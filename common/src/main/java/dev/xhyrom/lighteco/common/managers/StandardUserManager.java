@@ -2,7 +2,7 @@ package dev.xhyrom.lighteco.common.managers;
 
 import dev.xhyrom.lighteco.api.model.user.User;
 import dev.xhyrom.lighteco.api.managers.UserManager;
-import dev.xhyrom.lighteco.common.LightEcoPlugin;
+import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 

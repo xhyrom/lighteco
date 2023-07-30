@@ -4,7 +4,7 @@ import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.managers.UserManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.api.platform.PlayerAdapter;
-import dev.xhyrom.lighteco.common.LightEcoPlugin;
+import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.api.impl.ApiPlatform;
 import dev.xhyrom.lighteco.common.api.impl.ApiPlayerAdapter;
 import org.checkerframework.checker.nullness.qual.NonNull;
