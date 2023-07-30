@@ -1,6 +1,7 @@
 rootProject.name = "lighteco-parent"
 
 sequenceOf(
+    "api",
     "common",
     "bukkit",
     "velocity"
