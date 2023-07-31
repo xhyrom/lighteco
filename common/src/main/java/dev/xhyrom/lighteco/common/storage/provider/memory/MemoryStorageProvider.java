@@ -16,12 +16,12 @@ public class MemoryStorageProvider implements StorageProvider {
     }
 
     @Override
-    public @NonNull User loadUser(@NonNull UUID uniqueId) throws Exception {
+    public @NonNull User loadUser(@NonNull UUID uniqueId) {
         return users.get(uniqueId);
     }
 
     @Override
-    public void saveUser(@NonNull User user) throws Exception {
+    public void saveUser(@NonNull User user) {
         users.put(user.getUniqueId(), user);
     }
 }

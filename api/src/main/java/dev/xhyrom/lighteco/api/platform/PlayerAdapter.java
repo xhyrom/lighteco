@@ -6,5 +6,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.concurrent.CompletableFuture;
 
 public interface PlayerAdapter<T> {
-    @NonNull CompletableFuture<User> getUser(@NonNull T player);
+    @NonNull User getUser(@NonNull T player);
+
+    @NonNull CompletableFuture<User> loadUser(@NonNull T player);
 }

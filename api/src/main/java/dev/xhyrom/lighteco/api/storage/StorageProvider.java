@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface StorageProvider {
     @NonNull String[] getIdentifiers();
 
-    @NonNull User loadUser(@NonNull UUID uniqueId) throws Exception;
+    @NonNull User loadUser(@NonNull UUID uniqueId);
     // todo: look at this
-    void saveUser(@NonNull User user) /*throws Exception;*/;
+    void saveUser(@NonNull User user);
 }
