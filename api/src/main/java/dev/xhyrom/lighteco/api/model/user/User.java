@@ -27,4 +27,12 @@ public interface User {
      * @return the balance
      */
     <T> T getBalance(@NonNull Currency<T> currency);
+
+    /**
+     * Set the balance of this user for the specified currency.
+     *
+     * @param currency the currency
+     * @param balance the balance
+     */
+    <T> void setBalance(@NonNull Currency<T> currency, @NonNull T balance);
 }

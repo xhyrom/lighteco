@@ -25,6 +25,13 @@ public abstract class Currency<T> {
     public abstract boolean isPayable();
 
     /**
+     * Get the users that have a balance in this currency
+     *
+     * @return The users
+     */
+    public abstract T getDefaultBalance();
+
+    /**
      * Calculate the tax for the given amount
      * Used for payables
      *
@@ -34,11 +41,6 @@ public abstract class Currency<T> {
     public double calculateTax(T amount) {
         return 0;
     };
-
-    // Implemented in common module
-    public List<User> getTopUsers(int length) {
-        throw new NotImplementedException();
-    }
 
     /**
      * Represents the type of currency

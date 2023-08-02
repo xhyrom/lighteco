@@ -4,6 +4,7 @@ sequenceOf(
     "api",
     "common",
     "bukkit",
+    "bukkittest",
     "velocity"
 ).forEach {
     include("lighteco-$it")

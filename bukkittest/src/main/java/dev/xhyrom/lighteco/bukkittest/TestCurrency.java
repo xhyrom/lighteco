@@ -1,4 +1,4 @@
-package dev.xhyrom.lighteco.bukkit.test;
+package dev.xhyrom.lighteco.bukkittest;
 
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 
@@ -20,5 +20,10 @@ public class TestCurrency extends Currency<Integer> {
     @Override
     public boolean isPayable() {
         return true;
+    }
+
+    @Override
+    public Integer getDefaultBalance() {
+        return 0;
     }
 }

@@ -2,10 +2,12 @@ package dev.xhyrom.lighteco.common.managers.currency;
 
 import dev.xhyrom.lighteco.common.managers.AbstractManager;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
+import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Collection;
+import java.util.List;
 
 import static dev.xhyrom.lighteco.api.model.currency.Currency.Type;
 
@@ -43,5 +45,11 @@ public class StandardCurrencyManager extends AbstractManager<String, Currency<?>
             throw new IllegalArgumentException("Currency with identifier " + currency.getIdentifier() + " already registered");
 
         this.map.put(currency.getIdentifier(), currency);
+    }
+
+    // TODO: finish
+    @Override
+    public List<User> getTopUsers(@NonNull Currency<?> currency, int length) {
+        return null;
     }
 }

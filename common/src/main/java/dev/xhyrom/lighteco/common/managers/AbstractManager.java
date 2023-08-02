@@ -19,7 +19,7 @@ public abstract class AbstractManager<I, T> implements Manager<I, T> {
 
     @Override
     public T getOrMake(I identifier) {
-        return this.map.getOrDefault(identifier, this.apply(identifier));
+        return this.map.computeIfAbsent(identifier, this::apply);
     }
 
     @Override

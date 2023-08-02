@@ -31,6 +31,10 @@ public class Currency<T> {
         return proxy.getValueType();
     }
 
+    public T getDefaultBalance() {
+        return proxy.getDefaultBalance();
+    }
+
     public boolean isPayable() {
         return proxy.isPayable();
     }

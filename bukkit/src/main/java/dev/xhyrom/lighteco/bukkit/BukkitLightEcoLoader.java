@@ -1,15 +1,18 @@
 package dev.xhyrom.lighteco.bukkit;
 
-import dev.xhyrom.lighteco.bukkit.test.TestPlugin;
+import dev.xhyrom.lighteco.bukkit.listeners.BukkitConnectionListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BukkitLightEcoLoader extends JavaPlugin {
     private final BukkitLightEcoPlugin plugin = new BukkitLightEcoPlugin();
 
     @Override
-    public void onEnable() {
+    public void onLoad() {
         plugin.enable();
+    }
 
-        new TestPlugin(this);
+    @Override
+    public void onEnable() {
+        getServer().getPluginManager().registerEvents(new BukkitConnectionListener(plugin), this);
     }
 }

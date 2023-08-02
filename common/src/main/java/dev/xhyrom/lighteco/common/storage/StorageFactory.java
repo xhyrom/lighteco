@@ -21,7 +21,7 @@ public class StorageFactory {
     private StorageProvider createProvider(String provider) {
         switch (provider.toLowerCase()) {
             case "memory":
-                return new MemoryStorageProvider();
+                return new MemoryStorageProvider(this.plugin);
             default:
                 throw new IllegalArgumentException("Unknown storage provider: " + provider);
         }
