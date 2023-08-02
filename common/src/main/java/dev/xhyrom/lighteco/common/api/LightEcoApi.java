@@ -1,9 +1,12 @@
 package dev.xhyrom.lighteco.common.api;
 
 import dev.xhyrom.lighteco.api.LightEco;
+import dev.xhyrom.lighteco.api.managers.CurrencyManager;
 import dev.xhyrom.lighteco.api.managers.UserManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.api.platform.PlayerAdapter;
+import dev.xhyrom.lighteco.common.api.impl.ApiCurrencyManager;
+import dev.xhyrom.lighteco.common.api.impl.ApiUserManager;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.api.impl.ApiPlatform;
 import dev.xhyrom.lighteco.common.api.impl.ApiPlayerAdapter;
@@ -13,13 +16,17 @@ public class LightEcoApi implements LightEco {
     private final LightEcoPlugin plugin;
 
     private final Platform platform;
+    private final UserManager userManager;
+    private final CurrencyManager currencyManager;
     private final PlayerAdapter<?> playerAdapter;
 
     public LightEcoApi(LightEcoPlugin plugin) {
         this.plugin = plugin;
 
         this.platform = new ApiPlatform(plugin);
-        this.playerAdapter = new ApiPlayerAdapter<>(plugin.getUserManager(), plugin.getContextManager());
+        this.userManager = new ApiUserManager(plugin, plugin.getUserManager());
+        this.currencyManager = new ApiCurrencyManager(plugin, plugin.getCurrencyManager());
+        this.playerAdapter = new ApiPlayerAdapter<>(userManager, plugin.getContextManager());
     }
 
     @Override
@@ -29,7 +36,12 @@ public class LightEcoApi implements LightEco {
 
     @Override
     public @NonNull UserManager getUserManager() {
-        return this.plugin.getUserManager();
+        return this.userManager;
+    }
+
+    @Override
+    public @NonNull CurrencyManager getCurrencyManager() {
+        return this.currencyManager;
     }
 
     @Override

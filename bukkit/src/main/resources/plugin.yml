@@ -1,7 +1,7 @@
 name: ${name}
 description: ${description}
 version: ${version}
-main: dev.xhyrom.lighteco.bukkit.BukkitLightEcoPlugin
+main: dev.xhyrom.lighteco.bukkit.BukkitLightEcoLoader
 author: ${author}
 api-version: 1.20
 

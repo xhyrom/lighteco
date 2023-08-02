@@ -19,5 +19,13 @@ public interface Platform {
         public String getName() {
             return displayName;
         }
+
+        public boolean isLocal() {
+            return this == BUKKIT;
+        }
+
+        public boolean isProxy() {
+            return this == VELOCITY || this == BUNGEECORD;
+        }
     }
 }

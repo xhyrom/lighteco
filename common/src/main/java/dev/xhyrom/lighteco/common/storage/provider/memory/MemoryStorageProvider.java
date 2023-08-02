@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class MemoryStorageProvider implements StorageProvider {
-    private HashMap<UUID, User> users = new HashMap<>();
+    private final HashMap<UUID, User> userDatabase = new HashMap<>();
 
     @Override
     public @NonNull String[] getIdentifiers() {
@@ -17,11 +17,11 @@ public class MemoryStorageProvider implements StorageProvider {
 
     @Override
     public @NonNull User loadUser(@NonNull UUID uniqueId) {
-        return users.get(uniqueId);
+        return userDatabase.get(uniqueId);
     }
 
     @Override
     public void saveUser(@NonNull User user) {
-        users.put(user.getUniqueId(), user);
+        userDatabase.put(user.getUniqueId(), user);
     }
 }
