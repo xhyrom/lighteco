@@ -30,7 +30,7 @@ public class BukkitConnectionListener implements Listener {
                     .error("Failed to load user data for %s (%s)", e, event.getName(), event.getUniqueId());
 
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, miniMessage.deserialize(
-                    "<bold>LightEco</bold> <red>Failed to load your data. Please try again later."
+                    "<bold>LightEco</bold> <red>Failed to load your data. Contact a staff member for assistance."
             ));
         }
     }
