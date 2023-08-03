@@ -24,8 +24,8 @@ public class ApiUser implements User {
     }
 
     @Override
-    public <T> T getBalance(@NonNull Currency<T> currency) {
-        dev.xhyrom.lighteco.common.model.currency.Currency<T> internal = (dev.xhyrom.lighteco.common.model.currency.Currency<T>) this.handler.getPlugin()
+    public <T> T getBalance(@NonNull Currency<?> currency) {
+        dev.xhyrom.lighteco.common.model.currency.Currency<?> internal = this.handler.getPlugin()
                 .getCurrencyManager()
                 .getIfLoaded(currency.getIdentifier());
 
@@ -33,8 +33,8 @@ public class ApiUser implements User {
     }
 
     @Override
-    public <T> void setBalance(@NonNull Currency<T> currency, @NonNull T balance) {
-        dev.xhyrom.lighteco.common.model.currency.Currency<T> internal = (dev.xhyrom.lighteco.common.model.currency.Currency<T>) this.handler.getPlugin()
+    public <T> void setBalance(@NonNull Currency<?> currency, @NonNull T balance) {
+        dev.xhyrom.lighteco.common.model.currency.Currency<?> internal = this.handler.getPlugin()
                 .getCurrencyManager()
                 .getIfLoaded(currency.getIdentifier());
 

@@ -25,14 +25,12 @@ public class TestPlugin extends JavaPlugin implements Listener {
         CurrencyManager currencyManager = provider.getCurrencyManager();
 
         currencyManager.registerCurrency(new TestCurrency());
+        currencyManager.registerCurrency(new TestCurrency2());
 
         getLogger().info("TestCurrency registered!");
 
         currencyManager.getRegisteredCurrencies().forEach(currency -> {
             getLogger().info("Currency: " + currency.getIdentifier() + " (" + currency.getType() + ", " + currency.getValueType() + ", " + currency.isPayable() + ")");
-            /*currencyManager.getTopUsers(currency, 5).forEach(user -> {
-                plugin.getLogger().info("User: " + user.getUniqueId() + " (" + user.getUsername() + ")");
-            });*/
         });
     }
 
@@ -42,17 +40,27 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
         LightEco provider = LightEcoProvider.get();
         CurrencyManager currencyManager = provider.getCurrencyManager();
-        Currency<Integer> currency = currencyManager.getCurrency("test");
 
         User user = provider.getPlayerAdapter(Player.class).getUser(player);
 
-        switch (event.getMessage()) {
+        String message = event.getMessage();
+        String command = message.split(" ")[0];
+        String[] args = message.substring(command.length()).trim().split(" ");
+
+        Currency<?> currency = currencyManager.getCurrency(args[0]);
+
+        switch (command) {
             case "balance": {
                 player.sendMessage(user.getBalance(currency).toString());
                 break;
             }
             case "add": {
-                user.setBalance(currency, user.getBalance(currency) + 1);
+                if (currency.getValueType().equals(Integer.class)) {
+                    user.setBalance(currency, Integer.parseInt(args[1]));
+                } else if (currency.getValueType().equals(Double.class)) {
+                    user.setBalance(currency, Double.parseDouble(args[1]));
+                }
+
                 provider.getUserManager().saveUser(user).thenAccept(aVoid -> player.sendMessage("Saved!"));
                 break;
             }

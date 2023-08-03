@@ -2,14 +2,14 @@ package dev.xhyrom.lighteco.bukkittest;
 
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 
-public class TestCurrency extends Currency<Integer> {
-    public TestCurrency() {
-        super(Integer.class);
+public class TestCurrency2 extends Currency<Double> {
+    public TestCurrency2() {
+        super(Double.class);
     }
 
     @Override
     public String getIdentifier() {
-        return "test";
+        return "test2";
     }
 
     @Override
@@ -19,16 +19,16 @@ public class TestCurrency extends Currency<Integer> {
 
     @Override
     public boolean isPayable() {
-        return true;
+        return false;
     }
 
     @Override
-    public Integer getDefaultBalance() {
-        return 0;
+    public Double getDefaultBalance() {
+        return 0.0;
     }
 
     @Override
-    public Integer calculateTax(Integer amount) {
-        return 0;
+    public Double calculateTax(Double amount) {
+        return 0.0;
     }
 }

@@ -1,6 +1,7 @@
 package dev.xhyrom.lighteco.common.model.user;
 
 import dev.xhyrom.lighteco.common.api.impl.ApiUser;
+import dev.xhyrom.lighteco.common.cache.TypedMap;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import lombok.Getter;
@@ -18,19 +19,18 @@ public class User {
 
     @Getter
     private final UUID uniqueId;
-    private final Map<Currency<?>, Number> balances = new HashMap<>();
+    private final TypedMap<Currency<?>> balances = new TypedMap<>();
 
     public User(LightEcoPlugin plugin, UUID uniqueId) {
         this.plugin = plugin;
         this.uniqueId = uniqueId;
     }
 
-    public <T> T getBalance(@NonNull Currency<T> currency) {
-        T balance = (T) balances.get(currency);
-        return balance == null ? currency.getDefaultBalance() : balance;
+    public <T> T getBalance(@NonNull Currency<?> currency) {
+        return balances.<T>getOrDefault(currency, (T) currency.getDefaultBalance());
     }
 
-    public <T> void setBalance(@NonNull Currency<T> currency, @NonNull T balance) {
-        balances.put(currency, (Number) balance);
+    public <T> void setBalance(@NonNull Currency<?> currency, @NonNull T balance) {
+        balances.put(currency, balance);
     }
 }

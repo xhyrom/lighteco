@@ -34,8 +34,8 @@ public abstract class Currency<T> {
      * @param amount The amount to calculate the tax for
      * @return The tax
      */
-    public double calculateTax(T amount) {
-        return 0;
+    public T calculateTax(T amount) {
+        return getDefaultBalance();
     };
 
     /**
