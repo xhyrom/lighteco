@@ -6,6 +6,8 @@ import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,10 +43,20 @@ public class StandardCurrencyManager extends AbstractManager<String, Currency<?>
         if (currency.getType() == Type.LOCAL && this.plugin.getPlatformType().isProxy())
             throw new IllegalArgumentException("Cannot register local currency on proxy platform");
 
+        if (!isValidValueType(currency.getValueType()))
+            throw new IllegalArgumentException("Invalid value type " + currency.getValueType().getName() + " for currency " + currency.getIdentifier());
+
         if (this.isLoaded(currency.getIdentifier()))
             throw new IllegalArgumentException("Currency with identifier " + currency.getIdentifier() + " already registered");
 
         this.map.put(currency.getIdentifier(), currency);
+    }
+
+    private boolean isValidValueType(Class<?> clazz) {
+        return clazz == Integer.class || clazz == Long.class ||
+                clazz == Double.class || clazz == Float.class ||
+                clazz == Short.class || clazz == BigInteger.class ||
+                clazz == BigDecimal.class;
     }
 
     // TODO: finish
