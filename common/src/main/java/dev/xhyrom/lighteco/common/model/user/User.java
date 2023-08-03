@@ -33,4 +33,8 @@ public class User {
     public <T> void setBalance(@NonNull Currency<?> currency, @NonNull T balance) {
         balances.put(currency, balance);
     }
+
+    public void invalidateCaches() {
+        balances.clear();
+    }
 }

@@ -4,6 +4,7 @@ version: ${version}
 main: dev.xhyrom.lighteco.bukkit.BukkitLightEcoLoader
 author: ${author}
 api-version: 1.20
+load: STARTUP
 
 softdepend:
   - Vault

@@ -17,4 +17,8 @@ public class TypedMap<T> {
     public <V> void put(T key, V value) {
         map.put(key, value);
     }
+
+    public void clear() {
+        map.clear();
+    }
 }

@@ -1,5 +1,6 @@
 package dev.xhyrom.lighteco.common.plugin;
 
+import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.LightEcoProvider;
 import dev.xhyrom.lighteco.common.api.LightEcoApi;
 import dev.xhyrom.lighteco.common.storage.Storage;
@@ -11,10 +12,13 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
     private Storage storage;
     private LightEcoApi api;
 
-    public final void load() {
+    public final void enable() {
         // setup storage
         StorageFactory factory = new StorageFactory(this);
         this.storage = factory.get();
+
+        // register listeners
+        this.registerListeners();
 
         // setup managers
         this.setupManagers();
@@ -22,13 +26,11 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
         // register api
         this.api = new LightEcoApi(this);
         LightEcoProvider.set(this.api);
-    }
-
-    public final void enable() {
-        // register listeners
-        this.registerListeners();
+        this.registerApiOnPlatform(this.api);
     }
 
     protected abstract void registerListeners();
+
     protected abstract void setupManagers();
+    protected abstract void registerApiOnPlatform(LightEco api);
 }

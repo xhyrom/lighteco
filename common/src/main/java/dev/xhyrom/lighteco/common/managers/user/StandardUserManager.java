@@ -33,6 +33,6 @@ public class StandardUserManager extends AbstractManager<UUID, User> implements 
 
     @Override
     public void invalidateCaches() {
-
+        values().forEach(User::invalidateCaches);
     }
 }

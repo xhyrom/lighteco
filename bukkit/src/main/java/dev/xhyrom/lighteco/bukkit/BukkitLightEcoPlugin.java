@@ -1,5 +1,6 @@
 package dev.xhyrom.lighteco.bukkit;
 
+import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.managers.ContextManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.bukkit.listeners.BukkitConnectionListener;
@@ -9,6 +10,7 @@ import dev.xhyrom.lighteco.common.plugin.AbstractLightEcoPlugin;
 import dev.xhyrom.lighteco.common.managers.user.StandardUserManager;
 import lombok.Getter;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.ServicePriority;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class BukkitLightEcoPlugin extends AbstractLightEcoPlugin {
@@ -36,6 +38,11 @@ public class BukkitLightEcoPlugin extends AbstractLightEcoPlugin {
         this.userManager = new StandardUserManager(this);
         this.currencyManager = new StandardCurrencyManager(this);
         this.contextManager = new BukkitContextManager();
+    }
+
+    @Override
+    protected void registerApiOnPlatform(LightEco api) {
+        this.getBootstrap().getServer().getServicesManager().register(LightEco.class, api, this.getBootstrap().getLoader(), ServicePriority.Normal);
     }
 
     @Override

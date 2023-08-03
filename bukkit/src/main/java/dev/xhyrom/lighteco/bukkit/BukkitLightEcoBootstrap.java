@@ -27,9 +27,7 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     }
 
     @Override
-    public void onLoad() {
-        plugin.load();
-    }
+    public void onLoad() {}
 
     @Override
     public void onEnable() {
