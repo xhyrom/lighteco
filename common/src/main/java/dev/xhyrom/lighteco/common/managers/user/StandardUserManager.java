@@ -24,8 +24,7 @@ public class StandardUserManager extends AbstractManager<UUID, User> implements 
     @Override
     public CompletableFuture<Void> load() {
         Set<UUID> uniqueIds = new HashSet<>(keys());
-        // TODO: Add all players lol
-        //uniqueIds.addAll(this.plugin.getBootstrap().getOnlinePlayers());
+        uniqueIds.addAll(this.plugin.getBootstrap().getOnlinePlayers());
 
         return uniqueIds.stream()
                 .map(id -> this.plugin.getStorage().loadUser(id))

@@ -1,4 +1,4 @@
-package dev.xhyrom.lighteco.bukkit;
+package dev.xhyrom.lighteco.bukkit.managers;
 
 import dev.xhyrom.lighteco.api.managers.ContextManager;
 import org.bukkit.entity.Player;

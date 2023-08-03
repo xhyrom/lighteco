@@ -1,18 +1,27 @@
 package dev.xhyrom.lighteco.bukkit;
 
-import dev.xhyrom.lighteco.bukkit.listeners.BukkitConnectionListener;
+import dev.xhyrom.lighteco.common.plugin.bootstrap.LoaderBootstrap;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BukkitLightEcoLoader extends JavaPlugin {
-    private final BukkitLightEcoPlugin plugin = new BukkitLightEcoPlugin();
+    private final LoaderBootstrap bootstrap;
+
+    public BukkitLightEcoLoader() {
+        this.bootstrap = new BukkitLightEcoBootstrap(this);
+    }
 
     @Override
     public void onLoad() {
-        plugin.enable();
+        this.bootstrap.onLoad();
     }
 
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(new BukkitConnectionListener(plugin), this);
+        this.bootstrap.onEnable();
+    }
+
+    @Override
+    public void onDisable() {
+        this.bootstrap.onDisable();
     }
 }

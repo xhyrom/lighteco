@@ -1,10 +1,6 @@
 package dev.xhyrom.lighteco.api.model.currency;
 
-import dev.xhyrom.lighteco.api.exceptions.NotImplementedException;
-import dev.xhyrom.lighteco.api.model.user.User;
 import lombok.Getter;
-
-import java.util.List;
 
 public abstract class Currency<T> {
     @Getter

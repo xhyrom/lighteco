@@ -23,17 +23,29 @@ public class MemoryStorageProvider implements StorageProvider {
 
     @Override
     public @NonNull User loadUser(@NonNull UUID uniqueId) {
-        return createUser(uniqueId, userDatabase.get(uniqueId));
+        this.simulateSlowDatabaseQuery();
+
+        return this.createUser(uniqueId, userDatabase.get(uniqueId));
     }
 
     @Override
     public void saveUser(@NonNull User user) {
-        userDatabase.put(user.getUniqueId(), user);
+        this.simulateSlowDatabaseQuery();
+
+        this.userDatabase.put(user.getUniqueId(), user);
     }
 
     private User createUser(UUID uniqueId, User data) {
         dev.xhyrom.lighteco.common.model.user.User user = this.plugin.getUserManager().getOrMake(uniqueId);
 
         return user.getProxy();
+    }
+
+    private void simulateSlowDatabaseQuery() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

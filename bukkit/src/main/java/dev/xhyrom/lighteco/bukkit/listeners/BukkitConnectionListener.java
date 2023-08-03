@@ -1,7 +1,7 @@
 package dev.xhyrom.lighteco.bukkit.listeners;
 
-import dev.xhyrom.lighteco.api.model.user.User;
 import dev.xhyrom.lighteco.bukkit.BukkitLightEcoPlugin;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -10,6 +10,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class BukkitConnectionListener implements Listener {
     private final BukkitLightEcoPlugin plugin;
+    private final MiniMessage miniMessage = MiniMessage.miniMessage();
+
     public BukkitConnectionListener(BukkitLightEcoPlugin plugin) {
         this.plugin = plugin;
     }
@@ -22,16 +24,18 @@ public class BukkitConnectionListener implements Listener {
         }
 
         try {
-            User user = this.plugin.getStorage().loadUser(event.getUniqueId()).join();
+            this.plugin.getStorage().loadUser(event.getUniqueId()).join();
         } catch (Exception e) {
-            e.printStackTrace();
+            this.plugin.getBootstrap().getLogger()
+                    .error("Failed to load user data for %s (%s)", e, event.getName(), event.getUniqueId());
+
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, miniMessage.deserialize(
+                    "<bold>LightEco</bold> <red>Failed to load your data. Please try again later."
+            ));
         }
     }
 
     public void onPlayerQuit(PlayerQuitEvent event) {
-        // house keeper stuff
-
-        // for now:
         this.plugin.getUserManager().unload(event.getPlayer().getUniqueId());
     }
 }
