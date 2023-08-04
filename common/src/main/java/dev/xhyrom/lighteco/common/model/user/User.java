@@ -7,8 +7,6 @@ import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class User {

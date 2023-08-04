@@ -1,6 +1,6 @@
 package dev.xhyrom.lighteco.common.api.impl;
 
-import dev.xhyrom.lighteco.api.managers.CurrencyManager;
+import dev.xhyrom.lighteco.api.manager.CurrencyManager;
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.api.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
@@ -10,8 +10,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ApiCurrencyManager extends ApiAbstractManager<dev.xhyrom.lighteco.common.managers.currency.CurrencyManager> implements CurrencyManager {
-    public ApiCurrencyManager(LightEcoPlugin plugin, dev.xhyrom.lighteco.common.managers.currency.CurrencyManager handler) {
+public class ApiCurrencyManager extends ApiAbstractManager<dev.xhyrom.lighteco.common.manager.currency.CurrencyManager> implements CurrencyManager {
+    public ApiCurrencyManager(LightEcoPlugin plugin, dev.xhyrom.lighteco.common.manager.currency.CurrencyManager handler) {
         super(plugin, handler);
     }
 

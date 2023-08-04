@@ -1,7 +1,7 @@
 package dev.xhyrom.lighteco.api;
 
-import dev.xhyrom.lighteco.api.managers.CurrencyManager;
-import dev.xhyrom.lighteco.api.managers.UserManager;
+import dev.xhyrom.lighteco.api.manager.CurrencyManager;
+import dev.xhyrom.lighteco.api.manager.UserManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.api.platform.PlayerAdapter;
 import org.checkerframework.checker.nullness.qual.NonNull;

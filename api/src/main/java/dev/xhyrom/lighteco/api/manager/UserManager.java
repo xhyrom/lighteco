@@ -1,4 +1,4 @@
-package dev.xhyrom.lighteco.api.managers;
+package dev.xhyrom.lighteco.api.manager;
 
 import dev.xhyrom.lighteco.api.model.user.User;
 import org.checkerframework.checker.nullness.qual.NonNull;

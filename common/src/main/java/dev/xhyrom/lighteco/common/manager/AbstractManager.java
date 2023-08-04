@@ -1,4 +1,4 @@
-package dev.xhyrom.lighteco.common.managers;
+package dev.xhyrom.lighteco.common.manager;
 
 import java.util.Collection;
 import java.util.HashMap;

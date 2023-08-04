@@ -1,4 +1,4 @@
-package dev.xhyrom.lighteco.api.managers;
+package dev.xhyrom.lighteco.api.manager;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 

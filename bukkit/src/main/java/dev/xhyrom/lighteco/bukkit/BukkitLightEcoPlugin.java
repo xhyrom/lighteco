@@ -1,13 +1,13 @@
 package dev.xhyrom.lighteco.bukkit;
 
 import dev.xhyrom.lighteco.api.LightEco;
-import dev.xhyrom.lighteco.api.managers.ContextManager;
+import dev.xhyrom.lighteco.api.manager.ContextManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.bukkit.listeners.BukkitConnectionListener;
-import dev.xhyrom.lighteco.bukkit.managers.BukkitContextManager;
-import dev.xhyrom.lighteco.common.managers.currency.StandardCurrencyManager;
+import dev.xhyrom.lighteco.bukkit.manager.BukkitContextManager;
+import dev.xhyrom.lighteco.common.manager.currency.StandardCurrencyManager;
 import dev.xhyrom.lighteco.common.plugin.AbstractLightEcoPlugin;
-import dev.xhyrom.lighteco.common.managers.user.StandardUserManager;
+import dev.xhyrom.lighteco.common.manager.user.StandardUserManager;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;

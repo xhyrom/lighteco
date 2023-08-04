@@ -2,16 +2,13 @@ package dev.xhyrom.lighteco.bukkittest;
 
 import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.LightEcoProvider;
-import dev.xhyrom.lighteco.api.managers.CurrencyManager;
+import dev.xhyrom.lighteco.api.manager.CurrencyManager;
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.api.model.user.User;
-import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TestPlugin extends JavaPlugin implements Listener {

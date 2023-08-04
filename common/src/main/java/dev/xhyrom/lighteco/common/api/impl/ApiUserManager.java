@@ -1,6 +1,6 @@
 package dev.xhyrom.lighteco.common.api.impl;
 
-import dev.xhyrom.lighteco.api.managers.UserManager;
+import dev.xhyrom.lighteco.api.manager.UserManager;
 import dev.xhyrom.lighteco.api.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -9,8 +9,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class ApiUserManager extends ApiAbstractManager<dev.xhyrom.lighteco.common.managers.user.UserManager> implements UserManager {
-    public ApiUserManager(LightEcoPlugin plugin, dev.xhyrom.lighteco.common.managers.user.UserManager handler) {
+public class ApiUserManager extends ApiAbstractManager<dev.xhyrom.lighteco.common.manager.user.UserManager> implements UserManager {
+    public ApiUserManager(LightEcoPlugin plugin, dev.xhyrom.lighteco.common.manager.user.UserManager handler) {
         super(plugin, handler);
     }
 

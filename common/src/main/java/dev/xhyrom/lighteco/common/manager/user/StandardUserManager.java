@@ -1,6 +1,6 @@
-package dev.xhyrom.lighteco.common.managers.user;
+package dev.xhyrom.lighteco.common.manager.user;
 
-import dev.xhyrom.lighteco.common.managers.AbstractManager;
+import dev.xhyrom.lighteco.common.manager.AbstractManager;
 import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 

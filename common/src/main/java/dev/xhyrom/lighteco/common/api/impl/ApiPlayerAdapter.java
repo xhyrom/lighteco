@@ -1,8 +1,8 @@
 package dev.xhyrom.lighteco.common.api.impl;
 
-import dev.xhyrom.lighteco.api.managers.ContextManager;
+import dev.xhyrom.lighteco.api.manager.ContextManager;
 import dev.xhyrom.lighteco.api.model.user.User;
-import dev.xhyrom.lighteco.api.managers.UserManager;
+import dev.xhyrom.lighteco.api.manager.UserManager;
 import dev.xhyrom.lighteco.api.platform.PlayerAdapter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 

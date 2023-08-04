@@ -1,7 +1,6 @@
-package dev.xhyrom.lighteco.common.managers;
+package dev.xhyrom.lighteco.common.manager;
 
 import java.util.Collection;
-import java.util.concurrent.CompletableFuture;
 
 public interface Manager<I, T> {
     T apply(I identifier);

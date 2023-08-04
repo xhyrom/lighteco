@@ -1,6 +1,6 @@
-package dev.xhyrom.lighteco.bukkit.managers;
+package dev.xhyrom.lighteco.bukkit.manager;
 
-import dev.xhyrom.lighteco.api.managers.ContextManager;
+import dev.xhyrom.lighteco.api.manager.ContextManager;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 

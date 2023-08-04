@@ -1,6 +1,6 @@
-package dev.xhyrom.lighteco.common.managers.user;
+package dev.xhyrom.lighteco.common.manager.user;
 
-import dev.xhyrom.lighteco.common.managers.Manager;
+import dev.xhyrom.lighteco.common.manager.Manager;
 import dev.xhyrom.lighteco.common.model.user.User;
 
 import java.util.UUID;

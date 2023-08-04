@@ -1,8 +1,8 @@
 package dev.xhyrom.lighteco.common.api;
 
 import dev.xhyrom.lighteco.api.LightEco;
-import dev.xhyrom.lighteco.api.managers.CurrencyManager;
-import dev.xhyrom.lighteco.api.managers.UserManager;
+import dev.xhyrom.lighteco.api.manager.CurrencyManager;
+import dev.xhyrom.lighteco.api.manager.UserManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.api.platform.PlayerAdapter;
 import dev.xhyrom.lighteco.common.api.impl.ApiCurrencyManager;
