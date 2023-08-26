@@ -11,4 +11,8 @@ public class Config extends OkaeriConfig {
     @Comment("If you have multiple servers, you must set this property to a different value for each server.")
     @Comment("Used for local currencies.")
     public String server = "none";
+
+    @Comment("The storage provider to use.")
+    @Comment("Supported providers: memory")
+    public String storage = "memory";
 }

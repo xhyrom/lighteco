@@ -13,7 +13,7 @@ public class StorageFactory {
 
     public Storage get() {
         // todo: use config
-        String provider = "memory";//this.plugin.getConfig().getString("storage.provider");
+        String provider = this.plugin.getConfig().get("storage", String.class);
 
         return new Storage(this.plugin, createProvider(provider));
     }
