@@ -122,14 +122,14 @@ public abstract class AbstractCommandManager implements CommandManager {
         BigDecimal tax = currency.getProxy().calculateTax(user.getProxy(), amount);
 
         // subtract tax from amount
-        amount = amount.subtract(tax);
+        BigDecimal taxedAmount = amount.subtract(tax);
 
-        target.setBalance(currency, target.getBalance(currency).add(amount));
+        target.setBalance(currency, target.getBalance(currency).add(taxedAmount));
         user.setBalance(currency, user.getBalance(currency).subtract(amount));
 
-       // send message and also include tax rate (percentage) with tax amount
+       // send message that will include original amount, taxed amount, tax rate - percentage amount and tax amount
         sender.sendMessage(
-                miniMessage.deserialize("<yellow>Paid <gold>" + amount.toPlainString() + " <yellow>" + currency.getIdentifier() + " to " + target.getUsername() + " with a tax rate of <gold>" + tax + "% <yellow>(<gold>" + tax.toPlainString() + " <yellow>" + currency.getIdentifier() + ")")
+                miniMessage.deserialize("<yellow>Paid <gold>" + amount.toPlainString() + " <yellow>" + currency.getIdentifier() + " to " + target.getUsername() + " <yellow>(<gold>" + taxedAmount.toPlainString() + " <yellow>after tax)")
         );
 
         CompletableFuture.allOf(
