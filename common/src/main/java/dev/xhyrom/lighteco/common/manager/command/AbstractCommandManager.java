@@ -118,6 +118,8 @@ public abstract class AbstractCommandManager implements CommandManager {
 
         User user = this.plugin.getUserManager().getIfLoaded(sender.getUniqueId());
 
+        // TODO: ADD CHECKS FOR IF USER HAS ENOUGH MONEY
+
         // calculate tax using Currency#calculateTax
         BigDecimal tax = currency.getProxy().calculateTax(user.getProxy(), amount);
 
