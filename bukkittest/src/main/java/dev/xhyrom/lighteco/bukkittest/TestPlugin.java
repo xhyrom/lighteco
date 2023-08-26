@@ -3,17 +3,7 @@ package dev.xhyrom.lighteco.bukkittest;
 import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.LightEcoProvider;
 import dev.xhyrom.lighteco.api.manager.CurrencyManager;
-import dev.xhyrom.lighteco.api.model.currency.Currency;
-import dev.xhyrom.lighteco.api.model.user.User;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.ParseException;
 
 public class TestPlugin extends JavaPlugin {
     @Override
@@ -33,5 +23,6 @@ public class TestPlugin extends JavaPlugin {
         });
 
         provider.getCommandManager().registerCurrencyCommand(currencyManager.getCurrency("test"));
+        provider.getCommandManager().registerCurrencyCommand(currencyManager.getCurrency("test2"));
     }
 }
