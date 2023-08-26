@@ -22,6 +22,11 @@ public class StandardUserManager extends AbstractManager<UUID, User> implements 
     }
 
     @Override
+    public CompletableFuture<User> loadUser(UUID uniqueId) {
+        return this.plugin.getStorage().loadUser(uniqueId);
+    }
+
+    @Override
     public CompletableFuture<Void> load() {
         Set<UUID> uniqueIds = new HashSet<>(keys());
         uniqueIds.addAll(this.plugin.getBootstrap().getOnlinePlayers());
@@ -29,6 +34,11 @@ public class StandardUserManager extends AbstractManager<UUID, User> implements 
         return uniqueIds.stream()
                 .map(id -> this.plugin.getStorage().loadUser(id))
                 .collect(CompletableFuture::allOf, (future, userFuture) -> future.join(), (future, userFuture) -> future.join());
+    }
+
+    @Override
+    public CompletableFuture<Void> saveUser(User user) {
+       return this.plugin.getStorage().saveUser(user.getProxy());
     }
 
     @Override

@@ -3,6 +3,7 @@ package dev.xhyrom.lighteco.common.api.impl;
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.api.model.user.User;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -20,12 +21,12 @@ public class ApiUser implements User {
     }
 
     @Override
-    public @NonNull String getUsername() {
-        return null;
+    public @Nullable String getUsername() {
+        return this.handler.getUsername();
     }
 
     @Override
-    public BigDecimal getBalance(@NonNull Currency currency) {
+    public @NonNull BigDecimal getBalance(@NonNull Currency currency) {
         dev.xhyrom.lighteco.common.model.currency.Currency internal = this.handler.getPlugin()
                 .getCurrencyManager()
                 .getIfLoaded(currency.getIdentifier());

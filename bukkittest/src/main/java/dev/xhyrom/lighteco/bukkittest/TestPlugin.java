@@ -15,11 +15,9 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 
-public class TestPlugin extends JavaPlugin implements Listener {
+public class TestPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(this, this);
-
         getLogger().info("TestPlugin loaded!");
 
         LightEco provider = LightEcoProvider.get();
@@ -35,41 +33,5 @@ public class TestPlugin extends JavaPlugin implements Listener {
         });
 
         provider.getCommandManager().registerCurrencyCommand(currencyManager.getCurrency("test"));
-    }
-
-    @EventHandler
-    public void onWalk(AsyncPlayerChatEvent event) throws ParseException {
-        Player player = event.getPlayer();
-
-        LightEco provider = LightEcoProvider.get();
-        CurrencyManager currencyManager = provider.getCurrencyManager();
-
-        User user = provider.getPlayerAdapter(Player.class).getUser(player);
-
-        String message = event.getMessage();
-        String command = message.split(" ")[0];
-        String[] args = message.substring(command.length()).trim().split(" ");
-
-        Currency currency = currencyManager.getCurrency(args[0]);
-
-        switch (command) {
-            case "balance" -> player.sendMessage(user.getBalance(currency).toString());
-            case "add" -> {
-                if (currency.getDecimalPlaces() > 0) {
-                    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-                    user.setBalance(currency, BigDecimal.valueOf(
-                            Double.parseDouble(
-                                    decimalFormat.format(
-                                            Double.parseDouble(args[1])
-                                    )
-                            )
-                    ));
-                } else {
-                    user.setBalance(currency, BigDecimal.valueOf(Integer.parseInt(args[1])));
-                }
-
-                provider.getUserManager().saveUser(user).thenAccept(aVoid -> player.sendMessage("Saved!"));
-            }
-        }
     }
 }

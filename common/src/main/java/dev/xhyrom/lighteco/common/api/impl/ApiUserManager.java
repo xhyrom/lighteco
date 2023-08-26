@@ -20,7 +20,8 @@ public class ApiUserManager extends ApiAbstractManager<dev.xhyrom.lighteco.commo
 
     @Override
     public @NonNull CompletableFuture<User> loadUser(@NonNull UUID uniqueId) {
-        return this.plugin.getStorage().loadUser(uniqueId);
+        return this.plugin.getStorage().loadUser(uniqueId)
+                .thenApply(ApiUserManager::wrap);
     }
 
     @Override

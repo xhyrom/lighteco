@@ -1,6 +1,6 @@
 package dev.xhyrom.lighteco.common.storage;
 
-import dev.xhyrom.lighteco.api.model.user.User;
+import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.api.storage.StorageProvider;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 
@@ -37,10 +37,16 @@ public class Storage {
     }
 
     public CompletableFuture<User> loadUser(UUID uniqueId) {
-        return future(() -> this.provider.loadUser(uniqueId));
+        User user = this.plugin.getUserManager().getIfLoaded(uniqueId);
+        if (user != null) {
+            return CompletableFuture.completedFuture(user);
+        }
+
+        return future(() -> this.provider.loadUser(uniqueId))
+                .thenApply(apiUser -> this.plugin.getUserManager().getIfLoaded(apiUser.getUniqueId()));
     }
 
-    public CompletableFuture<Void> saveUser(User user) {
+    public CompletableFuture<Void> saveUser(dev.xhyrom.lighteco.api.model.user.User user) {
         return future(() -> this.provider.saveUser(user));
     }
 }

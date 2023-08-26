@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":lighteco-common"))
 
     implementation("dev.jorel:commandapi-bukkit-shade:9.1.0")
+    implementation("net.kyori:adventure-platform-bukkit:4.2.0")
 
     compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
 
