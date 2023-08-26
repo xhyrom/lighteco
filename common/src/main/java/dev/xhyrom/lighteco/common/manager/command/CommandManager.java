@@ -18,4 +18,5 @@ public interface CommandManager {
     void onSet(CommandSender sender, Currency currency, User target, BigDecimal amount);
     void onGive(CommandSender sender, Currency currency, User target, BigDecimal amount);
     void onTake(CommandSender sender, Currency currency, User target, BigDecimal amount);
+    void onPay(CommandSender sender, Currency currency, User target, BigDecimal amount);
 }

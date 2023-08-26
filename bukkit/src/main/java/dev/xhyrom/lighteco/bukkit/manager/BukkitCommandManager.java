@@ -91,6 +91,18 @@ public class BukkitCommandManager extends AbstractCommandManager {
                             this.handleTake(sender, args, currency);
                         })
                 )
+                .withSubcommand(new CommandAPICommand("pay")
+                        .withPermission(permissionBase + "pay")
+                        .withArguments(
+                                new OfflinePlayerArgument("target"),
+                                currency.getProxy().getDecimalPlaces() > 0
+                                        ? new DoubleArgument("amount", 1)
+                                        : new IntegerArgument("amount", 1)
+                        )
+                        .executesPlayer((sender, args) -> {
+                            this.handlePay(sender, args, currency);
+                        })
+                )
                 .withSubcommand(balanceCommands.get(0))
                 .withSubcommands(balanceCommands.get(1))
                 .register();
@@ -147,7 +159,7 @@ public class BukkitCommandManager extends AbstractCommandManager {
                 });
     }
 
-    public void handleTake(CommandSender originalSender, CommandArguments args, Currency currency) {
+    private void handleTake(CommandSender originalSender, CommandArguments args, Currency currency) {
         BukkitCommandSender sender = new BukkitCommandSender(originalSender, this.audienceFactory);
         OfflinePlayer target = (OfflinePlayer) args.get("target");
         BigDecimal amount = BigDecimal.valueOf(Double.parseDouble(args.getRaw("amount")));
@@ -160,6 +172,22 @@ public class BukkitCommandManager extends AbstractCommandManager {
                     result.setUsername(name);
 
                     this.onTake(sender, currency, result, amount);
+                });
+    }
+
+    private void handlePay(CommandSender originalSender, CommandArguments args, Currency currency) {
+        BukkitCommandSender sender = new BukkitCommandSender(originalSender, this.audienceFactory);
+        OfflinePlayer target = (OfflinePlayer) args.get("target");
+        BigDecimal amount = BigDecimal.valueOf(Double.parseDouble(args.getRaw("amount")));
+
+        if (!this.canUse(sender)) return;
+
+        this.plugin.getUserManager().loadUser(target.getUniqueId())
+                .thenAcceptAsync(result -> {
+                    String name = target.getName() != null ? target.getName() : args.getRaw("target");
+                    result.setUsername(name);
+
+                    this.onPay(sender, currency, result, amount);
                 });
     }
 }

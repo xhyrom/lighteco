@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class AbstractCommandManager implements CommandManager {
     protected final LightEcoPlugin plugin;
@@ -109,5 +110,31 @@ public abstract class AbstractCommandManager implements CommandManager {
 
         this.plugin.getUserManager().saveUser(target)
                 .thenAccept(v -> removeFromMustWait(target.getUniqueId(), sender.getUniqueId()));
+    }
+
+    @Override
+    public void onPay(CommandSender sender, Currency currency, User target, BigDecimal amount) {
+        addToMustWait(sender.getUniqueId(), target.getUniqueId());
+
+        User user = this.plugin.getUserManager().getIfLoaded(sender.getUniqueId());
+
+        // calculate tax using Currency#calculateTax
+        BigDecimal tax = currency.getProxy().calculateTax(user.getProxy(), amount);
+
+        // subtract tax from amount
+        amount = amount.subtract(tax);
+
+        target.setBalance(currency, target.getBalance(currency).add(amount));
+        user.setBalance(currency, user.getBalance(currency).subtract(amount));
+
+       // send message and also include tax rate (percentage) with tax amount
+        sender.sendMessage(
+                miniMessage.deserialize("<yellow>Paid <gold>" + amount.toPlainString() + " <yellow>" + currency.getIdentifier() + " to " + target.getUsername() + " with a tax rate of <gold>" + tax + "% <yellow>(<gold>" + tax.toPlainString() + " <yellow>" + currency.getIdentifier() + ")")
+        );
+
+        CompletableFuture.allOf(
+                this.plugin.getUserManager().saveUser(user),
+                this.plugin.getUserManager().saveUser(target)
+        ).thenAccept(v -> removeFromMustWait(sender.getUniqueId(), target.getUniqueId()));
     }
 }

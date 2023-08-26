@@ -1,5 +1,7 @@
 package dev.xhyrom.lighteco.api.model.currency;
 
+import dev.xhyrom.lighteco.api.model.user.User;
+
 import java.math.BigDecimal;
 
 public abstract class Currency {
@@ -36,10 +38,10 @@ public abstract class Currency {
      * Used for payables
      *
      * @param amount The amount to calculate the tax for
-     * @return The tax
+     * @return Amount that should be taxed
      */
-    public BigDecimal calculateTax(BigDecimal amount) {
-        return getDefaultBalance();
+    public BigDecimal calculateTax(User user, BigDecimal amount) {
+        return BigDecimal.ZERO;
     };
 
     /**

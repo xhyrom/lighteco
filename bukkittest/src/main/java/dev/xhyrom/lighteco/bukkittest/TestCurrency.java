@@ -24,9 +24,4 @@ public class TestCurrency extends Currency {
     public BigDecimal getDefaultBalance() {
         return BigDecimal.ZERO;
     }
-
-    @Override
-    public BigDecimal calculateTax(BigDecimal amount) {
-        return BigDecimal.ZERO;
-    }
 }
