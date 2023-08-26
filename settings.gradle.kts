@@ -10,3 +10,11 @@ sequenceOf(
     include("lighteco-$it")
     project(":lighteco-$it").projectDir = file(it)
 }
+
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}

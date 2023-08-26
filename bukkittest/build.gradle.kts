@@ -1,5 +1,12 @@
+import lol.koblizek.serverloader.plugin.server
+
 plugins {
     id("lighteco.platform-logic")
+    id("lol.koblizek.serverloader") version "1.1"
+}
+
+server {
+    version = "1.20.1"
 }
 
 repositories {
