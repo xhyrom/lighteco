@@ -1,5 +1,6 @@
 package dev.xhyrom.lighteco.api;
 
+import dev.xhyrom.lighteco.api.manager.CommandManager;
 import dev.xhyrom.lighteco.api.manager.CurrencyManager;
 import dev.xhyrom.lighteco.api.manager.UserManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
@@ -18,6 +19,7 @@ public interface LightEco {
     @NonNull UserManager getUserManager();
 
     @NonNull CurrencyManager getCurrencyManager();
+    @NonNull CommandManager getCommandManager();
 
     <T> @NonNull PlayerAdapter<T> getPlayerAdapter(@NonNull Class<T> playerClass);
 }

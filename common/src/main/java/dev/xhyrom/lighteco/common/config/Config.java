@@ -5,6 +5,7 @@ import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
 
 @Header("LightEco configuration file.")
+@Header("")
 public class Config extends OkaeriConfig {
     @Comment("This property must be unique for each server.")
     @Comment("If you have multiple servers, you must set this property to a different value for each server.")

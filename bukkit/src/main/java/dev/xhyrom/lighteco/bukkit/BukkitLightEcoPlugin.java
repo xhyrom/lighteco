@@ -4,6 +4,7 @@ import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.manager.ContextManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.bukkit.listeners.BukkitConnectionListener;
+import dev.xhyrom.lighteco.bukkit.manager.BukkitCommandManager;
 import dev.xhyrom.lighteco.bukkit.manager.BukkitContextManager;
 import dev.xhyrom.lighteco.common.manager.currency.StandardCurrencyManager;
 import dev.xhyrom.lighteco.common.plugin.AbstractLightEcoPlugin;
@@ -22,6 +23,8 @@ public class BukkitLightEcoPlugin extends AbstractLightEcoPlugin {
     @Getter
     private StandardCurrencyManager currencyManager;
     @Getter
+    private BukkitCommandManager commandManager;
+    @Getter
     private ContextManager<Player> contextManager;
 
     public BukkitLightEcoPlugin(BukkitLightEcoBootstrap bootstrap) {
@@ -37,6 +40,7 @@ public class BukkitLightEcoPlugin extends AbstractLightEcoPlugin {
     public void setupManagers() {
         this.userManager = new StandardUserManager(this);
         this.currencyManager = new StandardCurrencyManager(this);
+        this.commandManager = new BukkitCommandManager(this);
         this.contextManager = new BukkitContextManager();
     }
 

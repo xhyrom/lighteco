@@ -16,6 +16,8 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
     @Getter
     private Storage storage;
     private LightEcoApi api;
+    @Getter
+    private Config config;
 
     public final void load() {
         Config config = ConfigManager.create(Config.class, (it) -> {
@@ -28,6 +30,8 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
             it.saveDefaults();
             it.load(true);
         });
+
+        this.config = config;
     }
 
     public final void enable() {

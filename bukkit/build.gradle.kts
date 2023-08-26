@@ -9,6 +9,8 @@ repositories {
 dependencies {
     implementation(project(":lighteco-common"))
 
+    implementation("dev.jorel:commandapi-bukkit-shade:9.1.0")
+
     compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
 
     compileOnly("org.projectlombok:lombok:1.18.28")
@@ -16,4 +18,8 @@ dependencies {
 
     compileOnly("org.checkerframework:checker-qual:3.8.0")
     compileOnly("org.jetbrains:annotations:20.1.0")
+}
+
+tasks.shadowJar {
+    relocate("dev.jorel.commandapi", "dev.xhyrom.lighteco.libraries.commandapi")
 }

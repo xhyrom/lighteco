@@ -33,6 +33,8 @@ public class TestPlugin extends JavaPlugin implements Listener {
         currencyManager.getRegisteredCurrencies().forEach(currency -> {
             getLogger().info("Currency: " + currency.getIdentifier() + " (" + currency.getType() + ", " + currency.getDecimalPlaces() + ", " + currency.isPayable() + ")");
         });
+
+        provider.getCommandManager().registerCurrencyCommand(currencyManager.getCurrency("test"));
     }
 
     @EventHandler

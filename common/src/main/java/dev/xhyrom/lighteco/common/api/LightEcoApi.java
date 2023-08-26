@@ -1,15 +1,13 @@
 package dev.xhyrom.lighteco.common.api;
 
 import dev.xhyrom.lighteco.api.LightEco;
+import dev.xhyrom.lighteco.api.manager.CommandManager;
 import dev.xhyrom.lighteco.api.manager.CurrencyManager;
 import dev.xhyrom.lighteco.api.manager.UserManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.api.platform.PlayerAdapter;
-import dev.xhyrom.lighteco.common.api.impl.ApiCurrencyManager;
-import dev.xhyrom.lighteco.common.api.impl.ApiUserManager;
+import dev.xhyrom.lighteco.common.api.impl.*;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
-import dev.xhyrom.lighteco.common.api.impl.ApiPlatform;
-import dev.xhyrom.lighteco.common.api.impl.ApiPlayerAdapter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class LightEcoApi implements LightEco {
@@ -18,6 +16,7 @@ public class LightEcoApi implements LightEco {
     private final Platform platform;
     private final UserManager userManager;
     private final CurrencyManager currencyManager;
+    private final CommandManager commandManager;
     private final PlayerAdapter<?> playerAdapter;
 
     public LightEcoApi(LightEcoPlugin plugin) {
@@ -26,6 +25,7 @@ public class LightEcoApi implements LightEco {
         this.platform = new ApiPlatform(plugin);
         this.userManager = new ApiUserManager(plugin, plugin.getUserManager());
         this.currencyManager = new ApiCurrencyManager(plugin, plugin.getCurrencyManager());
+        this.commandManager = new ApiCommandManager(plugin, plugin.getCommandManager());
         this.playerAdapter = new ApiPlayerAdapter<>(userManager, plugin.getContextManager());
     }
 
@@ -42,6 +42,11 @@ public class LightEcoApi implements LightEco {
     @Override
     public @NonNull CurrencyManager getCurrencyManager() {
         return this.currencyManager;
+    }
+
+    @Override
+    public @NonNull CommandManager getCommandManager() {
+        return this.commandManager;
     }
 
     @Override

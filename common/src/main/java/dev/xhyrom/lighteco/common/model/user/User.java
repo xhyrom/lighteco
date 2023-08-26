@@ -9,8 +9,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.UUID;
 
+@Getter
 public class User {
-    @Getter
     private final LightEcoPlugin plugin;
     @Getter
     private final ApiUser proxy = new ApiUser(this);
