@@ -12,6 +12,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 
 public class TestPlugin extends JavaPlugin implements Listener {
     @Override
@@ -34,7 +36,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void onWalk(AsyncPlayerChatEvent event) {
+    public void onWalk(AsyncPlayerChatEvent event) throws ParseException {
         Player player = event.getPlayer();
 
         LightEco provider = LightEcoProvider.get();
@@ -49,19 +51,22 @@ public class TestPlugin extends JavaPlugin implements Listener {
         Currency currency = currencyManager.getCurrency(args[0]);
 
         switch (command) {
-            case "balance": {
-                player.sendMessage(user.getBalance(currency).toString());
-                break;
-            }
-            case "add": {
+            case "balance" -> player.sendMessage(user.getBalance(currency).toString());
+            case "add" -> {
                 if (currency.getDecimalPlaces() > 0) {
-                    user.setBalance(currency, BigDecimal.valueOf(Integer.parseInt(args[1])));
+                    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+                    user.setBalance(currency, BigDecimal.valueOf(
+                            Double.parseDouble(
+                                    decimalFormat.format(
+                                            Double.parseDouble(args[1])
+                                    )
+                            )
+                    ));
                 } else {
-                    user.setBalance(currency, BigDecimal.valueOf(Double.parseDouble(args[1])));
+                    user.setBalance(currency, BigDecimal.valueOf(Integer.parseInt(args[1])));
                 }
 
                 provider.getUserManager().saveUser(user).thenAccept(aVoid -> player.sendMessage("Saved!"));
-                break;
             }
         }
     }

@@ -9,6 +9,8 @@ import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +29,9 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     }
 
     @Override
-    public void onLoad() {}
+    public void onLoad() {
+        plugin.load();
+    }
 
     @Override
     public void onEnable() {
@@ -41,6 +45,11 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     public Server getServer() {
         return loader.getServer();
+    }
+
+    @Override
+    public File getDataFolder() {
+        return loader.getDataFolder();
     }
 
     @Override

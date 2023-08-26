@@ -5,7 +5,8 @@ plugins {
 dependencies {
     api(project(":lighteco-api"))
 
-    implementation("org.spongepowered:configurate-yaml:4.0.0")
+    implementation("eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.0-beta.5")
+    implementation("eu.okaeri:okaeri-configs-validator-okaeri:5.0.0-beta.5")
 
     compileOnly("org.projectlombok:lombok:1.18.28")
     annotationProcessor("org.projectlombok:lombok:1.18.28")
