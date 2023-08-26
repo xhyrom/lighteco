@@ -8,10 +8,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.Collection;
 import java.util.List;
 
-public interface CurrencyManager extends Manager<String, Currency<?>> {
-    @NonNull Collection<Currency<?>> getRegisteredCurrencies();
+public interface CurrencyManager extends Manager<String, Currency> {
+    @NonNull Collection<Currency> getRegisteredCurrencies();
 
-    void registerCurrency(@NonNull Currency<?> currency);
+    void registerCurrency(@NonNull Currency currency);
 
-    List<User> getTopUsers(@NonNull Currency<?> currency, int length);
+    List<User> getTopUsers(@NonNull Currency currency, int length);
 }

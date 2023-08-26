@@ -4,6 +4,7 @@ import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.api.model.user.User;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class ApiUser implements User {
@@ -24,8 +25,8 @@ public class ApiUser implements User {
     }
 
     @Override
-    public <T> T getBalance(@NonNull Currency<?> currency) {
-        dev.xhyrom.lighteco.common.model.currency.Currency<?> internal = this.handler.getPlugin()
+    public BigDecimal getBalance(@NonNull Currency currency) {
+        dev.xhyrom.lighteco.common.model.currency.Currency internal = this.handler.getPlugin()
                 .getCurrencyManager()
                 .getIfLoaded(currency.getIdentifier());
 
@@ -33,8 +34,8 @@ public class ApiUser implements User {
     }
 
     @Override
-    public <T> void setBalance(@NonNull Currency<?> currency, @NonNull T balance) {
-        dev.xhyrom.lighteco.common.model.currency.Currency<?> internal = this.handler.getPlugin()
+    public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance) {
+        dev.xhyrom.lighteco.common.model.currency.Currency internal = this.handler.getPlugin()
                 .getCurrencyManager()
                 .getIfLoaded(currency.getIdentifier());
 

@@ -11,6 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.math.BigDecimal;
+
 public class TestPlugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
@@ -27,7 +29,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
         getLogger().info("TestCurrency registered!");
 
         currencyManager.getRegisteredCurrencies().forEach(currency -> {
-            getLogger().info("Currency: " + currency.getIdentifier() + " (" + currency.getType() + ", " + currency.getValueType() + ", " + currency.isPayable() + ")");
+            getLogger().info("Currency: " + currency.getIdentifier() + " (" + currency.getType() + ", " + currency.getDecimalPlaces() + ", " + currency.isPayable() + ")");
         });
     }
 
@@ -44,7 +46,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
         String command = message.split(" ")[0];
         String[] args = message.substring(command.length()).trim().split(" ");
 
-        Currency<?> currency = currencyManager.getCurrency(args[0]);
+        Currency currency = currencyManager.getCurrency(args[0]);
 
         switch (command) {
             case "balance": {
@@ -52,10 +54,10 @@ public class TestPlugin extends JavaPlugin implements Listener {
                 break;
             }
             case "add": {
-                if (currency.getValueType().equals(Integer.class)) {
-                    user.setBalance(currency, Integer.parseInt(args[1]));
-                } else if (currency.getValueType().equals(Double.class)) {
-                    user.setBalance(currency, Double.parseDouble(args[1]));
+                if (currency.getDecimalPlaces() > 0) {
+                    user.setBalance(currency, BigDecimal.valueOf(Integer.parseInt(args[1])));
+                } else {
+                    user.setBalance(currency, BigDecimal.valueOf(Double.parseDouble(args[1])));
                 }
 
                 provider.getUserManager().saveUser(user).thenAccept(aVoid -> player.sendMessage("Saved!"));

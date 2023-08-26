@@ -3,6 +3,7 @@ package dev.xhyrom.lighteco.api.model.user;
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public interface User {
@@ -26,7 +27,7 @@ public interface User {
      * @param currency the currency
      * @return the balance
      */
-    <T> T getBalance(@NonNull Currency<?> currency);
+    BigDecimal getBalance(@NonNull Currency currency);
 
     /**
      * Set the balance of this user for the specified currency.
@@ -34,5 +35,5 @@ public interface User {
      * @param currency the currency
      * @param balance the balance
      */
-    <T> void setBalance(@NonNull Currency<?> currency, @NonNull T balance);
+    void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance);
 }

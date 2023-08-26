@@ -1,14 +1,8 @@
 package dev.xhyrom.lighteco.api.model.currency;
 
-import lombok.Getter;
+import java.math.BigDecimal;
 
-public abstract class Currency<T> {
-    @Getter
-    private final Class<T> valueType;
-    public Currency(Class<T> valueType) {
-        this.valueType = valueType;
-    }
-
+public abstract class Currency {
     public abstract String getIdentifier();
     /**
      * Get the type of the currency, either {@link Type#LOCAL} or {@link Type#GLOBAL}
@@ -21,11 +15,21 @@ public abstract class Currency<T> {
     public abstract boolean isPayable();
 
     /**
+     * Get the number of decimal places this currency has
+     * If zero, the currency is considered to be a whole number (integer)
+     *
+     * @return The number of decimal places
+     */
+    public int getDecimalPlaces() {
+        return 0;
+    };
+
+    /**
      * Get the users that have a balance in this currency
      *
      * @return The users
      */
-    public abstract T getDefaultBalance();
+    public abstract BigDecimal getDefaultBalance();
 
     /**
      * Calculate the tax for the given amount
@@ -34,7 +38,7 @@ public abstract class Currency<T> {
      * @param amount The amount to calculate the tax for
      * @return The tax
      */
-    public T calculateTax(T amount) {
+    public BigDecimal calculateTax(BigDecimal amount) {
         return getDefaultBalance();
     };
 

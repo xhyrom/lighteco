@@ -8,11 +8,11 @@ import java.util.Collection;
 import java.util.List;
 
 public interface CurrencyManager {
-    @NonNull Collection<Currency<?>> getRegisteredCurrencies();
+    @NonNull Collection<Currency> getRegisteredCurrencies();
 
-    <T> Currency<T> getCurrency(@NonNull String identifier);
+    Currency getCurrency(@NonNull String identifier);
 
-    void registerCurrency(@NonNull Currency<?> currency);
+    void registerCurrency(@NonNull Currency currency);
 
-    List<User> getTopUsers(@NonNull Currency<?> currency, int length);
+    List<User> getTopUsers(@NonNull Currency currency, int length);
 }

@@ -13,8 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+@Getter
 public class BukkitLightEcoPlugin extends AbstractLightEcoPlugin {
-    @Getter
     private final BukkitLightEcoBootstrap bootstrap;
 
     @Getter

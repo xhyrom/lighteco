@@ -4,17 +4,18 @@ import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Currency<T> {
+public class Currency {
     private final LightEcoPlugin plugin;
 
     @Getter
-    private final dev.xhyrom.lighteco.api.model.currency.Currency<T> proxy;
+    private final dev.xhyrom.lighteco.api.model.currency.Currency proxy;
 
-    public Currency(LightEcoPlugin plugin, dev.xhyrom.lighteco.api.model.currency.Currency<T> proxy) {
+    public Currency(LightEcoPlugin plugin, dev.xhyrom.lighteco.api.model.currency.Currency proxy) {
         this.plugin = plugin;
         this.proxy = proxy;
     }
@@ -27,11 +28,7 @@ public class Currency<T> {
         return proxy.getType();
     }
 
-    public Class<T> getValueType() {
-        return proxy.getValueType();
-    }
-
-    public T getDefaultBalance() {
+    public BigDecimal getDefaultBalance() {
         return proxy.getDefaultBalance();
     }
 

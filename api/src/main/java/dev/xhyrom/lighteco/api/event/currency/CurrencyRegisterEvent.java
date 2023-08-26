@@ -7,5 +7,5 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface CurrencyRegisterEvent extends LightEcoEvent {
     @Position(0)
-    @NonNull Currency<?> getCurrency();
+    @NonNull Currency getCurrency();
 }

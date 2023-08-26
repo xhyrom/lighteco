@@ -17,18 +17,18 @@ public class User {
 
     @Getter
     private final UUID uniqueId;
-    private final TypedMap<Currency<?>> balances = new TypedMap<>();
+    private final TypedMap<Currency> balances = new TypedMap<>();
 
     public User(LightEcoPlugin plugin, UUID uniqueId) {
         this.plugin = plugin;
         this.uniqueId = uniqueId;
     }
 
-    public <T> T getBalance(@NonNull Currency<?> currency) {
+    public <T> T getBalance(@NonNull Currency currency) {
         return balances.<T>getOrDefault(currency, (T) currency.getDefaultBalance());
     }
 
-    public <T> void setBalance(@NonNull Currency<?> currency, @NonNull T balance) {
+    public <T> void setBalance(@NonNull Currency currency, @NonNull T balance) {
         balances.put(currency, balance);
     }
 

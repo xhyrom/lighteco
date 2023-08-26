@@ -2,11 +2,9 @@ package dev.xhyrom.lighteco.bukkittest;
 
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 
-public class TestCurrency2 extends Currency<Double> {
-    public TestCurrency2() {
-        super(Double.class);
-    }
+import java.math.BigDecimal;
 
+public class TestCurrency2 extends Currency {
     @Override
     public String getIdentifier() {
         return "test2";
@@ -23,12 +21,17 @@ public class TestCurrency2 extends Currency<Double> {
     }
 
     @Override
-    public Double getDefaultBalance() {
-        return 0.0;
+    public int getDecimalPlaces() {
+       return 2;
     }
 
     @Override
-    public Double calculateTax(Double amount) {
-        return 0.0;
+    public BigDecimal getDefaultBalance() {
+        return BigDecimal.ZERO;
+    }
+
+    @Override
+    public BigDecimal calculateTax(BigDecimal amount) {
+        return BigDecimal.ZERO;
     }
 }

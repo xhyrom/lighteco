@@ -12,8 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
 public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstrap {
-    @Getter
     private final JavaPlugin loader;
     private final BukkitLightEcoPlugin plugin = new BukkitLightEcoPlugin(this);
 
