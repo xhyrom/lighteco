@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class AbstractCommandManager implements CommandManager {
-    protected final LightEcoPlugin plugin;
+    public final LightEcoPlugin plugin;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
     private final ArrayList<UUID> mustWait = new ArrayList<>();
 

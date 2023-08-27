@@ -1,5 +1,6 @@
 package dev.xhyrom.lighteco.common.config;
 
+import dev.xhyrom.lighteco.common.config.storage.StorageConfig;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
@@ -12,7 +13,6 @@ public class Config extends OkaeriConfig {
     @Comment("Used for local currencies.")
     public String server = "none";
 
-    @Comment("The storage provider to use.")
-    @Comment("Supported providers: memory")
-    public String storage = "memory";
+    @Comment("Storage settings.")
+    public StorageConfig storage = new StorageConfig();
 }

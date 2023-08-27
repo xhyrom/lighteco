@@ -12,8 +12,17 @@ public class ApiCommandManager extends ApiAbstractManager<dev.xhyrom.lighteco.co
 
     @Override
     public void registerCurrencyCommand(@NonNull Currency currency) {
-        dev.xhyrom.lighteco.common.model.currency.Currency internal = this.plugin.getCurrencyManager().getIfLoaded(currency.getIdentifier());
+        dev.xhyrom.lighteco.common.model.currency.Currency internal = this.plugin.getCurrencyManager()
+                .getIfLoaded(currency.getIdentifier());
 
         this.handler.registerCurrencyCommand(internal);
+    }
+
+    @Override
+    public void registerCurrencyCommand(@NonNull Currency currency, boolean main) {
+        dev.xhyrom.lighteco.common.model.currency.Currency internal = this.plugin.getCurrencyManager()
+                .getIfLoaded(currency.getIdentifier());
+
+        this.handler.registerCurrencyCommand(internal, main);
     }
 }

@@ -5,4 +5,5 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface CommandManager {
     void registerCurrencyCommand(@NonNull Currency currency);
+    void registerCurrencyCommand(@NonNull Currency currency, boolean main);
 }

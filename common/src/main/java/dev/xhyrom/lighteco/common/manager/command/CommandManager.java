@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 
 public interface CommandManager {
     void registerCurrencyCommand(@NonNull Currency currency);
+    void registerCurrencyCommand(@NonNull Currency currency, boolean main);
 
     boolean canUse(CommandSender sender);
 
