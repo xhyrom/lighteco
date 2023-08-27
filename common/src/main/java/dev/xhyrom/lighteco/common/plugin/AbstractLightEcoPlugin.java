@@ -20,7 +20,7 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
     private Config config;
 
     public final void load() {
-        Config config = ConfigManager.create(Config.class, (it) -> {
+        this.config = ConfigManager.create(Config.class, (it) -> {
             File path = new File(this.getBootstrap().getDataFolder(), "config.yml");
             path.mkdir();
 
@@ -30,8 +30,6 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
             it.saveDefaults();
             it.load(true);
         });
-
-        this.config = config;
     }
 
     public final void enable() {

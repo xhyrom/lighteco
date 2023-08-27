@@ -1,0 +1,10 @@
+name: ${name}
+description: ${description}
+version: ${version}
+main: dev.xhyrom.lighteco.currency.money.bukkit.BukkitMCLoader
+author: ${author}
+api-version: 1.20
+
+softdepend:
+  - Vault
+  - lighteco-bukkit

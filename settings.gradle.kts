@@ -5,7 +5,7 @@ sequenceOf(
     "common",
     "bukkit",
     "bukkittest",
-    "velocity"
+    "currency-money"
 ).forEach {
     include("lighteco-$it")
     project(":lighteco-$it").projectDir = file(it)
