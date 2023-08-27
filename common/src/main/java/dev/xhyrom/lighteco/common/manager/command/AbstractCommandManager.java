@@ -114,6 +114,14 @@ public abstract class AbstractCommandManager implements CommandManager {
 
     @Override
     public void onPay(CommandSender sender, Currency currency, User target, BigDecimal amount) {
+        if (sender.getUniqueId() != null && (sender.getUniqueId() == target.getUniqueId())) {
+            sender.sendMessage(
+                    miniMessage.deserialize("<red>You cannot pay yourself!")
+            );
+
+            return;
+        }
+
         addToMustWait(sender.getUniqueId(), target.getUniqueId());
 
         User user = this.plugin.getUserManager().getIfLoaded(sender.getUniqueId());
