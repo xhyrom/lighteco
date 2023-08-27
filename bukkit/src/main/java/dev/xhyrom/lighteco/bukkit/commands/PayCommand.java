@@ -26,7 +26,7 @@ public class PayCommand implements Command {
                 .withPermission(permissionBase + "pay")
                 .withArguments(
                         new OfflinePlayerArgument("target"),
-                        currency.getProxy().getDecimalPlaces() > 0
+                        currency.getProxy().fractionalDigits() > 0
                                 ? new DoubleArgument("amount", 1)
                                 : new IntegerArgument("amount", 1)
                 )

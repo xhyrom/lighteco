@@ -22,7 +22,7 @@ public class TestCurrency2 extends Currency {
     }
 
     @Override
-    public int getDecimalPlaces() {
+    public int fractionalDigits() {
        return 2;
     }
 

@@ -17,12 +17,11 @@ public abstract class Currency {
     public abstract boolean isPayable();
 
     /**
-     * Get the number of decimal places this currency has
-     * If zero, the currency is considered to be a whole number (integer)
+     * Get the number of fractional digits this currency has
      *
-     * @return The number of decimal places
+     * @return The number of fractional digits
      */
-    public int getDecimalPlaces() {
+    public int fractionalDigits() {
         return 0;
     };
 

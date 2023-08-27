@@ -7,6 +7,7 @@ import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -73,6 +74,7 @@ public abstract class AbstractCommandManager implements CommandManager {
     @Override
     public void onSet(CommandSender sender, Currency currency, User target, BigDecimal amount) {
         addToMustWait(sender.getUniqueId(), target.getUniqueId());
+        amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
         target.setBalance(currency, amount);
 
@@ -87,6 +89,7 @@ public abstract class AbstractCommandManager implements CommandManager {
     @Override
     public void onGive(CommandSender sender, Currency currency, User target, BigDecimal amount) {
         addToMustWait(sender.getUniqueId(), target.getUniqueId());
+        amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
         target.setBalance(currency, target.getBalance(currency).add(amount));
 
@@ -101,6 +104,7 @@ public abstract class AbstractCommandManager implements CommandManager {
     @Override
     public void onTake(CommandSender sender, Currency currency, User target, BigDecimal amount) {
         addToMustWait(sender.getUniqueId(), target.getUniqueId());
+        amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
         target.setBalance(currency, target.getBalance(currency).subtract(amount));
 
@@ -122,11 +126,19 @@ public abstract class AbstractCommandManager implements CommandManager {
             return;
         }
 
-        addToMustWait(sender.getUniqueId(), target.getUniqueId());
+        amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
         User user = this.plugin.getUserManager().getIfLoaded(sender.getUniqueId());
 
-        // TODO: ADD CHECKS FOR IF USER HAS ENOUGH MONEY
+        if (user.getBalance(currency).compareTo(amount) < 0) {
+            sender.sendMessage(
+                    miniMessage.deserialize("<red>You do not have enough money!")
+            );
+
+            return;
+        }
+
+        addToMustWait(sender.getUniqueId(), target.getUniqueId());
 
         // calculate tax using Currency#calculateTax
         BigDecimal tax = currency.getProxy().calculateTax(user.getProxy(), amount);
