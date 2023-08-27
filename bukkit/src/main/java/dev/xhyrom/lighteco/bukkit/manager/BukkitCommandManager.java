@@ -54,7 +54,8 @@ public class BukkitCommandManager extends AbstractCommandManager {
         new CommandAPICommand(currency.getIdentifier())
                 .withSubcommand(new SetCommand(this, currency, permissionBase).build())
                 .withSubcommand(new GiveCommand(this, currency, permissionBase).build())
-                .withSubcommand(new TakeCommand(this, currency, permissionBase).build());
+                .withSubcommand(new TakeCommand(this, currency, permissionBase).build())
+                .register();
 
         new PayCommand(this, currency, permissionBase).build().register();
 

@@ -1,25 +1,29 @@
 package dev.xhyrom.lighteco.common.manager.command;
 
+import dev.xhyrom.lighteco.common.config.message.CurrencyMessageConfig;
 import dev.xhyrom.lighteco.common.model.chat.CommandSender;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class AbstractCommandManager implements CommandManager {
     public final LightEcoPlugin plugin;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
+    private final Map<String, CurrencyMessageConfig> config;
     private final ArrayList<UUID> mustWait = new ArrayList<>();
 
     public AbstractCommandManager(LightEcoPlugin plugin) {
         this.plugin = plugin;
+        this.config = this.plugin.getConfig().messages.currency;
     }
 
     @Override
@@ -52,13 +56,27 @@ public abstract class AbstractCommandManager implements CommandManager {
         }
     }
 
+    private CurrencyMessageConfig getConfig(Currency currency) {
+        CurrencyMessageConfig config = this.config.get(currency.getIdentifier());
+
+        if (config == null) {
+           return this.config.get("default");
+        }
+
+        return config;
+    }
+
     @Override
     public void onBalance(CommandSender sender, Currency currency) {
         User user = this.plugin.getUserManager().getIfLoaded(sender.getUniqueId());
         BigDecimal balance = user.getBalance(currency);
 
         sender.sendMessage(
-                miniMessage.deserialize("<yellow>Your balance: <gold>" + balance.toPlainString() + " <yellow>" + currency.getIdentifier())
+               miniMessage.deserialize(
+                       getConfig(currency).balance,
+                       Placeholder.parsed("currency", currency.getIdentifier()),
+                       Placeholder.parsed("balance", balance.toPlainString())
+               )
         );
     }
 
@@ -67,7 +85,13 @@ public abstract class AbstractCommandManager implements CommandManager {
         BigDecimal balance = target.getBalance(currency);
 
         sender.sendMessage(
-                miniMessage.deserialize("<yellow>" + target.getUsername() + "'s balance: <gold>" + balance.toPlainString() + " <yellow>" + currency.getIdentifier())
+                miniMessage.deserialize(
+                        getConfig(currency).balanceOthers,
+                        Placeholder.parsed("currency", currency.getIdentifier()),
+                        Placeholder.parsed("target", target.getUsername()),
+                        Placeholder.parsed("balance", balance.toPlainString())
+                )
+
         );
     }
 
