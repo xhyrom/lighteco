@@ -7,6 +7,7 @@ import java.lang.reflect.Constructor;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.function.Function;
 
 public class H2ConnectionFactory extends FileConnectionFactory {
     private Constructor<?> connectionConstructor;
@@ -35,5 +36,10 @@ public class H2ConnectionFactory extends FileConnectionFactory {
 
             throw new SQLException("Failed to create connection", e);
         }
+    }
+
+    @Override
+    public Function<String, String> getStatementProcessor() {
+        return s -> s.replace('\'', '`');
     }
 }

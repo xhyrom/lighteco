@@ -2,6 +2,7 @@ package dev.xhyrom.lighteco.api.model.user;
 
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -19,7 +20,7 @@ public interface User {
      *
      * @return the username
      */
-    @NonNull String getUsername();
+    @Nullable String getUsername();
 
     /**
      * Get the balance of this user for the specified currency.
