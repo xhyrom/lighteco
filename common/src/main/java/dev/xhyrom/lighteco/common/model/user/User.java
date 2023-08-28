@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -43,6 +44,7 @@ public class User {
             throw new IllegalArgumentException("Balance cannot be negative");
         }
 
+        balance = balance.setScale(currency.fractionalDigits(), RoundingMode.DOWN);
         balances.put(currency, balance);
     }
 

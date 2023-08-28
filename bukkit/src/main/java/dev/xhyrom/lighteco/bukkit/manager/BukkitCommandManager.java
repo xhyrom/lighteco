@@ -32,13 +32,16 @@ public class BukkitCommandManager extends AbstractCommandManager {
             cmd.register();
         }
 
-        new CommandAPICommand(currency.getIdentifier())
+        CommandAPICommand cmd = new CommandAPICommand(currency.getIdentifier())
                 .withSubcommand(new SetCommand(this, currency, permissionBase).build())
                 .withSubcommand(new GiveCommand(this, currency, permissionBase).build())
                 .withSubcommand(new TakeCommand(this, currency, permissionBase).build())
-                .withSubcommand(new PayCommand(this, currency, permissionBase).build())
-                .withSubcommands(new BalanceCommand(this, "balance", currency, permissionBase).multipleBuild())
-                .register();
+                .withSubcommands(new BalanceCommand(this, "balance", currency, permissionBase).multipleBuild());
+
+        if (currency.isPayable())
+            cmd = cmd.withSubcommand(new PayCommand(this, currency, permissionBase).build());
+
+        cmd.register();
     }
 
     @Override
@@ -54,7 +57,8 @@ public class BukkitCommandManager extends AbstractCommandManager {
         registerCurrencyCommand(currency);
 
         // Expose pay as main command
-        new PayCommand(this, currency, permissionBase).build().register();
+        if (currency.isPayable())
+            new PayCommand(this, currency, permissionBase).build().register();
 
         // Expose balance as main command
         for (CommandAPICommand cmd : new BalanceCommand(

@@ -36,6 +36,10 @@ public class Currency {
         return proxy.isPayable();
     }
 
+    public int fractionalDigits() {
+        return proxy.fractionalDigits();
+    }
+
     public List<User> getTopUsers(int length) {
         List<User> users = new ArrayList<>();
         users.add(new User(plugin, new UUID(0, 0)));
