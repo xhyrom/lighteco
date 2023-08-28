@@ -41,7 +41,7 @@ public class GiveCommand implements Command {
         OfflinePlayer target = (OfflinePlayer) args.get("target");
         BigDecimal amount = BigDecimal.valueOf(Double.parseDouble(args.getRaw("amount")));
 
-        if (!this.manager.canUse(sender)) return;
+        if (!this.manager.canUse(sender, currency)) return;
 
         this.manager.plugin.getUserManager().loadUser(target.getUniqueId())
                 .thenAcceptAsync(result -> {

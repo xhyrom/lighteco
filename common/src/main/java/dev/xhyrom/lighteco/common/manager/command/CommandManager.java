@@ -11,7 +11,7 @@ public interface CommandManager {
     void registerCurrencyCommand(@NonNull Currency currency);
     void registerCurrencyCommand(@NonNull Currency currency, boolean main);
 
-    boolean canUse(CommandSender sender);
+    boolean canUse(CommandSender sender, Currency currency);
 
     void onBalance(CommandSender sender, Currency currency);
     void onBalance(CommandSender sender, Currency currency, User target);

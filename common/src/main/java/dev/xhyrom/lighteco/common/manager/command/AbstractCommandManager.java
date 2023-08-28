@@ -27,13 +27,15 @@ public abstract class AbstractCommandManager implements CommandManager {
     }
 
     @Override
-    public boolean canUse(CommandSender sender) {
+    public boolean canUse(CommandSender sender, Currency currency) {
         // Console doesn't need to wait
         if (sender.getUniqueId() == null) return true;
 
         if (mustWait.contains(sender.getUniqueId())) {
             sender.sendMessage(
-                    miniMessage.deserialize("<red>Please wait a moment before using this command again.")
+                    miniMessage.deserialize(
+                            this.getConfig(currency).wait
+                    )
             );
 
             return false;
@@ -104,7 +106,7 @@ public abstract class AbstractCommandManager implements CommandManager {
             target.setBalance(currency, amount);
         } catch (IllegalArgumentException e) {
             sender.sendMessage(
-                    miniMessage.deserialize("<red>Cannot set negative money!")
+                    miniMessage.deserialize(this.getConfig(currency).cannotSetNegative)
             );
 
             removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
@@ -112,7 +114,12 @@ public abstract class AbstractCommandManager implements CommandManager {
         }
 
         sender.sendMessage(
-                miniMessage.deserialize("<yellow>Set " + target.getUsername() + "'s balance to <gold>" + amount.toPlainString() + " <yellow>" + currency.getIdentifier())
+                miniMessage.deserialize(
+                        this.getConfig(currency).set,
+                        Placeholder.parsed("currency", currency.getIdentifier()),
+                        Placeholder.parsed("target", target.getUsername()),
+                        Placeholder.parsed("amount", amount.toPlainString())
+                )
         );
 
         this.plugin.getUserManager().saveUser(target)
@@ -128,7 +135,7 @@ public abstract class AbstractCommandManager implements CommandManager {
             target.deposit(currency, amount);
         } catch (IllegalArgumentException e) {
             sender.sendMessage(
-                    miniMessage.deserialize("<red>Cannot give negative money!")
+                    miniMessage.deserialize(this.getConfig(currency).cannotGiveNegative)
             );
 
             removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
@@ -136,7 +143,13 @@ public abstract class AbstractCommandManager implements CommandManager {
         }
 
         sender.sendMessage(
-                miniMessage.deserialize("<yellow>Gave " + target.getUsername() + " <gold>" + amount.toPlainString() + " <yellow>" + currency.getIdentifier())
+                miniMessage.deserialize(
+                        this.getConfig(currency).give,
+                        Placeholder.parsed("currency", currency.getIdentifier()),
+                        Placeholder.parsed("target", target.getUsername()),
+                        Placeholder.parsed("amount", amount.toPlainString()),
+                        Placeholder.parsed("balance", target.getBalance(currency).toPlainString())
+                )
         );
 
         this.plugin.getUserManager().saveUser(target)
@@ -152,7 +165,7 @@ public abstract class AbstractCommandManager implements CommandManager {
             target.withdraw(currency, amount);
         } catch (IllegalArgumentException e) {
             sender.sendMessage(
-                    miniMessage.deserialize("<red>Cannot take negative money!")
+                    miniMessage.deserialize(this.getConfig(currency).cannotTakeNegative)
             );
 
             removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
@@ -160,7 +173,13 @@ public abstract class AbstractCommandManager implements CommandManager {
         }
 
         sender.sendMessage(
-                miniMessage.deserialize("<yellow>Took <gold>" + amount.toPlainString() + " <yellow>" + currency.getIdentifier() + " from " + target.getUsername())
+                miniMessage.deserialize(
+                        this.getConfig(currency).take,
+                        Placeholder.parsed("currency", currency.getIdentifier()),
+                        Placeholder.parsed("target", target.getUsername()),
+                        Placeholder.parsed("amount", amount.toPlainString()),
+                        Placeholder.parsed("balance", target.getBalance(currency).toPlainString())
+                )
         );
 
         this.plugin.getUserManager().saveUser(target)
@@ -171,7 +190,15 @@ public abstract class AbstractCommandManager implements CommandManager {
     public void onPay(CommandSender sender, Currency currency, User target, BigDecimal amount) {
         if (sender.getUniqueId() != null && (sender.getUniqueId() == target.getUniqueId())) {
             sender.sendMessage(
-                    miniMessage.deserialize("<red>You cannot pay yourself!")
+                    miniMessage.deserialize(this.getConfig(currency).cannotPaySelf)
+            );
+
+            return;
+        }
+
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            sender.sendMessage(
+                    miniMessage.deserialize(this.getConfig(currency).cannotPayNegative)
             );
 
             return;
@@ -183,7 +210,7 @@ public abstract class AbstractCommandManager implements CommandManager {
 
         if (user.getBalance(currency).compareTo(amount) < 0) {
             sender.sendMessage(
-                    miniMessage.deserialize("<red>You do not have enough money!")
+                    miniMessage.deserialize(this.getConfig(currency).notEnoughMoney)
             );
 
             return;
@@ -200,9 +227,16 @@ public abstract class AbstractCommandManager implements CommandManager {
         target.deposit(currency, taxedAmount);
         user.withdraw(currency, amount);
 
-       // send message that will include original amount, taxed amount, tax rate - percentage amount and tax amount
         sender.sendMessage(
-                miniMessage.deserialize("<yellow>Paid <gold>" + amount.toPlainString() + " <yellow>" + currency.getIdentifier() + " to " + target.getUsername() + " <yellow>(<gold>" + taxedAmount.toPlainString() + " <yellow>after tax)")
+                miniMessage.deserialize(
+                        this.getConfig(currency).pay,
+                        Placeholder.parsed("currency", currency.getIdentifier()),
+                        Placeholder.parsed("target", target.getUsername()),
+                        Placeholder.parsed("amount", amount.toPlainString()),
+                        Placeholder.parsed("taxed_amount", taxedAmount.toPlainString()),
+                        Placeholder.parsed("sender_balance", user.getBalance(currency).toPlainString()),
+                        Placeholder.parsed("receiver_balance", target.getBalance(currency).toPlainString())
+                )
         );
 
         CompletableFuture.allOf(
