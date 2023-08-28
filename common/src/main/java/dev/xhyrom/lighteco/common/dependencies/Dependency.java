@@ -4,14 +4,29 @@ import lombok.Getter;
 
 public enum Dependency {
     H2_DRIVER(
-            "com.h2database",
-            "h2",
-            "2.1.214"
+        "com.h2database",
+        "h2",
+        "2.1.214"
     ),
     SQLITE_DRIVER(
-            "org.xerial",
-            "sqlite-jdbc",
-            "3.28.0"
+        "org.xerial",
+        "sqlite-jdbc",
+        "3.28.0"
+    ),
+    MARIADB_DRIVER(
+        "org.mariadb.jdbc",
+        "mariadb-java-client",
+        "3.1.3"
+    ),
+    MYSQL_DRIVER(
+        "mysql",
+        "mysql-connector-java",
+        "8.0.23"
+    ),
+    POSTGRESQL_DRIVER(
+        "org.postgresql",
+        "postgresql",
+        "42.6.0"
     );
 
     @Getter

@@ -25,7 +25,7 @@ public enum SqlStatements {
             case SQLITE -> {
                 return this.sqlite;
             }
-            case H2, MYSQL -> {
+            case H2, MYSQL, MARIADB -> {
                 return this.mysql;
             }
         }

@@ -11,6 +11,8 @@ public class DependencyRegistry {
     private static final SetMultimap<StorageType, Dependency> STORAGE_DEPENDENCIES = ImmutableSetMultimap.<StorageType, Dependency>builder()
             .putAll(StorageType.SQLITE, Dependency.SQLITE_DRIVER)
             .putAll(StorageType.H2, Dependency.H2_DRIVER)
+            .putAll(StorageType.MYSQL, Dependency.MYSQL_DRIVER)
+            .putAll(StorageType.MARIADB, Dependency.MARIADB_DRIVER)
             .build();
 
     public Set<Dependency> resolveStorageDependencies(Set<StorageType> types) {

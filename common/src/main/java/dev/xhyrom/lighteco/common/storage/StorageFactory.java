@@ -7,6 +7,8 @@ import dev.xhyrom.lighteco.common.storage.provider.memory.MemoryStorageProvider;
 import dev.xhyrom.lighteco.common.storage.provider.sql.SqlStorageProvider;
 import dev.xhyrom.lighteco.common.storage.provider.sql.connection.file.H2ConnectionFactory;
 import dev.xhyrom.lighteco.common.storage.provider.sql.connection.file.SqliteConnectionFactory;
+import dev.xhyrom.lighteco.common.storage.provider.sql.connection.hikari.MariaDBConnectionFactory;
+import dev.xhyrom.lighteco.common.storage.provider.sql.connection.hikari.MySQLConnectionFactory;
 
 import java.util.Set;
 
@@ -44,6 +46,16 @@ public class StorageFactory {
                 return new SqlStorageProvider(
                         this.plugin,
                         new SqliteConnectionFactory(this.plugin.getBootstrap().getDataDirectory().resolve("lighteco-sqlite.db"))
+                );
+            case "mysql":
+                return new SqlStorageProvider(
+                        this.plugin,
+                        new MySQLConnectionFactory(this.plugin.getConfig().storage.data)
+                );
+            case "mariadb":
+                return new SqlStorageProvider(
+                        this.plugin,
+                        new MariaDBConnectionFactory(this.plugin.getConfig().storage.data)
                 );
             default:
                 throw new IllegalArgumentException("Unknown storage provider: " + provider);
