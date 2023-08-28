@@ -50,8 +50,8 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     }
 
     @Override
-    public File getDataFolder() {
-        return this.loader.getDataFolder();
+    public Path getDataDirectory() {
+        return this.loader.getDataFolder().toPath();
     }
 
     @Override

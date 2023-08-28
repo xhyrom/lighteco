@@ -6,10 +6,11 @@ import eu.okaeri.configs.annotation.Variable;
 
 public class StorageConfig extends OkaeriConfig {
     @Comment("Storage provider.")
-    @Comment("Available providers: memory")
-    public String provider = "memory";
+    @Comment("Available providers: h2, sqlite")
+    public String provider = "h2";
 
     @Comment("Data storage settings.")
+    @Comment("You don't need to worry about this if you're using local database.")
     public StorageDataConfig data = new StorageDataConfig();
 
     @Variable("table-prefix")

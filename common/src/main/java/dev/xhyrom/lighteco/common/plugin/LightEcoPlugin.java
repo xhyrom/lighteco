@@ -3,6 +3,7 @@ package dev.xhyrom.lighteco.common.plugin;
 import dev.xhyrom.lighteco.api.manager.ContextManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.common.config.Config;
+import dev.xhyrom.lighteco.common.dependencies.DependencyManager;
 import dev.xhyrom.lighteco.common.manager.command.CommandManager;
 import dev.xhyrom.lighteco.common.manager.currency.CurrencyManager;
 import dev.xhyrom.lighteco.common.manager.user.UserManager;
@@ -20,6 +21,8 @@ public interface LightEcoPlugin {
     @NonNull CurrencyManager getCurrencyManager();
     @NonNull CommandManager getCommandManager();
     @NonNull ContextManager<?> getContextManager();
+
+    @NonNull DependencyManager getDependencyManager();
 
     @NonNull Storage getStorage();
 }

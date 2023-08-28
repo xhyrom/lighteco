@@ -4,6 +4,7 @@ import dev.xhyrom.lighteco.api.model.user.User;
 import dev.xhyrom.lighteco.api.storage.StorageProvider;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+import dev.xhyrom.lighteco.common.storage.StorageType;
 import dev.xhyrom.lighteco.common.storage.provider.sql.connection.ConnectionFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -46,7 +47,7 @@ public class SqlStorageProvider implements StorageProvider {
                         .replace("{context}", plugin.getConfig().server)
         );
 
-        final SqlImplementation implementationName = this.connectionFactory.getImplementationName();
+        final StorageType implementationName = this.connectionFactory.getImplementationName();
         this.SAVE_USER_LOCAL_CURRENCY = SqlStatements.SAVE_USER_LOCAL_CURRENCY.get(implementationName);
         this.SAVE_USER_GLOBAL_CURRENCY = SqlStatements.SAVE_USER_GLOBAL_CURRENCY.get(implementationName);
     }

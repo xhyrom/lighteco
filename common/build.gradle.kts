@@ -10,8 +10,7 @@ dependencies {
         exclude(module = "annotations")
     }
     api("net.kyori:adventure-text-minimessage:4.14.0")
-
-    api("org.xerial:sqlite-jdbc:3.40.0.0")
+    api("com.google.guava:guava:32.1.2-jre")
 
     implementation("eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.0-beta.5")
     implementation("eu.okaeri:okaeri-configs-validator-okaeri:5.0.0-beta.5")
