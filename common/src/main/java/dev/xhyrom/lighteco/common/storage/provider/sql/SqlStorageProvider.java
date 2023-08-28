@@ -17,11 +17,8 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public class SqlStorageProvider implements StorageProvider {
-    private static final String SAVE_USER_LOCAL_CURRENCY_MYSQL = "INSERT INTO {prefix}_{context}_users (uuid, currency_identifier, balance) VALUES (?1, ?2, ?3) ON DUPLICATE KEY UPDATE balance=?3;";
-    private static final String SAVE_USER_GLOBAL_CURRENCY_MYSQL = "INSERT INTO {prefix}_users (uuid, currency_identifier, balance) VALUES (?1, ?2, ?3) ON DUPLICATE KEY UPDATE balance=?3;";
-    private static final String SAVE_USER_LOCAL_CURRENCY = "INSERT INTO {prefix}_users (uuid, currency_identifier, balance) VALUES (?1, ?2, ?3) ON CONFLICT (uuid, currency_identifier) DO UPDATE SET balance=?3;";
-    private static final String SAVE_USER_GLOBAL_CURRENCY = "INSERT INTO {prefix}_users (uuid, currency_identifier, balance) VALUES (?1, ?2, ?3) ON CONFLICT (uuid, currency_identifier) DO UPDATE SET balance=?3;";
-
+    private final String SAVE_USER_LOCAL_CURRENCY;
+    private final String SAVE_USER_GLOBAL_CURRENCY;
     private static final String LOAD_WHOLE_USER = """
     SELECT currency_identifier, balance
     FROM
@@ -48,6 +45,10 @@ public class SqlStorageProvider implements StorageProvider {
                         .replace("{prefix}", plugin.getConfig().storage.tablePrefix)
                         .replace("{context}", plugin.getConfig().server)
         );
+
+        final SqlImplementation implementationName = this.connectionFactory.getImplementationName();
+        this.SAVE_USER_LOCAL_CURRENCY = SqlStatements.SAVE_USER_LOCAL_CURRENCY.get(implementationName);
+        this.SAVE_USER_GLOBAL_CURRENCY = SqlStatements.SAVE_USER_GLOBAL_CURRENCY.get(implementationName);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class SqlStorageProvider implements StorageProvider {
         this.connectionFactory.init(this.plugin);
 
         List<String> statements;
-        String schemaFileName = "schema/" + this.connectionFactory.getImplementationName().toLowerCase() + ".sql";
+        String schemaFileName = "schema/" + this.connectionFactory.getImplementationName().name().toLowerCase() + ".sql";
         try (InputStream is = this.plugin.getBootstrap().getResourceStream(schemaFileName)) {
             if (is == null)
                 throw new IOException("Failed to load schema file: " + schemaFileName);
@@ -132,23 +133,9 @@ public class SqlStorageProvider implements StorageProvider {
                     }
                 }
 
-                System.out.println(psGlobal.toString());
-                System.out.println(psLocal.toString());
                 psGlobal.executeBatch();
                 psLocal.executeBatch();
             }
         }
-    }
-
-    private static boolean doesTableExists(Connection c, String table) throws SQLException {
-        try (ResultSet rs = c.getMetaData().getTables(c.getCatalog(), null, "%s", null)) {
-            while (rs.next()) {
-                if (rs.getString(3).equalsIgnoreCase(table)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 }

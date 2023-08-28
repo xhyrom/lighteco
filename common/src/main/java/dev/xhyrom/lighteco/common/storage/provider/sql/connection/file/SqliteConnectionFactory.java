@@ -1,6 +1,7 @@
 package dev.xhyrom.lighteco.common.storage.provider.sql.connection.file;
 
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+import dev.xhyrom.lighteco.common.storage.provider.sql.SqlImplementation;
 
 import java.lang.reflect.Constructor;
 import java.nio.file.Path;
@@ -16,8 +17,8 @@ public class SqliteConnectionFactory extends FileConnectionFactory {
     }
 
     @Override
-    public String getImplementationName() {
-        return "sqlite";
+    public SqlImplementation getImplementationName() {
+        return SqlImplementation.SQLITE;
     }
 
     @Override

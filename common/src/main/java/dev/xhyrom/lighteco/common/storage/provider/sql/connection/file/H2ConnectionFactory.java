@@ -1,6 +1,7 @@
 package dev.xhyrom.lighteco.common.storage.provider.sql.connection.file;
 
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+import dev.xhyrom.lighteco.common.storage.provider.sql.SqlImplementation;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -18,8 +19,8 @@ public class H2ConnectionFactory extends FileConnectionFactory {
     }
 
     @Override
-    public String getImplementationName() {
-        return "h2";
+    public SqlImplementation getImplementationName() {
+        return SqlImplementation.H2;
     }
 
     @Override
