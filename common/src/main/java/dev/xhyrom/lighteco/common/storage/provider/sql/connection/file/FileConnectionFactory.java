@@ -5,6 +5,7 @@ import dev.xhyrom.lighteco.common.storage.provider.sql.connection.ConnectionFact
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.function.Function;
 
 abstract class FileConnectionFactory implements ConnectionFactory {
     private Connection connection;
@@ -32,5 +33,10 @@ abstract class FileConnectionFactory implements ConnectionFactory {
         }
 
         return connection;
+    }
+
+    @Override
+    public Function<String, String> getStatementProcessor() {
+        return s -> s.replace('\'', '`');
     }
 }

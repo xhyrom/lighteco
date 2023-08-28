@@ -9,24 +9,23 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.function.Function;
 
-public class H2ConnectionFactory extends FileConnectionFactory {
+public class SqliteConnectionFactory extends FileConnectionFactory {
     private Constructor<?> connectionConstructor;
 
-    public H2ConnectionFactory(File file) {
+    public SqliteConnectionFactory(File file) {
         super(file);
     }
 
     @Override
     public void init(LightEcoPlugin plugin) {
         // TODO: implement
-        //ClassLoader classLoader = plugin
     }
 
     @Override
     protected Connection createConnection(File file) throws SQLException {
         try {
             return (Connection) this.connectionConstructor.newInstance(
-                    "jdbc:h2:" + file.getAbsolutePath(),
+                    "jdbc:sqlite:" + file.getAbsolutePath(),
                     new Properties(),
                     null, null, false
             );
