@@ -39,7 +39,32 @@ public class User {
     }
 
     public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance) {
+        if (balance.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Balance cannot be negative");
+        }
+
         balances.put(currency, balance);
+    }
+
+    public void deposit(@NonNull Currency currency, @NonNull BigDecimal amount) throws IllegalArgumentException {
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
+
+        setBalance(currency, getBalance(currency).add(amount));
+    }
+
+    public void withdraw(@NonNull Currency currency, @NonNull BigDecimal amount) throws IllegalArgumentException {
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
+
+        if (getBalance(currency).compareTo(amount) < 0) {
+            // Withdraw all
+            amount = getBalance(currency);
+        }
+
+        setBalance(currency, getBalance(currency).subtract(amount));
     }
 
     public void invalidateCaches() {

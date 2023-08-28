@@ -7,10 +7,12 @@ import dev.xhyrom.lighteco.api.model.user.User;
 import net.milkbowl.vault.economy.AbstractEconomy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 public class Vault extends AbstractEconomy {
     private final LightEco provider;
@@ -105,14 +107,39 @@ public class Vault extends AbstractEconomy {
         UUID uniqueId = Bukkit.getPlayerUniqueId(playerName);
         User user = provider.getUserManager().loadUser(uniqueId).join();
 
-        BigDecimal balance = user.getBalance(currency);
-        BigDecimal newBalance = balance.subtract(BigDecimal.valueOf(amount));
+        try {
+            user.withdraw(currency, BigDecimal.valueOf(amount));
+        } catch (IllegalArgumentException e) {
+            return new EconomyResponse(
+                    amount,
+                    bigDecimalToDouble(user.getBalance(currency)),
+                    EconomyResponse.ResponseType.FAILURE,
+                    "Cannot withdraw negative funds"
+            );
+        }
 
-        user.setBalance(currency, newBalance);
+        return saveUser(amount, user);
+    }
 
-        provider.getUserManager().saveUser(user);
+    @NotNull
+    private EconomyResponse saveUser(double amount, User user) {
+        try {
+            provider.getUserManager().saveUser(user).get();
+        } catch (InterruptedException | ExecutionException e) {
+            return new EconomyResponse(
+                    amount,
+                    bigDecimalToDouble(user.getBalance(currency)),
+                    EconomyResponse.ResponseType.FAILURE,
+                    "Cannot save user"
+            );
+        }
 
-        return new EconomyResponse(amount, bigDecimalToDouble(newBalance), EconomyResponse.ResponseType.SUCCESS, "");
+        return new EconomyResponse(
+                amount,
+                bigDecimalToDouble(user.getBalance(currency)),
+                EconomyResponse.ResponseType.SUCCESS,
+                ""
+        );
     }
 
     @Override
@@ -125,14 +152,18 @@ public class Vault extends AbstractEconomy {
         UUID uniqueId = Bukkit.getPlayerUniqueId(playerName);
         User user = provider.getUserManager().loadUser(uniqueId).join();
 
-        BigDecimal balance = user.getBalance(currency);
-        BigDecimal newBalance = balance.add(BigDecimal.valueOf(amount));
+        try {
+            user.deposit(currency, BigDecimal.valueOf(amount));
+        } catch (IllegalArgumentException e) {
+            return new EconomyResponse(
+                    amount,
+                    bigDecimalToDouble(user.getBalance(currency)),
+                    EconomyResponse.ResponseType.FAILURE,
+                    "Cannot deposit negative funds"
+            );
+        }
 
-        user.setBalance(currency, newBalance);
-
-        provider.getUserManager().saveUser(user);
-
-        return new EconomyResponse(amount, bigDecimalToDouble(newBalance), EconomyResponse.ResponseType.SUCCESS, "");
+        return saveUser(amount, user);
     }
 
     @Override

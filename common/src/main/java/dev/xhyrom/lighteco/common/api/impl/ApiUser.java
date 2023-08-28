@@ -42,4 +42,22 @@ public class ApiUser implements User {
 
         this.handler.setBalance(internal, balance);
     }
+
+    @Override
+    public void deposit(@NonNull Currency currency, @NonNull BigDecimal amount) {
+        dev.xhyrom.lighteco.common.model.currency.Currency internal = this.handler.getPlugin()
+                .getCurrencyManager()
+                .getIfLoaded(currency.getIdentifier());
+
+        this.handler.deposit(internal, amount);
+    }
+
+    @Override
+    public void withdraw(@NonNull Currency currency, @NonNull BigDecimal amount) {
+        dev.xhyrom.lighteco.common.model.currency.Currency internal = this.handler.getPlugin()
+                .getCurrencyManager()
+                .getIfLoaded(currency.getIdentifier());
+
+        this.handler.withdraw(internal, amount);
+    }
 }

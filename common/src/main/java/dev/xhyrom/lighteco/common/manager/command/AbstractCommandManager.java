@@ -100,7 +100,16 @@ public abstract class AbstractCommandManager implements CommandManager {
         addToMustWait(sender.getUniqueId(), target.getUniqueId());
         amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
-        target.setBalance(currency, amount);
+        try {
+            target.setBalance(currency, amount);
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(
+                    miniMessage.deserialize("<red>Cannot set negative money!")
+            );
+
+            removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
+            return;
+        }
 
         sender.sendMessage(
                 miniMessage.deserialize("<yellow>Set " + target.getUsername() + "'s balance to <gold>" + amount.toPlainString() + " <yellow>" + currency.getIdentifier())
@@ -115,7 +124,16 @@ public abstract class AbstractCommandManager implements CommandManager {
         addToMustWait(sender.getUniqueId(), target.getUniqueId());
         amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
-        target.setBalance(currency, target.getBalance(currency).add(amount));
+        try {
+            target.deposit(currency, amount);
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(
+                    miniMessage.deserialize("<red>Cannot give negative money!")
+            );
+
+            removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
+            return;
+        }
 
         sender.sendMessage(
                 miniMessage.deserialize("<yellow>Gave " + target.getUsername() + " <gold>" + amount.toPlainString() + " <yellow>" + currency.getIdentifier())
@@ -130,7 +148,16 @@ public abstract class AbstractCommandManager implements CommandManager {
         addToMustWait(sender.getUniqueId(), target.getUniqueId());
         amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
-        target.setBalance(currency, target.getBalance(currency).subtract(amount));
+        try {
+            target.withdraw(currency, amount);
+        } catch (IllegalArgumentException e) {
+            sender.sendMessage(
+                    miniMessage.deserialize("<red>Cannot take negative money!")
+            );
+
+            removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
+            return;
+        }
 
         sender.sendMessage(
                 miniMessage.deserialize("<yellow>Took <gold>" + amount.toPlainString() + " <yellow>" + currency.getIdentifier() + " from " + target.getUsername())
@@ -170,8 +197,8 @@ public abstract class AbstractCommandManager implements CommandManager {
         // subtract tax from amount
         BigDecimal taxedAmount = amount.subtract(tax);
 
-        target.setBalance(currency, target.getBalance(currency).add(taxedAmount));
-        user.setBalance(currency, user.getBalance(currency).subtract(amount));
+        target.deposit(currency, taxedAmount);
+        user.withdraw(currency, amount);
 
        // send message that will include original amount, taxed amount, tax rate - percentage amount and tax amount
         sender.sendMessage(

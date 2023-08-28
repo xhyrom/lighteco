@@ -36,4 +36,22 @@ public interface User {
      * @param balance the balance
      */
     void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance);
+
+    /**
+     * Add the specified amount to the balance of this user for the specified currency.
+     *
+     * @param currency the currency
+     * @param amount the amount
+     * @throws IllegalArgumentException if the amount is negative
+     */
+    void deposit(@NonNull Currency currency, @NonNull BigDecimal amount) throws IllegalArgumentException;
+
+    /**
+     * Subtract the specified amount from the balance of this user for the specified currency.
+     *
+     * @param currency the currency
+     * @param amount the amount
+     * @throws IllegalArgumentException if the amount is negative
+     */
+    void withdraw(@NonNull Currency currency, @NonNull BigDecimal amount) throws IllegalArgumentException;
 }
