@@ -17,6 +17,9 @@ public class MemoryStorageProvider implements StorageProvider {
     }
 
     @Override
+    public void init() throws Exception {}
+
+    @Override
     public @NonNull User loadUser(@NonNull UUID uniqueId) {
         this.simulateSlowDatabaseQuery();
 

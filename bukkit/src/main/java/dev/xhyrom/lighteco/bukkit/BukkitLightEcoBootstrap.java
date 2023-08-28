@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
@@ -31,12 +32,12 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     @Override
     public void onLoad() {
-        plugin.load();
+        this.plugin.load();
     }
 
     @Override
     public void onEnable() {
-        plugin.enable();
+        this.plugin.enable();
     }
 
     @Override
@@ -45,12 +46,12 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     }
 
     public Server getServer() {
-        return loader.getServer();
+        return this.loader.getServer();
     }
 
     @Override
     public File getDataFolder() {
-        return loader.getDataFolder();
+        return this.loader.getDataFolder();
     }
 
     @Override
@@ -58,5 +59,10 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
         return getServer().getOnlinePlayers().stream()
                 .map(Entity::getUniqueId)
                 .toList();
+    }
+
+    @Override
+    public InputStream getResourceStream(String filename) {
+        return this.loader.getResource(filename);
     }
 }

@@ -6,7 +6,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.UUID;
 
 public interface StorageProvider {
+    void init() throws Exception;
+
     @NonNull User loadUser(@NonNull UUID uniqueId) throws Exception;
     // todo: look at this
-    void saveUser(@NonNull User user);
+    void saveUser(@NonNull User user) throws Exception;
 }

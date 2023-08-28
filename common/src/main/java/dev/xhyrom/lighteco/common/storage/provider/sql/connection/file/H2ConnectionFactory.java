@@ -4,6 +4,7 @@ import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -12,8 +13,13 @@ import java.util.function.Function;
 public class H2ConnectionFactory extends FileConnectionFactory {
     private Constructor<?> connectionConstructor;
 
-    public H2ConnectionFactory(File file) {
+    public H2ConnectionFactory(Path file) {
         super(file);
+    }
+
+    @Override
+    public String getImplementationName() {
+        return "h2";
     }
 
     @Override
@@ -23,10 +29,10 @@ public class H2ConnectionFactory extends FileConnectionFactory {
     }
 
     @Override
-    protected Connection createConnection(File file) throws SQLException {
+    protected Connection createConnection(Path file) throws SQLException {
         try {
             return (Connection) this.connectionConstructor.newInstance(
-                    "jdbc:h2:" + file.getAbsolutePath(),
+                    "jdbc:h2:" + file,
                     new Properties(),
                     null, null, false
             );

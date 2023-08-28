@@ -3,6 +3,7 @@ package dev.xhyrom.lighteco.common.storage;
 import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.api.storage.StorageProvider;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+import dev.xhyrom.lighteco.common.util.ThrowableRunnable;
 
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -32,8 +33,26 @@ public class Storage {
         });
     }
 
-    private CompletableFuture<Void> future(Runnable runnable) {
-        return CompletableFuture.runAsync(runnable);
+    private CompletableFuture<Void> future(ThrowableRunnable runnable) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                runnable.run();
+            } catch (Exception e) {
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                }
+
+                throw new CompletionException(e);
+            }
+        });
+    }
+
+    public void init() {
+        try {
+            this.provider.init();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize storage provider", e);
+        }
     }
 
     public CompletableFuture<User> loadUser(UUID uniqueId) {

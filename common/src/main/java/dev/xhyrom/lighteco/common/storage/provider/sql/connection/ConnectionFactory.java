@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.util.function.Function;
 
 public interface ConnectionFactory {
+    String getImplementationName();
+
     void init(LightEcoPlugin plugin);
     void shutdown() throws Exception;
 

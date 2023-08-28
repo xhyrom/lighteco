@@ -7,16 +7,20 @@ import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.storage.provider.sql.connection.ConnectionFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
 public class SqlStorageProvider implements StorageProvider {
-    private static final String SAVE_USER_LOCAL_CURRENCY = "";
-    private static final String SAVE_USER_GLOBAL_CURRENCY = "";
+    private static final String SAVE_USER_LOCAL_CURRENCY_MYSQL = "INSERT INTO {prefix}_{context}_users (uuid, currency_identifier, balance) VALUES (?1, ?2, ?3) ON DUPLICATE KEY UPDATE balance=?3;";
+    private static final String SAVE_USER_GLOBAL_CURRENCY_MYSQL = "INSERT INTO {prefix}_users (uuid, currency_identifier, balance) VALUES (?1, ?2, ?3) ON DUPLICATE KEY UPDATE balance=?3;";
+    private static final String SAVE_USER_LOCAL_CURRENCY = "INSERT INTO {prefix}_users (uuid, currency_identifier, balance) VALUES (?1, ?2, ?3) ON CONFLICT (uuid, currency_identifier) DO UPDATE SET balance=?3;";
+    private static final String SAVE_USER_GLOBAL_CURRENCY = "INSERT INTO {prefix}_users (uuid, currency_identifier, balance) VALUES (?1, ?2, ?3) ON CONFLICT (uuid, currency_identifier) DO UPDATE SET balance=?3;";
 
     private static final String LOAD_WHOLE_USER = """
     SELECT currency_identifier, balance
@@ -47,14 +51,39 @@ public class SqlStorageProvider implements StorageProvider {
     }
 
     @Override
+    public void init() throws Exception {
+        this.connectionFactory.init(this.plugin);
+
+        List<String> statements;
+        String schemaFileName = "schema/" + this.connectionFactory.getImplementationName().toLowerCase() + ".sql";
+        try (InputStream is = this.plugin.getBootstrap().getResourceStream(schemaFileName)) {
+            if (is == null)
+                throw new IOException("Failed to load schema file: " + schemaFileName);
+
+            statements = SchemaReader.getStatements(is).stream()
+                    .map(this.statementProcessor)
+                    .toList();
+        }
+
+        try (Connection c = this.connectionFactory.getConnection()) {
+            try (Statement s = c.createStatement()) {
+                for (String statement : statements) {
+                    s.addBatch(statement);
+                }
+
+                s.executeBatch();
+            }
+        }
+    }
+
+    @Override
     public @NonNull User loadUser(@NonNull UUID uniqueId) throws Exception {
         String uniqueIdString = uniqueId.toString();
         dev.xhyrom.lighteco.common.model.user.User user = this.plugin.getUserManager().getOrMake(uniqueId);
 
         try (Connection c = this.connectionFactory.getConnection()) {
-            try (PreparedStatement ps = c.prepareStatement(LOAD_WHOLE_USER)) {
+            try (PreparedStatement ps = c.prepareStatement(this.statementProcessor.apply(LOAD_WHOLE_USER))) {
                 ps.setString(1, uniqueIdString);
-                ps.setString(2, uniqueIdString);
 
                 ResultSet rs = ps.executeQuery();
 
@@ -73,7 +102,53 @@ public class SqlStorageProvider implements StorageProvider {
     }
 
     @Override
-    public void saveUser(@NonNull User user) {
+    public void saveUser(@NonNull User user) throws Exception {
+        String uniqueIdString = user.getUniqueId().toString();
 
+        try (Connection c = this.connectionFactory.getConnection()) {
+            try (PreparedStatement psGlobal = c.prepareStatement(this.statementProcessor.apply(SAVE_USER_GLOBAL_CURRENCY));
+                 PreparedStatement psLocal = c.prepareStatement(this.statementProcessor.apply(SAVE_USER_LOCAL_CURRENCY))) {
+
+                for (Currency currency : this.plugin.getCurrencyManager().getRegisteredCurrencies()) {
+                    BigDecimal balance = user.getBalance(currency.getProxy());
+
+                    if (balance.compareTo(BigDecimal.ZERO) == 0) continue;
+
+                    switch (currency.getType()) {
+                        case GLOBAL -> {
+                            psGlobal.setString(1, uniqueIdString);
+                            psGlobal.setString(2, currency.getIdentifier());
+                            psGlobal.setBigDecimal(3, balance);
+
+                            psGlobal.addBatch();
+                        }
+                        case LOCAL -> {
+                            psLocal.setString(1, uniqueIdString);
+                            psLocal.setString(2, currency.getIdentifier());
+                            psLocal.setBigDecimal(3, balance);
+
+                            psLocal.addBatch();
+                        }
+                    }
+                }
+
+                System.out.println(psGlobal.toString());
+                System.out.println(psLocal.toString());
+                psGlobal.executeBatch();
+                psLocal.executeBatch();
+            }
+        }
+    }
+
+    private static boolean doesTableExists(Connection c, String table) throws SQLException {
+        try (ResultSet rs = c.getMetaData().getTables(c.getCatalog(), null, "%s", null)) {
+            while (rs.next()) {
+                if (rs.getString(3).equalsIgnoreCase(table)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

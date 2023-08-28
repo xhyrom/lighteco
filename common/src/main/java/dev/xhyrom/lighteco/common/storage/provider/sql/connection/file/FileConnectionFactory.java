@@ -3,19 +3,20 @@ package dev.xhyrom.lighteco.common.storage.provider.sql.connection.file;
 import dev.xhyrom.lighteco.common.storage.provider.sql.connection.ConnectionFactory;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.function.Function;
 
 abstract class FileConnectionFactory implements ConnectionFactory {
     private Connection connection;
-    private final File file;
+    private final Path file;
 
-    public FileConnectionFactory(File file) {
+    public FileConnectionFactory(Path file) {
         this.file = file;
     }
 
-    protected abstract Connection createConnection(File file) throws SQLException;
+    protected abstract Connection createConnection(Path file) throws SQLException;
 
     @Override
     public void shutdown() throws Exception {
