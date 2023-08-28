@@ -24,4 +24,11 @@ public class DependencyRegistry {
 
         return dependencies;
     }
+
+    public boolean shouldAutoLoad(Dependency dependency) {
+        return switch (dependency) {
+            case H2_DRIVER, SQLITE_DRIVER -> false;
+            default -> true;
+        };
+    }
 }

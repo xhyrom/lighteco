@@ -12,6 +12,7 @@ import dev.xhyrom.lighteco.common.manager.user.StandardUserManager;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
+import org.bukkit.plugin.java.PluginClassLoader;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 @Getter

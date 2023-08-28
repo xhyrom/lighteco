@@ -21,17 +21,17 @@ public class SqlStorageProvider implements StorageProvider {
     private final String SAVE_USER_LOCAL_CURRENCY;
     private final String SAVE_USER_GLOBAL_CURRENCY;
     private static final String LOAD_WHOLE_USER = """
-    SELECT currency_identifier, balance
-    FROM
-        (
-            SELECT currency_identifier, balance
-            FROM {prefix}_users
-            WHERE uuid=?1
-            UNION ALL
-            SELECT currency_identifier, balance
-            FROM {prefix}_{context}_users
-            WHERE uuid=?1
-        );
+SELECT currency_identifier, balance
+FROM
+    (
+        SELECT currency_identifier, balance
+        FROM '{prefix}_users'
+        WHERE uuid=?1
+        UNION ALL
+        SELECT currency_identifier, balance
+        FROM '{prefix}_{context}_users'
+        WHERE uuid=?1
+    ) AS combined_currencies;
     """;
 
     private final LightEcoPlugin plugin;
@@ -86,6 +86,7 @@ public class SqlStorageProvider implements StorageProvider {
         try (Connection c = this.connectionFactory.getConnection()) {
             try (PreparedStatement ps = c.prepareStatement(this.statementProcessor.apply(LOAD_WHOLE_USER))) {
                 ps.setString(1, uniqueIdString);
+                ps.setString(2, uniqueIdString);
 
                 ResultSet rs = ps.executeQuery();
 

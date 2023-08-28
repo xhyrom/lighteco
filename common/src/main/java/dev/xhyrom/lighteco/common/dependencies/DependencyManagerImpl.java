@@ -3,10 +3,12 @@ package dev.xhyrom.lighteco.common.dependencies;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.MoreFiles;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+import dev.xhyrom.lighteco.common.plugin.classpath.URLClassLoaderAccess;
 import dev.xhyrom.lighteco.common.storage.StorageType;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.EnumMap;
@@ -22,10 +24,13 @@ public class DependencyManagerImpl implements DependencyManager {
 
     private final DependencyRegistry registry;
     private final Path cacheDirectory;
+    private final URLClassLoaderAccess classLoader;
 
     public DependencyManagerImpl(LightEcoPlugin plugin) {
         this.registry = new DependencyRegistry();
         this.cacheDirectory = setupCacheDirectory(plugin);
+        this.classLoader = URLClassLoaderAccess.create((URLClassLoader) plugin.getBootstrap().getClass().getClassLoader());
+        System.out.println(this.classLoader);
     }
 
     @Override
@@ -56,17 +61,24 @@ public class DependencyManagerImpl implements DependencyManager {
         }
     }
 
-    private void loadDependency(Dependency dependency) {
+    private void loadDependency(Dependency dependency) throws Exception {
         if (this.loaded.containsKey(dependency)) {
             return;
         }
 
-        try {
-            Path file = downloadDependency(dependency);
+        Path file = downloadDependency(dependency);
 
-            this.loaded.put(dependency, file);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        this.loaded.put(dependency, file);
+
+        System.out.println("HHHH");
+        if (this.registry.shouldAutoLoad(dependency)) {
+            System.out.println("Loaded dependency " + dependency + " from " + file);
+
+            try {
+                this.classLoader.addURL(file.toUri().toURL());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
