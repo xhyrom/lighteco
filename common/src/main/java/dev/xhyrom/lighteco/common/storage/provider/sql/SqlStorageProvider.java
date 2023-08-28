@@ -10,6 +10,23 @@ import java.sql.Connection;
 import java.util.UUID;
 
 public class SqlStorageProvider implements StorageProvider {
+    private static final String SAVE_USER_LOCAL_CURRENCY = "";
+    private static final String SAVE_USER_GLOBAL_CURRENCY = "";
+
+    private static final String LOAD_WHOLE_USER = """
+    SELECT currency_identifier, balance
+    FROM
+        (
+            SELECT currency_identifier, balance
+            FROM {prefix}_users
+            WHERE uuid=?
+            UNION ALL
+            SELECT currency_identifier, balance
+            FROM {prefix}_{context}_users
+            WHERE uuid=?
+        );
+    """;
+
     private final LightEcoPlugin plugin;
     private final ConnectionFactory connectionFactory;
 
