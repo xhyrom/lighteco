@@ -24,13 +24,13 @@ public class BalanceCommand implements Command {
                         .withPermission(permissionBase + "balance.others")
                         .withArguments(new OfflinePlayerArgument("target"))
                         .executes((sender, args) -> {
-                    this.handleBalance(sender, args, currency);
-                }),
+                            this.handleBalance(sender, args, currency);
+                        }),
                 new CommandAPICommand(name)
                         .withPermission(permissionBase + "balance")
                         .executesPlayer((sender, args) -> {
-                    this.handleBalance(sender, args, currency);
-                })
+                            this.handleBalance(sender, args, currency);
+                        })
         };
     }
 

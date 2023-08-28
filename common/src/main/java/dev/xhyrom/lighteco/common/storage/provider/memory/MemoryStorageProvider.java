@@ -17,11 +17,6 @@ public class MemoryStorageProvider implements StorageProvider {
     }
 
     @Override
-    public @NonNull String[] getIdentifiers() {
-        return new String[] {"memory"};
-    }
-
-    @Override
     public @NonNull User loadUser(@NonNull UUID uniqueId) {
         this.simulateSlowDatabaseQuery();
 

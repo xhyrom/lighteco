@@ -27,4 +27,15 @@ dependencies {
 
 tasks.shadowJar {
     relocate("dev.jorel.commandapi", "dev.xhyrom.lighteco.libraries.commandapi")
+
+    // common
+    relocate("eu.okaeri.configs", "dev.xhyrom.lighteco.libraries.okaeri.configs")
+    relocate("eu.okaeri.validator", "dev.xhyrom.lighteco.libraries.okaeri.validator")
+
+    relocate("net.kyori.adventure", "dev.xhyrom.lighteco.libraries.net.kyori.adventure")
+    relocate("net.kyori.examination", "dev.xhyrom.lighteco.libraries.net.kyori.examination")
+
+    relocate("org.yaml.snakeyaml", "dev.xhyrom.lighteco.libraries.org.yaml.snakeyaml")
+
+    relocate("com.zaxxer.hikari", "dev.xhyrom.lighteco.libraries.com.zaxxer.hikari")
 }

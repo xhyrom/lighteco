@@ -50,16 +50,13 @@ public class BukkitCommandManager extends AbstractCommandManager {
 
         String permissionBase = "lighteco.currency." + currency.getIdentifier() + ".command.";
 
-        // Dont expose set, give, take directly - only through main command
-        new CommandAPICommand(currency.getIdentifier())
-                .withPermission("lighteco.currency." + currency.getIdentifier() + ".command")
-                .withSubcommand(new SetCommand(this, currency, permissionBase).build())
-                .withSubcommand(new GiveCommand(this, currency, permissionBase).build())
-                .withSubcommand(new TakeCommand(this, currency, permissionBase).build())
-                .register();
+        // Register main command
+        registerCurrencyCommand(currency);
 
+        // Expose pay as main command
         new PayCommand(this, currency, permissionBase).build().register();
 
+        // Expose balance as main command
         for (CommandAPICommand cmd : new BalanceCommand(
                 this,
                 "balance",
