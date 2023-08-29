@@ -17,6 +17,9 @@ public class Config extends OkaeriConfig {
     @Comment("Storage settings.")
     public StorageConfig storage = new StorageConfig();
 
+    @Comment("Save interval to storage in seconds.")
+    public long saveInterval = 5L;
+
     @Comment("Messages")
     public MessageConfig messages = new MessageConfig();
 }

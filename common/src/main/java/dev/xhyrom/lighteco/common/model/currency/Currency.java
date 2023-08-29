@@ -1,13 +1,9 @@
 package dev.xhyrom.lighteco.common.model.currency;
 
-import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import lombok.Getter;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class Currency {
     private final LightEcoPlugin plugin;
@@ -38,12 +34,5 @@ public class Currency {
 
     public int fractionalDigits() {
         return proxy.fractionalDigits();
-    }
-
-    public List<User> getTopUsers(int length) {
-        List<User> users = new ArrayList<>();
-        users.add(new User(plugin, new UUID(0, 0)));
-
-        return users;
     }
 }

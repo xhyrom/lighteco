@@ -55,7 +55,7 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
         LightEcoProvider.set(this.api);
         this.registerApiOnPlatform(this.api);
 
-        this.getBootstrap().getScheduler().asyncRepeating(new UserSaveTask(this), 3, TimeUnit.SECONDS);
+        this.getBootstrap().getScheduler().asyncRepeating(new UserSaveTask(this), this.config.saveInterval, TimeUnit.SECONDS);
     }
 
     public final void disable() {
