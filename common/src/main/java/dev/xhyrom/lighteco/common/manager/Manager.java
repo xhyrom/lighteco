@@ -15,6 +15,4 @@ public interface Manager<I, T> {
     boolean isLoaded(I identifier);
 
     void unload(I identifier);
-
-    void unload(Collection<I> identifiers);
 }

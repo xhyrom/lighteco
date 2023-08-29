@@ -1,15 +1,16 @@
 package dev.xhyrom.lighteco.common.manager.currency;
 
-import dev.xhyrom.lighteco.common.manager.AbstractManager;
+import dev.xhyrom.lighteco.api.model.user.User;
+import dev.xhyrom.lighteco.common.manager.SingleManager;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
-import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-public class StandardCurrencyManager extends AbstractManager<String, Currency> implements CurrencyManager {
+public class StandardCurrencyManager extends SingleManager<String, Currency> implements CurrencyManager {
     private final LightEcoPlugin plugin;
 
     public StandardCurrencyManager(LightEcoPlugin plugin) {
@@ -18,7 +19,7 @@ public class StandardCurrencyManager extends AbstractManager<String, Currency> i
 
     @Override
     public Currency apply(String identifier) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -39,9 +40,8 @@ public class StandardCurrencyManager extends AbstractManager<String, Currency> i
         this.map.put(currency.getIdentifier(), currency);
     }
 
-    // TODO: finish
     @Override
-    public List<User> getTopUsers(@NonNull Currency currency, int length) {
-        return null;
+    public CompletableFuture<List<User>> getTopUsers(@NonNull Currency currency, int length) {
+        return this.plugin.getStorage().getTopUsers(currency.getProxy(), length);
     }
 }

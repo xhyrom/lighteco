@@ -1,15 +1,14 @@
 package dev.xhyrom.lighteco.common.manager.user;
 
-import dev.xhyrom.lighteco.common.manager.AbstractManager;
+import dev.xhyrom.lighteco.common.manager.ConcurrentManager;
 import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class StandardUserManager extends AbstractManager<UUID, User> implements UserManager {
+public class StandardUserManager extends ConcurrentManager<UUID, User> implements UserManager {
     private final LightEcoPlugin plugin;
 
     public StandardUserManager(LightEcoPlugin plugin) {
@@ -32,22 +31,16 @@ public class StandardUserManager extends AbstractManager<UUID, User> implements 
     }
 
     @Override
-    public CompletableFuture<Void> load() {
-        Set<UUID> uniqueIds = new HashSet<>(keys());
-        uniqueIds.addAll(this.plugin.getBootstrap().getOnlinePlayers());
-
-        return uniqueIds.stream()
-                .map(id -> this.plugin.getStorage().loadUser(id))
-                .collect(CompletableFuture::allOf, (future, userFuture) -> future.join(), (future, userFuture) -> future.join());
-    }
-
-    @Override
     public CompletableFuture<Void> saveUser(User user) {
        return this.plugin.getStorage().saveUser(user.getProxy());
     }
 
     @Override
-    public void invalidateCaches() {
-        values().forEach(User::invalidateCaches);
+    public CompletableFuture<Void> saveUsers(User... users) {
+        return this.plugin.getStorage().saveUsers(
+                Arrays.stream(users)
+                        .map(User::getProxy)
+                        .toArray(dev.xhyrom.lighteco.api.model.user.User[]::new)
+        );
     }
 }

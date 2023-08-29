@@ -13,7 +13,7 @@ public final class LightEcoProvider {
         LightEco instance = LightEcoProvider.instance;
         if (instance == null) {
             throw new NotLoadedException();
-        };
+        }
 
         return instance;
     }
@@ -22,7 +22,7 @@ public final class LightEcoProvider {
     public static void set(LightEco instance) {
         if (LightEcoProvider.instance != null) {
             throw new IllegalStateException("LightEco is already loaded!");
-        };
+        }
 
         LightEcoProvider.instance = instance;
     }

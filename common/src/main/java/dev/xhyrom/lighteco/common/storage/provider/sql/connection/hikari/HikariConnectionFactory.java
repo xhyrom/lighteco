@@ -64,12 +64,12 @@ public abstract class HikariConnectionFactory implements ConnectionFactory {
         this.setProperties(config, properties);
 
         // configure the connection pool
-//        config.setMaximumPoolSize(1);
-//        config.setMinimumIdle(10);
-//        config.setMaxLifetime(1800000);
-//        config.setKeepaliveTime(0);
-//        config.setConnectionTimeout(5000);
-//        config.setInitializationFailTimeout(-1);
+        config.setMaximumPoolSize(this.configuration.maximumPoolSize);
+        config.setMinimumIdle(this.configuration.minimumIdle);
+        config.setMaxLifetime(this.configuration.maxLifetime);
+        config.setKeepaliveTime(this.configuration.keepAliveTime);
+        config.setConnectionTimeout(this.configuration.connectionTimeout);
+        config.setInitializationFailTimeout(-1);
 
         this.hikari = new HikariDataSource(config);
 

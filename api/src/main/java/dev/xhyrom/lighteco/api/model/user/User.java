@@ -32,6 +32,10 @@ public interface User {
 
     /**
      * Set the balance of this user for the specified currency.
+     * <p>
+     *     Save the user after setting the balance using {@link dev.xhyrom.lighteco.api.manager.UserManager#saveUser(User)}. <br/>
+     *     If you're doing multiple changes, use {@link dev.xhyrom.lighteco.api.manager.UserManager#saveUsers(User...)}
+     * </p>
      *
      * @param currency the currency
      * @param balance the balance

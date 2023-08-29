@@ -13,4 +13,19 @@ public class StorageDataConfig extends OkaeriConfig {
     @Comment("Credentials for connecting to the database.")
     public String username = "root";
     public String password = "password";
+
+    @Comment("Maximum number of connections in the pool.")
+    public int maximumPoolSize = 10;
+
+    @Comment("Minimum idle connections in the pool.")
+    public int minimumIdle = 5;
+
+    @Comment("Maximum lifetime of a connection in the pool.")
+    public long maxLifetime = 1800000;
+
+    @Comment("Keep alive interval in milliseconds.")
+    public long keepAliveTime = 0;
+
+    @Comment("Connection timeout in milliseconds.")
+    public long connectionTimeout = 5000;
 }

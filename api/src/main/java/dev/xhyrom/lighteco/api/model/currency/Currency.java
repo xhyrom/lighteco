@@ -3,32 +3,57 @@ package dev.xhyrom.lighteco.api.model.currency;
 import dev.xhyrom.lighteco.api.model.user.User;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 
 public interface Currency {
-    String getIdentifier();
     /**
-     * Get the type of the currency, either {@link Type#LOCAL} or {@link Type#GLOBAL}
+     * Returns the identifier of the currency.
+     *
+     * @return the identifier
+     */
+    String getIdentifier();
+
+    /**
+     * Returns the type of the currency, either {@link Type#LOCAL} or {@link Type#GLOBAL}
      *
      * @see Type
      * @return The type of the currency
      */
     Type getType();
 
+    /**
+     * Format the given amount to a string
+     *
+     * @param amount The amount to format
+     * @return The formatted amount
+     */
+    default String format(BigDecimal amount) {
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMaximumFractionDigits(fractionalDigits());
+
+        return format.format(amount);
+    }
+
+    /**
+     * Determine if this currency is payable
+     *
+     * @return `true` if this currency is payable, `false` otherwise
+     */
     boolean isPayable();
 
     /**
-     * Get the number of fractional digits this currency has
+     * Returns the number of fractional digits this currency has
      *
      * @return The number of fractional digits
      */
     default int fractionalDigits() {
         return 0;
-    };
+    }
 
     /**
-     * Get the users that have a balance in this currency
+     * Returns the default balance for this currency
      *
-     * @return The users
+     * @return The default balance
      */
     BigDecimal getDefaultBalance();
 
@@ -46,7 +71,7 @@ public interface Currency {
     /**
      * Represents the type of currency
      */
-    public enum Type {
+    enum Type {
         /**
          * A currency that is only available on a single server
          */

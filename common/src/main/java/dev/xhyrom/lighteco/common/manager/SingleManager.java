@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbstractManager<I, T> implements Manager<I, T> {
+public abstract class SingleManager<I, T> implements Manager<I, T> {
     public final Map<I, T> map = new HashMap<>();
 
     @Override
@@ -35,10 +35,5 @@ public abstract class AbstractManager<I, T> implements Manager<I, T> {
     @Override
     public void unload(I identifier) {
         this.map.remove(identifier);
-    }
-
-    @Override
-    public void unload(Collection<I> identifiers) {
-        identifiers.forEach(this::unload);
     }
 }

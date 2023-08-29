@@ -8,7 +8,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.CompletableFuture;
 
 public class ApiCurrencyManager extends ApiAbstractManager<dev.xhyrom.lighteco.common.manager.currency.CurrencyManager> implements CurrencyManager {
     public ApiCurrencyManager(LightEcoPlugin plugin, dev.xhyrom.lighteco.common.manager.currency.CurrencyManager handler) {
@@ -38,10 +38,8 @@ public class ApiCurrencyManager extends ApiAbstractManager<dev.xhyrom.lighteco.c
     }
 
     @Override
-    public List<User> getTopUsers(@NonNull Currency currency, int length) {
+    public CompletableFuture<List<User>> getTopUsers(@NonNull Currency currency, int length) {
         dev.xhyrom.lighteco.common.model.currency.Currency internal = this.handler.getIfLoaded(currency.getIdentifier());
-        return this.handler.getTopUsers(internal, length)
-                .stream().map(dev.xhyrom.lighteco.common.model.user.User::getProxy)
-                .collect(Collectors.toList());
+        return this.handler.getTopUsers(internal, length);
     }
 }

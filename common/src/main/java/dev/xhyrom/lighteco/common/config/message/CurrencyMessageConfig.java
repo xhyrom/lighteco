@@ -12,13 +12,10 @@ public class CurrencyMessageConfig extends OkaeriConfig {
     public String give = "<currency> <dark_gray>| <gray>Gave <gold><target> <gold><amount> <dark_gray>| <gold><balance>";
     public String take = "<currency> <dark_gray>| <gray>Took <gold><amount> <yellow>from <gold><target>";
 
-    public String pay = "<currency> <dark_gray>| <gray>Paid <gold><amount> <yellow>to <gold><target> <dark_gray>(<gold><taxed_amount> <yellow>after tax)</gray>";
+    public String pay = "<currency> <dark_gray>| <gray>Paid <gold><amount> <yellow>to <gold><target>";
+    public String payWithTax = "<currency> <dark_gray>| <gray>Paid <gold><amount> <yellow>to <gold><target> <dark_gray>(<gold><taxed_amount> <yellow>after tax<dark_gray>)";
 
     public String wait = "<red>Please wait a moment before using this command again.";
     public String notEnoughMoney = "<red>You don't have enough money!";
-    public String cannotSetNegative = "<red>Cannot set negative money!";
-    public String cannotGiveNegative = "<red>Cannot give negative money!";
-    public String cannotTakeNegative = "<red>Cannot take negative money!";
-    public String cannotPayNegative = "<red>Cannot pay negative money!";
     public String cannotPaySelf = "<red>You cannot pay yourself!";
 }

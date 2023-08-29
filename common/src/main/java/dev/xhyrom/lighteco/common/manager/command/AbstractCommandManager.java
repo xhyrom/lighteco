@@ -13,7 +13,6 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public abstract class AbstractCommandManager implements CommandManager {
     public final LightEcoPlugin plugin;
@@ -102,16 +101,7 @@ public abstract class AbstractCommandManager implements CommandManager {
         addToMustWait(sender.getUniqueId(), target.getUniqueId());
         amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
-        try {
-            target.setBalance(currency, amount);
-        } catch (IllegalArgumentException e) {
-            sender.sendMessage(
-                    miniMessage.deserialize(this.getConfig(currency).cannotSetNegative)
-            );
-
-            removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
-            return;
-        }
+        target.setBalance(currency, amount);
 
         sender.sendMessage(
                 miniMessage.deserialize(
@@ -131,16 +121,7 @@ public abstract class AbstractCommandManager implements CommandManager {
         addToMustWait(sender.getUniqueId(), target.getUniqueId());
         amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
-        try {
-            target.deposit(currency, amount);
-        } catch (IllegalArgumentException e) {
-            sender.sendMessage(
-                    miniMessage.deserialize(this.getConfig(currency).cannotGiveNegative)
-            );
-
-            removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
-            return;
-        }
+        target.deposit(currency, amount);
 
         sender.sendMessage(
                 miniMessage.deserialize(
@@ -161,16 +142,7 @@ public abstract class AbstractCommandManager implements CommandManager {
         addToMustWait(sender.getUniqueId(), target.getUniqueId());
         amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
-        try {
-            target.withdraw(currency, amount);
-        } catch (IllegalArgumentException e) {
-            sender.sendMessage(
-                    miniMessage.deserialize(this.getConfig(currency).cannotTakeNegative)
-            );
-
-            removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
-            return;
-        }
+        target.withdraw(currency, amount);
 
         sender.sendMessage(
                 miniMessage.deserialize(
@@ -196,14 +168,6 @@ public abstract class AbstractCommandManager implements CommandManager {
             return;
         }
 
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
-            sender.sendMessage(
-                    miniMessage.deserialize(this.getConfig(currency).cannotPayNegative)
-            );
-
-            return;
-        }
-
         amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
         User user = this.plugin.getUserManager().getIfLoaded(sender.getUniqueId());
@@ -220,6 +184,7 @@ public abstract class AbstractCommandManager implements CommandManager {
 
         // calculate tax using Currency#calculateTax
         BigDecimal tax = currency.getProxy().calculateTax(user.getProxy(), amount);
+        tax = tax.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
         // subtract tax from amount
         BigDecimal taxedAmount = amount.subtract(tax);
@@ -227,9 +192,14 @@ public abstract class AbstractCommandManager implements CommandManager {
         target.deposit(currency, taxedAmount);
         user.withdraw(currency, amount);
 
+        String template = tax.compareTo(BigDecimal.ZERO) > 0
+                ? this.getConfig(currency).payWithTax
+                : this.getConfig(currency).pay;
+
+
         sender.sendMessage(
                 miniMessage.deserialize(
-                        this.getConfig(currency).pay,
+                        template,
                         Placeholder.parsed("currency", currency.getIdentifier()),
                         Placeholder.parsed("target", target.getUsername()),
                         Placeholder.parsed("amount", amount.toPlainString()),
@@ -239,9 +209,7 @@ public abstract class AbstractCommandManager implements CommandManager {
                 )
         );
 
-        CompletableFuture.allOf(
-                this.plugin.getUserManager().saveUser(user),
-                this.plugin.getUserManager().saveUser(target)
-        ).thenAccept(v -> removeFromMustWait(sender.getUniqueId(), target.getUniqueId()));
+        this.plugin.getUserManager().saveUsers(user, target)
+                        .thenAccept(v -> removeFromMustWait(sender.getUniqueId(), target.getUniqueId()));
     }
 }

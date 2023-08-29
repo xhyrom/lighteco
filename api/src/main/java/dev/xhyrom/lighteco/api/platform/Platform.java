@@ -3,6 +3,11 @@ package dev.xhyrom.lighteco.api.platform;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface Platform {
+    /**
+     * Get the type of this platform.
+     *
+     * @return
+     */
     @NonNull Type getType();
 
     enum Type {

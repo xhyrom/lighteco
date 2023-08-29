@@ -16,10 +16,33 @@ public interface LightEco {
      */
     @NonNull Platform getPlatform();
 
+    /**
+     * Gets the {@link UserManager}, which manages the users.
+     *
+     * @return the user manager
+     */
     @NonNull UserManager getUserManager();
 
+    /**
+     * Gets the {@link CurrencyManager}, which manages the currencies.
+     *
+     * @return the currency manager
+     */
     @NonNull CurrencyManager getCurrencyManager();
+
+    /**
+     * Gets the {@link CommandManager}, which manages the commands.
+     *
+     * @return the command manager
+     */
     @NonNull CommandManager getCommandManager();
 
+    /**
+     * Gets the {@link PlayerAdapter} for a player class.
+     *
+     * @param playerClass the player class
+     * @return the player adapter
+     * @param <T> the player class
+     */
     <T> @NonNull PlayerAdapter<T> getPlayerAdapter(@NonNull Class<T> playerClass);
 }

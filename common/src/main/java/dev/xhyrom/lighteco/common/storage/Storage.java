@@ -5,6 +5,8 @@ import dev.xhyrom.lighteco.api.storage.StorageProvider;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.util.ThrowableRunnable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -79,5 +81,15 @@ public class Storage {
 
     public CompletableFuture<Void> saveUser(dev.xhyrom.lighteco.api.model.user.User user) {
         return future(() -> this.provider.saveUser(user));
+    }
+
+    public CompletableFuture<Void> saveUsers(dev.xhyrom.lighteco.api.model.user.User... users) {
+        return future(() -> this.provider.saveUsers(users));
+    }
+
+    // Return ApiUser instead of User
+    // We don't do anything with this
+    public CompletableFuture<List<dev.xhyrom.lighteco.api.model.user.User>> getTopUsers(dev.xhyrom.lighteco.api.model.currency.Currency currency, int length) {
+        return future(() -> this.provider.getTopUsers(currency, length));
     }
 }

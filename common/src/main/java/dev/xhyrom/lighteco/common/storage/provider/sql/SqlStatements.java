@@ -19,7 +19,7 @@ public enum SqlStatements {
             "SELECT currency_identifier, balance FROM ( SELECT currency_identifier, balance FROM '{prefix}_users' WHERE uuid = ?1 UNION ALL SELECT currency_identifier, balance FROM '{prefix}_{context}_users' WHERE uuid = ?1 ) AS combined_currencies;",
             "SELECT currency_identifier, balance FROM ( SELECT currency_identifier, balance FROM '{prefix}_users' WHERE uuid = ?1 UNION ALL SELECT currency_identifier, balance FROM '{prefix}_{context}_users' WHERE uuid = ?1 ) AS combined_currencies;",
             "SELECT currency_identifier, balance FROM ( SELECT currency_identifier, balance FROM '{prefix}_users' WHERE uuid = ? UNION ALL SELECT currency_identifier, balance FROM '{prefix}_{context}_users' WHERE uuid = ? ) AS combined_currencies;",
-            null
+            null // same as mariadb
     );
 
     public final String sqlite;

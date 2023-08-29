@@ -13,6 +13,20 @@ public interface UserManager {
 
     @NonNull CompletableFuture<Void> saveUser(@NonNull User user);
 
+    /**
+     * Saves multiple users at once.
+     * <p>
+     *     Uses TRANSACTION clause under the hood.
+     *     If one of the users fails to save, the entire transaction will be rolled back.
+     *     This is to ensure data integrity.
+     *     If you want to save users individually, use {@link #saveUser(User)} instead.
+     * </p>
+     *
+     * @param users the users to save
+     * @return a future that completes when the users have been saved
+     */
+    @NonNull CompletableFuture<Void> saveUsers(@NonNull User... users);
+
     @Nullable User getUser(@NonNull UUID uniqueId);
 
     boolean isLoaded(@NonNull UUID uniqueId);
