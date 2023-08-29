@@ -83,7 +83,7 @@ public class SqlStorageProvider implements StorageProvider {
         try (Connection c = this.connectionFactory.getConnection()) {
             try (PreparedStatement ps = c.prepareStatement(this.statementProcessor.apply(LOAD_WHOLE_USER))) {
                 ps.setString(1, uniqueIdString);
-                if (this.connectionFactory.getImplementationName() == StorageType.MARIADB)
+                if (SqlStatements.mustDuplicateParameters(this.connectionFactory.getImplementationName()))
                     ps.setString(2, uniqueIdString);
 
                 ResultSet rs = ps.executeQuery();
@@ -120,7 +120,7 @@ public class SqlStorageProvider implements StorageProvider {
                             psGlobal.setString(1, uniqueIdString);
                             psGlobal.setString(2, currency.getIdentifier());
                             psGlobal.setBigDecimal(3, balance);
-                            if (this.connectionFactory.getImplementationName() == StorageType.MARIADB)
+                            if (SqlStatements.mustDuplicateParameters(this.connectionFactory.getImplementationName()))
                                 psGlobal.setBigDecimal(4, balance);
 
                             psGlobal.addBatch();
@@ -129,7 +129,7 @@ public class SqlStorageProvider implements StorageProvider {
                             psLocal.setString(1, uniqueIdString);
                             psLocal.setString(2, currency.getIdentifier());
                             psLocal.setBigDecimal(3, balance);
-                            if (this.connectionFactory.getImplementationName() == StorageType.MARIADB)
+                            if (SqlStatements.mustDuplicateParameters(this.connectionFactory.getImplementationName()))
                                 psLocal.setBigDecimal(4, balance);
 
                             psLocal.addBatch();

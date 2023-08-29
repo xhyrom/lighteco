@@ -6,7 +6,7 @@ import eu.okaeri.configs.annotation.Comment;
 
 public class StorageConfig extends OkaeriConfig {
     @Comment("Storage provider.")
-    @Comment("Available providers: h2, sqlite, mysql, mariadb")
+    @Comment("Available providers: h2, sqlite, mysql, mariadb, postgresql")
     public StorageType provider = StorageType.H2;
 
     @Comment("Data storage settings.")
@@ -14,5 +14,5 @@ public class StorageConfig extends OkaeriConfig {
     public StorageDataConfig data = new StorageDataConfig();
 
     @Comment("Table prefix.")
-    public String tablePrefix = "lighteco_";
+    public String tablePrefix = "lighteco";
 }

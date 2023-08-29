@@ -9,6 +9,7 @@ import dev.xhyrom.lighteco.common.storage.provider.sql.connection.file.H2Connect
 import dev.xhyrom.lighteco.common.storage.provider.sql.connection.file.SqliteConnectionFactory;
 import dev.xhyrom.lighteco.common.storage.provider.sql.connection.hikari.MariaDBConnectionFactory;
 import dev.xhyrom.lighteco.common.storage.provider.sql.connection.hikari.MySQLConnectionFactory;
+import dev.xhyrom.lighteco.common.storage.provider.sql.connection.hikari.PostgreSQLConnectionFactory;
 
 import java.util.Set;
 
@@ -50,6 +51,10 @@ public class StorageFactory {
             case MARIADB -> new SqlStorageProvider(
                     this.plugin,
                     new MariaDBConnectionFactory(this.plugin.getConfig().storage.data)
+            );
+            case POSTGRESQL -> new SqlStorageProvider(
+                    this.plugin,
+                    new PostgreSQLConnectionFactory(this.plugin.getConfig().storage.data)
             );
             default -> throw new IllegalArgumentException("Unknown storage provider: " + type.name());
         };
