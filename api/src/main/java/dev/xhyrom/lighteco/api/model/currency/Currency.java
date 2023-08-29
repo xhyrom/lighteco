@@ -4,24 +4,24 @@ import dev.xhyrom.lighteco.api.model.user.User;
 
 import java.math.BigDecimal;
 
-public abstract class Currency {
-    public abstract String getIdentifier();
+public interface Currency {
+    String getIdentifier();
     /**
      * Get the type of the currency, either {@link Type#LOCAL} or {@link Type#GLOBAL}
      *
      * @see Type
      * @return The type of the currency
      */
-    public abstract Type getType();
+    Type getType();
 
-    public abstract boolean isPayable();
+    boolean isPayable();
 
     /**
      * Get the number of fractional digits this currency has
      *
      * @return The number of fractional digits
      */
-    public int fractionalDigits() {
+    default int fractionalDigits() {
         return 0;
     };
 
@@ -30,7 +30,7 @@ public abstract class Currency {
      *
      * @return The users
      */
-    public abstract BigDecimal getDefaultBalance();
+    BigDecimal getDefaultBalance();
 
     /**
      * Calculate the tax for the given amount
@@ -39,7 +39,7 @@ public abstract class Currency {
      * @param amount The amount to calculate the tax for
      * @return Amount that should be taxed
      */
-    public BigDecimal calculateTax(User user, BigDecimal amount) {
+    default BigDecimal calculateTax(User user, BigDecimal amount) {
         return BigDecimal.ZERO;
     };
 

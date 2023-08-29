@@ -6,12 +6,8 @@ import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
-
-import static dev.xhyrom.lighteco.api.model.currency.Currency.Type;
 
 public class StandardCurrencyManager extends AbstractManager<String, Currency> implements CurrencyManager {
     private final LightEcoPlugin plugin;

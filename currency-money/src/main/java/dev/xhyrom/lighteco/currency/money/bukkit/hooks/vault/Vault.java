@@ -227,7 +227,7 @@ public class Vault extends AbstractEconomy {
     private double bigDecimalToDouble(final BigDecimal value) {
         double amount = value.doubleValue();
 
-        if (new BigDecimal(amount).compareTo(value) > 0) {
+        if (BigDecimal.valueOf(amount).compareTo(value) > 0) {
             amount = Math.nextAfter(amount, Double.NEGATIVE_INFINITY);
         }
 

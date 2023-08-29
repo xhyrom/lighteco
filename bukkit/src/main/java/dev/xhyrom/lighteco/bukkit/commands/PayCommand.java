@@ -44,12 +44,12 @@ public class PayCommand implements Command {
 
         this.manager.plugin.getUserManager().loadUser(target.getUniqueId())
                 .thenAcceptAsync(result -> {
-                    String name = result.getUsername() == null ?
+                    String username = result.getUsername() == null ?
                             target.getName() != null
                                     ? target.getName()
                                     : args.getRaw("target")
                             : result.getUsername();
-                    result.setUsername(name);
+                    result.setUsername(username);
 
                     this.manager.onPay(sender, currency, result, amount);
                 });

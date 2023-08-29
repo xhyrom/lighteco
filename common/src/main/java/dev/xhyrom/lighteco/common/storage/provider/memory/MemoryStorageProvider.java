@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class MemoryStorageProvider implements StorageProvider {
-    private final HashMap<UUID, User> userDatabase = new HashMap<>();
+    private HashMap<UUID, User> userDatabase;
 
     private final LightEcoPlugin plugin;
     public MemoryStorageProvider(LightEcoPlugin plugin) {
@@ -18,10 +18,14 @@ public class MemoryStorageProvider implements StorageProvider {
     }
 
     @Override
-    public void init() {}
+    public void init() {
+        userDatabase = new HashMap<>();
+    }
 
     @Override
-    public void shutdown() {}
+    public void shutdown() {
+        userDatabase = null;
+    }
 
     @Override
     public @NonNull User loadUser(@NonNull UUID uniqueId, @Nullable String username) {

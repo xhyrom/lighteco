@@ -12,10 +12,8 @@ import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import lombok.Getter;
 
-import java.io.File;
-
+@Getter
 public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
-    @Getter
     private DependencyManager dependencyManager;
     @Getter
     private Config config;
@@ -27,7 +25,7 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
     public final void load() {
         this.dependencyManager = new DependencyManagerImpl(this);
 
-        this.config = ConfigManager.create(Config.class, (it) -> {
+        this.config = ConfigManager.create(Config.class, it -> {
             it.withConfigurer(new YamlSnakeYamlConfigurer());
             it.withBindFile(this.getBootstrap().getDataDirectory().resolve("config.yml"));
             it.withRemoveOrphans(true);

@@ -2,6 +2,7 @@ import java.io.ByteArrayOutputStream
 
 plugins {
     id("java")
+    id("org.sonarqube") version "4.2.1.3168"
 }
 
 val majorVersion = 0

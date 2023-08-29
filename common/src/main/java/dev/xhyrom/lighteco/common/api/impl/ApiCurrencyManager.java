@@ -23,7 +23,7 @@ public class ApiCurrencyManager extends ApiAbstractManager<dev.xhyrom.lighteco.c
     public @NonNull Collection<Currency> getRegisteredCurrencies() {
         return this.handler.values()
                 .stream().map(this::wrap)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

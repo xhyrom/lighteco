@@ -18,9 +18,7 @@ public class TestPlugin extends JavaPlugin {
 
         getLogger().info("TestCurrency registered!");
 
-        currencyManager.getRegisteredCurrencies().forEach(currency -> {
-            getLogger().info("Currency: " + currency.getIdentifier() + " (" + currency.getType() + ", " + currency.fractionalDigits() + ", " + currency.isPayable() + ")");
-        });
+        currencyManager.getRegisteredCurrencies().forEach(currency -> getLogger().info("Currency: " + currency.getIdentifier() + " (" + currency.getType() + ", " + currency.fractionalDigits() + ", " + currency.isPayable() + ")"));
 
         provider.getCommandManager().registerCurrencyCommand(currencyManager.getCurrency("test"));
         provider.getCommandManager().registerCurrencyCommand(currencyManager.getCurrency("test2"));

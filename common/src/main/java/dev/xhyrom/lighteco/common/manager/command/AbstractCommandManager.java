@@ -21,7 +21,7 @@ public abstract class AbstractCommandManager implements CommandManager {
     private final Map<String, CurrencyMessageConfig> config;
     private final ArrayList<UUID> mustWait = new ArrayList<>();
 
-    public AbstractCommandManager(LightEcoPlugin plugin) {
+    protected AbstractCommandManager(LightEcoPlugin plugin) {
         this.plugin = plugin;
         this.config = this.plugin.getConfig().messages.currency;
     }
@@ -59,13 +59,13 @@ public abstract class AbstractCommandManager implements CommandManager {
     }
 
     private CurrencyMessageConfig getConfig(Currency currency) {
-        CurrencyMessageConfig config = this.config.get(currency.getIdentifier());
+        CurrencyMessageConfig currencyMessageConfig = this.config.get(currency.getIdentifier());
 
-        if (config == null) {
+        if (currencyMessageConfig == null) {
            return this.config.get("default");
         }
 
-        return config;
+        return currencyMessageConfig;
     }
 
     @Override

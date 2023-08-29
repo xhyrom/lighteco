@@ -25,8 +25,8 @@ public class BukkitCommandSender extends AbstractCommandSender<CommandSender> {
 
     @Override
     public UUID getUniqueId() {
-        if (super.delegate instanceof Player) {
-            return ((Player) super.delegate).getUniqueId();
+        if (super.delegate instanceof Player player) {
+            return player.getUniqueId();
         }
 
         return null;

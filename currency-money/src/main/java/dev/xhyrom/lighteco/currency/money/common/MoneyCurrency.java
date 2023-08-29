@@ -4,7 +4,7 @@ import dev.xhyrom.lighteco.api.model.currency.Currency;
 
 import java.math.BigDecimal;
 
-public class MoneyCurrency extends Currency {
+public class MoneyCurrency implements Currency {
     @Override
     public String getIdentifier() {
         return "money";

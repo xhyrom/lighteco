@@ -24,8 +24,8 @@ public class Storage {
             try {
                 return callable.call();
             } catch (Exception e) {
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
+                if (e instanceof RuntimeException r) {
+                    throw r;
                 }
 
                 throw new CompletionException(e);
@@ -38,8 +38,8 @@ public class Storage {
             try {
                 runnable.run();
             } catch (Exception e) {
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
+                if (e instanceof RuntimeException r) {
+                    throw r;
                 }
 
                 throw new CompletionException(e);

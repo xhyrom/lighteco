@@ -48,9 +48,8 @@ public enum SqlStatements {
             case POSTGRESQL -> {
                 return this.postgresql;
             }
+            default -> throw new IllegalArgumentException("Unknown implementation: " + implementationName);
         }
-
-        throw new IllegalArgumentException("Unknown implementation: " + implementationName);
     }
 
     public static boolean mustDuplicateParameters(StorageType implementationName) {

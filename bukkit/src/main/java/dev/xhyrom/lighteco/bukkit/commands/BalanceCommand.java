@@ -46,8 +46,12 @@ public class BalanceCommand implements Command {
 
         this.manager.plugin.getUserManager().loadUser(target.getUniqueId())
                 .thenAcceptAsync(result -> {
-                    String name = target.getName() != null ? target.getName() : args.getRaw("target");
-                    result.setUsername(name);
+                    String username = result.getUsername() == null ?
+                            target.getName() != null
+                                    ? target.getName()
+                                    : args.getRaw("target")
+                            : result.getUsername();
+                    result.setUsername(username);
 
                     this.manager.onBalance(sender, currency, result);
                 });

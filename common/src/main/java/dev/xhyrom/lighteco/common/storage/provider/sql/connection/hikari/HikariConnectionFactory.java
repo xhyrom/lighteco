@@ -17,7 +17,7 @@ public abstract class HikariConnectionFactory implements ConnectionFactory {
     private final StorageDataConfig configuration;
     private HikariDataSource hikari;
 
-    public HikariConnectionFactory(StorageDataConfig configuration) {
+    protected HikariConnectionFactory(StorageDataConfig configuration) {
         this.configuration = configuration;
     }
 
