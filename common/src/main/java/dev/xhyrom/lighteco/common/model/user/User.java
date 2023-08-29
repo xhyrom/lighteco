@@ -20,9 +20,14 @@ public class User {
 
     @Getter
     private final UUID uniqueId;
+
+    @Getter
+    @Setter
+    private boolean dirty = false;
     @Getter
     @Setter
     private String username;
+
     private final HashMap<Currency, BigDecimal> balances = new HashMap<>();
 
     public User(LightEcoPlugin plugin, UUID uniqueId) {
@@ -46,6 +51,8 @@ public class User {
 
         balance = balance.setScale(currency.fractionalDigits(), RoundingMode.DOWN);
         balances.put(currency, balance);
+
+        this.setDirty(true);
     }
 
     public void deposit(@NonNull Currency currency, @NonNull BigDecimal amount) throws IllegalArgumentException {
@@ -53,7 +60,7 @@ public class User {
             throw new IllegalArgumentException("Amount cannot be negative");
         }
 
-        setBalance(currency, getBalance(currency).add(amount));
+        this.setBalance(currency, this.getBalance(currency).add(amount));
     }
 
     public void withdraw(@NonNull Currency currency, @NonNull BigDecimal amount) throws IllegalArgumentException {
@@ -61,15 +68,11 @@ public class User {
             throw new IllegalArgumentException("Amount cannot be negative");
         }
 
-        if (getBalance(currency).compareTo(amount) < 0) {
+        if (this.getBalance(currency).compareTo(amount) < 0) {
             // Withdraw all
-            amount = getBalance(currency);
+            amount = this.getBalance(currency);
         }
 
-        setBalance(currency, getBalance(currency).subtract(amount));
-    }
-
-    public void invalidateCaches() {
-        balances.clear();
+        this.setBalance(currency, this.getBalance(currency).subtract(amount));
     }
 }

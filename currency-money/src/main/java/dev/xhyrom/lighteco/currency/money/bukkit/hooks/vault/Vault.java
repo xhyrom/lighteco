@@ -7,12 +7,10 @@ import dev.xhyrom.lighteco.api.model.user.User;
 import net.milkbowl.vault.economy.AbstractEconomy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 public class Vault extends AbstractEconomy {
     private final LightEco provider;
@@ -118,21 +116,8 @@ public class Vault extends AbstractEconomy {
             );
         }
 
-        return saveUser(amount, user);
-    }
-
-    @NotNull
-    private EconomyResponse saveUser(double amount, User user) {
-        try {
-            provider.getUserManager().saveUser(user).get();
-        } catch (InterruptedException | ExecutionException e) {
-            return new EconomyResponse(
-                    amount,
-                    bigDecimalToDouble(user.getBalance(currency)),
-                    EconomyResponse.ResponseType.FAILURE,
-                    "Cannot save user"
-            );
-        }
+        // Can happen on background
+        this.provider.getUserManager().saveUser(user);
 
         return new EconomyResponse(
                 amount,
@@ -163,7 +148,12 @@ public class Vault extends AbstractEconomy {
             );
         }
 
-        return saveUser(amount, user);
+        return new EconomyResponse(
+                amount,
+                bigDecimalToDouble(user.getBalance(currency)),
+                EconomyResponse.ResponseType.SUCCESS,
+                ""
+        );
     }
 
     @Override

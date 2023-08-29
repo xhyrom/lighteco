@@ -8,9 +8,12 @@ import dev.xhyrom.lighteco.common.dependencies.DependencyManager;
 import dev.xhyrom.lighteco.common.dependencies.DependencyManagerImpl;
 import dev.xhyrom.lighteco.common.storage.Storage;
 import dev.xhyrom.lighteco.common.storage.StorageFactory;
+import dev.xhyrom.lighteco.common.task.UserSaveTask;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import lombok.Getter;
+
+import java.util.concurrent.TimeUnit;
 
 @Getter
 public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
@@ -51,6 +54,8 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
         this.api = new LightEcoApi(this);
         LightEcoProvider.set(this.api);
         this.registerApiOnPlatform(this.api);
+
+        this.getBootstrap().getScheduler().asyncRepeating(new UserSaveTask(this), 3, TimeUnit.SECONDS);
     }
 
     public final void disable() {

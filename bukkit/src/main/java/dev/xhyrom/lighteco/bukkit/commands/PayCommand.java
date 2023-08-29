@@ -43,7 +43,7 @@ public class PayCommand implements Command {
         if (!this.manager.canUse(sender, currency)) return;
 
         this.manager.plugin.getUserManager().loadUser(target.getUniqueId())
-                .thenAcceptAsync(result -> {
+                .thenAccept(result -> {
                     String username = result.getUsername() == null ?
                             target.getName() != null
                                     ? target.getName()

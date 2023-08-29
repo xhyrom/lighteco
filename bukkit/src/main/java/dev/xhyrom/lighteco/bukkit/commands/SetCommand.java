@@ -44,7 +44,7 @@ public class SetCommand implements Command {
         if (!this.manager.canUse(sender, currency)) return;
 
         this.manager.plugin.getUserManager().loadUser(target.getUniqueId())
-                .thenAcceptAsync(result -> {
+                .thenAccept(result -> {
                     String name = target.getName() != null ? target.getName() : args.getRaw("target");
                     result.setUsername(name);
 

@@ -4,6 +4,7 @@ import dev.xhyrom.lighteco.bukkit.logger.BukkitLogger;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LightEcoBootstrap;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LoaderBootstrap;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
+import dev.xhyrom.lighteco.common.plugin.scheduler.SchedulerAdapter;
 import lombok.Getter;
 import org.bukkit.Server;
 import org.bukkit.entity.Entity;
@@ -47,6 +48,11 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     public Server getServer() {
         return this.loader.getServer();
+    }
+
+    @Override
+    public SchedulerAdapter getScheduler() {
+        return new BukkitSchedulerAdapter(this);
     }
 
     @Override

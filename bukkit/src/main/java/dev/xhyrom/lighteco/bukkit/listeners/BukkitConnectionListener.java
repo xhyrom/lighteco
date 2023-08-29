@@ -1,12 +1,16 @@
 package dev.xhyrom.lighteco.bukkit.listeners;
 
 import dev.xhyrom.lighteco.bukkit.BukkitLightEcoPlugin;
+import dev.xhyrom.lighteco.common.model.user.User;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.util.UUID;
 
 public class BukkitConnectionListener implements Listener {
     private final BukkitLightEcoPlugin plugin;
@@ -34,7 +38,22 @@ public class BukkitConnectionListener implements Listener {
         }
     }
 
+    @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        this.plugin.getUserManager().unload(event.getPlayer().getUniqueId());
+        UUID uniqueId = event.getPlayer().getUniqueId();
+
+        User user = this.plugin.getUserManager().getIfLoaded(uniqueId);
+        if (!user.isDirty()) {
+            this.plugin.getUserManager().unload(uniqueId);
+            return;
+        }
+
+        this.plugin.getUserManager().saveUser(user)
+                .thenAccept(v -> {
+                    // make sure the player is offline before unloading
+                    if (Bukkit.getPlayer(uniqueId) != null) return;
+
+                    this.plugin.getUserManager().unload(uniqueId);
+                });
     }
 }

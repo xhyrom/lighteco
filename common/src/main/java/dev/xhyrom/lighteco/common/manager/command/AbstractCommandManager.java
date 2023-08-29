@@ -112,8 +112,7 @@ public abstract class AbstractCommandManager implements CommandManager {
                 )
         );
 
-        this.plugin.getUserManager().saveUser(target)
-                .thenAccept(v -> removeFromMustWait(target.getUniqueId(), sender.getUniqueId()));
+        removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
     }
 
     @Override
@@ -133,8 +132,7 @@ public abstract class AbstractCommandManager implements CommandManager {
                 )
         );
 
-        this.plugin.getUserManager().saveUser(target)
-                .thenAccept(v -> removeFromMustWait(target.getUniqueId(), sender.getUniqueId()));
+        removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
     }
 
     @Override
@@ -154,8 +152,7 @@ public abstract class AbstractCommandManager implements CommandManager {
                 )
         );
 
-        this.plugin.getUserManager().saveUser(target)
-                .thenAccept(v -> removeFromMustWait(target.getUniqueId(), sender.getUniqueId()));
+        removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
     }
 
     @Override
@@ -209,7 +206,6 @@ public abstract class AbstractCommandManager implements CommandManager {
                 )
         );
 
-        this.plugin.getUserManager().saveUsers(user, target)
-                        .thenAccept(v -> removeFromMustWait(sender.getUniqueId(), target.getUniqueId()));
+        removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
     }
 }
