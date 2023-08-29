@@ -20,19 +20,7 @@ import java.util.function.Function;
 public class SqlStorageProvider implements StorageProvider {
     private final String SAVE_USER_LOCAL_CURRENCY;
     private final String SAVE_USER_GLOBAL_CURRENCY;
-    private static final String LOAD_WHOLE_USER = """
-SELECT currency_identifier, balance
-FROM
-    (
-        SELECT currency_identifier, balance
-        FROM '{prefix}_users'
-        WHERE uuid=?1
-        UNION ALL
-        SELECT currency_identifier, balance
-        FROM '{prefix}_{context}_users'
-        WHERE uuid=?1
-    ) AS combined_currencies;
-    """;
+    private static final String LOAD_WHOLE_USER = "SELECT currency_identifier, balance FROM ( SELECT currency_identifier, balance FROM '{prefix}_users' WHERE uuid = ? UNION ALL SELECT currency_identifier, balance FROM '{prefix}_{context}_users' WHERE uuid = ? ) AS combined_currencies;";
 
     private final LightEcoPlugin plugin;
     private final ConnectionFactory connectionFactory;
@@ -86,7 +74,8 @@ FROM
         try (Connection c = this.connectionFactory.getConnection()) {
             try (PreparedStatement ps = c.prepareStatement(this.statementProcessor.apply(LOAD_WHOLE_USER))) {
                 ps.setString(1, uniqueIdString);
-                ps.setString(2, uniqueIdString);
+                if (this.connectionFactory.getImplementationName() == StorageType.MARIADB)
+                    ps.setString(2, uniqueIdString);
 
                 ResultSet rs = ps.executeQuery();
 
@@ -122,6 +111,8 @@ FROM
                             psGlobal.setString(1, uniqueIdString);
                             psGlobal.setString(2, currency.getIdentifier());
                             psGlobal.setBigDecimal(3, balance);
+                            if (this.connectionFactory.getImplementationName() == StorageType.MARIADB)
+                                psGlobal.setBigDecimal(4, balance);
 
                             psGlobal.addBatch();
                         }
@@ -129,6 +120,8 @@ FROM
                             psLocal.setString(1, uniqueIdString);
                             psLocal.setString(2, currency.getIdentifier());
                             psLocal.setBigDecimal(3, balance);
+                            if (this.connectionFactory.getImplementationName() == StorageType.MARIADB)
+                                psLocal.setBigDecimal(4, balance);
 
                             psLocal.addBatch();
                         }
@@ -137,6 +130,8 @@ FROM
 
                 psGlobal.executeBatch();
                 psLocal.executeBatch();
+            } catch (SQLException e) {
+                throw new RuntimeException("Failed to save user " + user.getUniqueId(), e);
             }
         }
     }
