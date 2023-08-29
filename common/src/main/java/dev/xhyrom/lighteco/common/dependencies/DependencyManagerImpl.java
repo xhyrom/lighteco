@@ -3,7 +3,7 @@ package dev.xhyrom.lighteco.common.dependencies;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.MoreFiles;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
-import dev.xhyrom.lighteco.common.plugin.classpath.URLClassLoaderAccess;
+import dev.xhyrom.lighteco.common.util.URLClassLoaderAccess;
 import dev.xhyrom.lighteco.common.storage.StorageType;
 
 import java.io.IOException;
@@ -30,7 +30,6 @@ public class DependencyManagerImpl implements DependencyManager {
         this.registry = new DependencyRegistry();
         this.cacheDirectory = setupCacheDirectory(plugin);
         this.classLoader = URLClassLoaderAccess.create((URLClassLoader) plugin.getBootstrap().getClass().getClassLoader());
-        System.out.println(this.classLoader);
     }
 
     @Override
@@ -47,7 +46,7 @@ public class DependencyManagerImpl implements DependencyManager {
                 try {
                     loadDependency(dependency);
                 } catch (Exception e) {
-                    new RuntimeException("Failed to load dependency " + dependency, e);
+                    throw new RuntimeException("Failed to load dependency " + dependency, e);
                 } finally {
                     latch.countDown();
                 }
@@ -70,14 +69,11 @@ public class DependencyManagerImpl implements DependencyManager {
 
         this.loaded.put(dependency, file);
 
-        System.out.println("HHHH");
         if (this.registry.shouldAutoLoad(dependency)) {
-            System.out.println("Loaded dependency " + dependency + " from " + file);
-
             try {
                 this.classLoader.addURL(file.toUri().toURL());
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException("Failed to load dependency " + dependency, e);
             }
         }
     }

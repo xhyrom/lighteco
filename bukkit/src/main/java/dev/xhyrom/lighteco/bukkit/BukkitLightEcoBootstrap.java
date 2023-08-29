@@ -42,7 +42,7 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     @Override
     public void onDisable() {
-
+        this.plugin.disable();
     }
 
     public Server getServer() {

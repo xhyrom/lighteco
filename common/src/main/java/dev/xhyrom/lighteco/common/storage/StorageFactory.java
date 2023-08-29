@@ -20,12 +20,11 @@ public class StorageFactory {
     }
 
     public Set<StorageType> getRequiredTypes() {
-        return ImmutableSet.of(StorageType.parse(this.plugin.getConfig().storage.provider));
+        return ImmutableSet.of(this.plugin.getConfig().storage.provider);
     }
 
     public Storage get() {
-        // todo: use config
-        String provider = this.plugin.getConfig().storage.provider;
+        StorageType provider = this.plugin.getConfig().storage.provider;
         Storage storage = new Storage(this.plugin, createProvider(provider));
 
         storage.init();
@@ -33,32 +32,26 @@ public class StorageFactory {
         return storage;
     }
 
-    private StorageProvider createProvider(String provider) {
-        switch (provider.toLowerCase()) {
-            case "memory":
-                return new MemoryStorageProvider(this.plugin);
-            case "h2":
-                return new SqlStorageProvider(
-                        this.plugin,
-                        new H2ConnectionFactory(this.plugin.getBootstrap().getDataDirectory().resolve("lighteco-h2").toAbsolutePath())
-                );
-            case "sqlite":
-                return new SqlStorageProvider(
-                        this.plugin,
-                        new SqliteConnectionFactory(this.plugin.getBootstrap().getDataDirectory().resolve("lighteco-sqlite.db"))
-                );
-            case "mysql":
-                return new SqlStorageProvider(
-                        this.plugin,
-                        new MySQLConnectionFactory(this.plugin.getConfig().storage.data)
-                );
-            case "mariadb":
-                return new SqlStorageProvider(
-                        this.plugin,
-                        new MariaDBConnectionFactory(this.plugin.getConfig().storage.data)
-                );
-            default:
-                throw new IllegalArgumentException("Unknown storage provider: " + provider);
-        }
+    private StorageProvider createProvider(StorageType type) {
+        return switch (type) {
+            case MEMORY -> new MemoryStorageProvider(this.plugin);
+            case H2 -> new SqlStorageProvider(
+                    this.plugin,
+                    new H2ConnectionFactory(this.plugin.getBootstrap().getDataDirectory().resolve("lighteco-h2").toAbsolutePath())
+            );
+            case SQLITE -> new SqlStorageProvider(
+                    this.plugin,
+                    new SqliteConnectionFactory(this.plugin.getBootstrap().getDataDirectory().resolve("lighteco-sqlite.db"))
+            );
+            case MYSQL -> new SqlStorageProvider(
+                    this.plugin,
+                    new MySQLConnectionFactory(this.plugin.getConfig().storage.data)
+            );
+            case MARIADB -> new SqlStorageProvider(
+                    this.plugin,
+                    new MariaDBConnectionFactory(this.plugin.getConfig().storage.data)
+            );
+            default -> throw new IllegalArgumentException("Unknown storage provider: " + type.name());
+        };
     }
 }

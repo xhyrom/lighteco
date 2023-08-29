@@ -2,6 +2,7 @@ package dev.xhyrom.lighteco.common.dependencies;
 
 import lombok.Getter;
 
+@Getter
 public enum Dependency {
     H2_DRIVER(
         "com.h2database",
@@ -29,10 +30,7 @@ public enum Dependency {
         "42.6.0"
     );
 
-    @Getter
     private final String fullPath;
-    private final String groupId;
-    private final String artifactId;
     private final String version;
 
     private static final String MAVEN_FORMAT = "%s/%s/%s/%s-%s.jar";
@@ -46,8 +44,6 @@ public enum Dependency {
                 version
         );
 
-        this.groupId = groupId;
-        this.artifactId = artifactId;
         this.version = version;
     }
 

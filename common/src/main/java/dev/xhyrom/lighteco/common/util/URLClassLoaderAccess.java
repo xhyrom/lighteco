@@ -1,5 +1,12 @@
-package dev.xhyrom.lighteco.common.plugin.classpath;
+// Class loader access from LuckPerms
+// https://github.com/LuckPerms/LuckPerms/blob/1790c0ad4744d31ea3e30eb87822b4f506de449b/common/src/main/java/me/lucko/luckperms/common/plugin/classpath/URLClassLoaderAccess.java
+// Copyright (c) lucko (Luck) <lucko@lucko.me>
+// Copyright (c) contributors
+// MIT License
 
+package dev.xhyrom.lighteco.common.util;
+
+import dev.xhyrom.lighteco.common.util.exception.UnableToInjectException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.Field;
@@ -15,7 +22,9 @@ public abstract class URLClassLoaderAccess {
         } else if (Unsafe.isSupported()) {
             return new Unsafe(classLoader);
         } else {
-            return Noop.INSTANCE;
+            throw new UnableToInjectException("LightEco is unable to inject dependencies into the plugin class loader.\n" +
+                    "To fix this, please add '--add-opens java.base/java.lang=ALL-UNNAMED' to your JVM arguments." +
+                    "If it still doesn't work, please report this on https://github.com/xHyroM/lighteco/issues");
         }
     }
 
@@ -116,19 +125,6 @@ public abstract class URLClassLoaderAccess {
                 this.unopenedURLs.add(url);
                 this.pathURLs.add(url);
             }
-        }
-    }
-
-    private static class Noop extends URLClassLoaderAccess {
-        private static final Noop INSTANCE = new Noop();
-
-        private Noop() {
-            super(null);
-        }
-
-        @Override
-        public void addURL(@NonNull URL url) {
-            throw new UnsupportedOperationException("Noop");
         }
     }
 }

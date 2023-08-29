@@ -55,6 +55,10 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
         this.registerApiOnPlatform(this.api);
     }
 
+    public final void disable() {
+        this.storage.shutdown();
+    }
+
     protected abstract void registerListeners();
 
     protected abstract void setupManagers();

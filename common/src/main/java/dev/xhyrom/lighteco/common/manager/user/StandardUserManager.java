@@ -23,7 +23,12 @@ public class StandardUserManager extends AbstractManager<UUID, User> implements 
 
     @Override
     public CompletableFuture<User> loadUser(UUID uniqueId) {
-        return this.plugin.getStorage().loadUser(uniqueId);
+        return loadUser(uniqueId, null);
+    }
+
+    @Override
+    public CompletableFuture<User> loadUser(UUID uniqueId, String username) {
+        return this.plugin.getStorage().loadUser(uniqueId, username);
     }
 
     @Override

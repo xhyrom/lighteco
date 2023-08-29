@@ -16,7 +16,6 @@ public class BukkitConnectionListener implements Listener {
         this.plugin = plugin;
     }
 
-
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
@@ -24,7 +23,7 @@ public class BukkitConnectionListener implements Listener {
         }
 
         try {
-            this.plugin.getStorage().loadUser(event.getUniqueId()).join();
+            this.plugin.getStorage().loadUser(event.getUniqueId(), event.getName()).join();
         } catch (Exception e) {
             this.plugin.getBootstrap().getLogger()
                     .error("Failed to load user data for %s (%s)", e, event.getName(), event.getUniqueId());

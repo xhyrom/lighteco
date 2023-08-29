@@ -10,7 +10,9 @@ public interface UserManager extends Manager<UUID, User> {
     CompletableFuture<Void> saveUser(User user);
 
     CompletableFuture<Void> load();
+
     CompletableFuture<User> loadUser(UUID uniqueId);
+    CompletableFuture<User> loadUser(UUID uniqueId, String username);
 
     void invalidateCaches();
 }

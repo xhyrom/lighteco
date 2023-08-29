@@ -9,7 +9,6 @@ public class BukkitLogger implements PluginLogger {
         this.logger = logger;
     }
 
-
     @Override
     public void info(String message) {
         this.logger.info(message);

@@ -7,6 +7,7 @@ import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.storage.StorageType;
 import dev.xhyrom.lighteco.common.storage.provider.sql.connection.ConnectionFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,10 +19,10 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public class SqlStorageProvider implements StorageProvider {
-    private final String SAVE_USER_LOCAL_CURRENCY;
-    private final String SAVE_USER_GLOBAL_CURRENCY;
-    private static final String LOAD_WHOLE_USER = "SELECT currency_identifier, balance FROM ( SELECT currency_identifier, balance FROM '{prefix}_users' WHERE uuid = ? UNION ALL SELECT currency_identifier, balance FROM '{prefix}_{context}_users' WHERE uuid = ? ) AS combined_currencies;";
-
+    private static String SAVE_USER_LOCAL_CURRENCY;
+    private static String SAVE_USER_GLOBAL_CURRENCY;
+    private static String LOAD_WHOLE_USER;
+    
     private final LightEcoPlugin plugin;
     private final ConnectionFactory connectionFactory;
     private final Function<String, String> statementProcessor;
@@ -36,8 +37,9 @@ public class SqlStorageProvider implements StorageProvider {
         );
 
         final StorageType implementationName = this.connectionFactory.getImplementationName();
-        this.SAVE_USER_LOCAL_CURRENCY = SqlStatements.SAVE_USER_LOCAL_CURRENCY.get(implementationName);
-        this.SAVE_USER_GLOBAL_CURRENCY = SqlStatements.SAVE_USER_GLOBAL_CURRENCY.get(implementationName);
+        SAVE_USER_LOCAL_CURRENCY = SqlStatements.SAVE_USER_LOCAL_CURRENCY.get(implementationName);
+        SAVE_USER_GLOBAL_CURRENCY = SqlStatements.SAVE_USER_GLOBAL_CURRENCY.get(implementationName);
+        LOAD_WHOLE_USER = SqlStatements.LOAD_WHOLE_USER.get(implementationName);
     }
 
     @Override
@@ -67,9 +69,16 @@ public class SqlStorageProvider implements StorageProvider {
     }
 
     @Override
-    public @NonNull User loadUser(@NonNull UUID uniqueId) throws Exception {
+    public void shutdown() throws Exception {
+        this.connectionFactory.shutdown();
+    }
+
+    @Override
+    public @NonNull User loadUser(@NonNull UUID uniqueId, @Nullable String username) throws Exception {
         String uniqueIdString = uniqueId.toString();
         dev.xhyrom.lighteco.common.model.user.User user = this.plugin.getUserManager().getOrMake(uniqueId);
+        if (username != null)
+            user.setUsername(username);
 
         try (Connection c = this.connectionFactory.getConnection()) {
             try (PreparedStatement ps = c.prepareStatement(this.statementProcessor.apply(LOAD_WHOLE_USER))) {

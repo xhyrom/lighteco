@@ -46,6 +46,6 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
             return user.getBalance(currency).toPlainString();
         }
 
-        return "lighteco";
+        return null;
     }
 }

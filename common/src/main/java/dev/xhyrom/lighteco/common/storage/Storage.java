@@ -55,13 +55,25 @@ public class Storage {
         }
     }
 
+    public void shutdown() {
+        try {
+            this.provider.shutdown();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to shutdown storage provider", e);
+        }
+    }
+
     public CompletableFuture<User> loadUser(UUID uniqueId) {
+        return loadUser(uniqueId, null);
+    }
+
+    public CompletableFuture<User> loadUser(UUID uniqueId, String username) {
         User user = this.plugin.getUserManager().getIfLoaded(uniqueId);
         if (user != null) {
             return CompletableFuture.completedFuture(user);
         }
 
-        return future(() -> this.provider.loadUser(uniqueId))
+        return future(() -> this.provider.loadUser(uniqueId, username))
                 .thenApply(apiUser -> this.plugin.getUserManager().getIfLoaded(apiUser.getUniqueId()));
     }
 

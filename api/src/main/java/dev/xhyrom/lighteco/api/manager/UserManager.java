@@ -9,6 +9,7 @@ import java.util.concurrent.CompletableFuture;
 
 public interface UserManager {
     @NonNull CompletableFuture<User> loadUser(@NonNull UUID uniqueId);
+    @NonNull CompletableFuture<User> loadUser(@NonNull UUID uniqueId, String username);
 
     @NonNull CompletableFuture<Void> saveUser(@NonNull User user);
 
