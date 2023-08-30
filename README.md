@@ -1,4 +1,4 @@
-![lighteco thumbnail](.github/lighteco.png)
+![lighteco thumbnail](.github/assets/lighteco.png)
 
 **LightEco** ⚡ is an incredibly fast, lightweight, and modular plugin that excels across multiple platforms. It's designed to optimize performance and provide a seamless experience.
 
