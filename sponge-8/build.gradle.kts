@@ -1,19 +1,32 @@
 plugins {
-    id("java")
-}
-
-group = "dev.xhyrom"
-version = "0.1.0"
-
-repositories {
-    mavenCentral()
+    id("lighteco.platform-logic")
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation(project(":lighteco-common"))
+
+    compileOnly("org.spongepowered:spongeapi:8.0.0")
+
+    //implementation("dev.jorel:commandapi-sponge-shade:9.1.0")
+
+    compileOnly("org.projectlombok:lombok:1.18.28")
+    annotationProcessor("org.projectlombok:lombok:1.18.28")
+
+    compileOnly("org.checkerframework:checker-qual:3.8.0")
+    compileOnly("org.jetbrains:annotations:20.1.0")
 }
 
-tasks.test {
-    useJUnitPlatform()
+tasks.shadowJar {
+    relocate("dev.jorel.commandapi", "dev.xhyrom.lighteco.libraries.commandapi")
+
+    // common
+    relocate("eu.okaeri.configs", "dev.xhyrom.lighteco.libraries.okaeri.configs")
+    relocate("eu.okaeri.validator", "dev.xhyrom.lighteco.libraries.okaeri.validator")
+
+    relocate("org.yaml.snakeyaml", "dev.xhyrom.lighteco.libraries.org.yaml.snakeyaml")
+
+    relocate("org.mariadb.jdbc", "dev.xhyrom.lighteco.libraries.mariadb")
+    relocate("com.mysql", "dev.xhyrom.lighteco.libraries.mysql")
+    relocate("org.postgresql", "dev.xhyrom.lighteco.libraries.postgresql")
+    relocate("com.zaxxer.hikari", "dev.xhyrom.lighteco.libraries.hikari")
 }

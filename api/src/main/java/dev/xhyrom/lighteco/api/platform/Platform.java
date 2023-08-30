@@ -12,6 +12,7 @@ public interface Platform {
 
     enum Type {
         BUKKIT("Bukkit"),
+        SPONGE("Sponge"),
         VELOCITY("Velocity"),
         BUNGEECORD("BungeeCord");
 
@@ -26,7 +27,7 @@ public interface Platform {
         }
 
         public boolean isLocal() {
-            return this == BUKKIT;
+            return this == BUKKIT || this == SPONGE;
         }
 
         public boolean isProxy() {

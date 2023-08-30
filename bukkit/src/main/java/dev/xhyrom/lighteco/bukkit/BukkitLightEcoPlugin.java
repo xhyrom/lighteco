@@ -34,7 +34,7 @@ public class BukkitLightEcoPlugin extends AbstractLightEcoPlugin {
 
     @Override
     protected void registerListeners() {
-        this.bootstrap.getServer().getPluginManager().registerEvents(new BukkitConnectionListener(this), this.bootstrap.getLoader());
+        this.bootstrap.getLoader().getServer().getPluginManager().registerEvents(new BukkitConnectionListener(this), this.bootstrap.getLoader());
     }
 
     @Override
@@ -47,7 +47,7 @@ public class BukkitLightEcoPlugin extends AbstractLightEcoPlugin {
 
     @Override
     protected void registerApiOnPlatform(LightEco api) {
-        this.getBootstrap().getServer().getServicesManager().register(LightEco.class, api, this.getBootstrap().getLoader(), ServicePriority.Normal);
+        this.getBootstrap().getLoader().getServer().getServicesManager().register(LightEco.class, api, this.getBootstrap().getLoader(), ServicePriority.Normal);
     }
 
     @Override

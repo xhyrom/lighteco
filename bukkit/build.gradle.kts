@@ -35,9 +35,6 @@ tasks.shadowJar {
     relocate("eu.okaeri.configs", "dev.xhyrom.lighteco.libraries.okaeri.configs")
     relocate("eu.okaeri.validator", "dev.xhyrom.lighteco.libraries.okaeri.validator")
 
-    //relocate("net.kyori.adventure", "dev.xhyrom.lighteco.libraries.net.kyori.adventure")
-    //relocate("net.kyori.examination", "dev.xhyrom.lighteco.libraries.net.kyori.examination")
-
     relocate("org.yaml.snakeyaml", "dev.xhyrom.lighteco.libraries.org.yaml.snakeyaml")
 
     relocate("org.mariadb.jdbc", "dev.xhyrom.lighteco.libraries.mariadb")

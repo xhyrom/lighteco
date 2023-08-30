@@ -17,7 +17,7 @@ public class BukkitSchedulerAdapter implements SchedulerAdapter {
 
     public BukkitSchedulerAdapter(BukkitLightEcoBootstrap bootstrap) {
         this.bootstrap = bootstrap;
-        this.scheduler = bootstrap.getServer().getScheduler();
+        this.scheduler = bootstrap.getLoader().getServer().getScheduler();
 
         this.async = runnable -> this.scheduler.runTaskAsynchronously(this.bootstrap.getLoader(), runnable);
     }

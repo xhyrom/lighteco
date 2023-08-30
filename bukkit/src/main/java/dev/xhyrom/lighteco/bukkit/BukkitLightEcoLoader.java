@@ -2,8 +2,6 @@ package dev.xhyrom.lighteco.bukkit;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
-import dev.xhyrom.lighteco.bukkit.hooks.PlaceholderAPIExpansion;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 // Used inside plugin.yml

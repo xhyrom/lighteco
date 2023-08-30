@@ -1,12 +1,13 @@
 package dev.xhyrom.lighteco.bukkit;
 
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.xhyrom.lighteco.bukkit.logger.BukkitLogger;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LightEcoBootstrap;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LoaderBootstrap;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 import dev.xhyrom.lighteco.common.plugin.scheduler.SchedulerAdapter;
 import lombok.Getter;
-import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,10 +18,10 @@ import java.util.UUID;
 
 @Getter
 public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstrap {
-    private final JavaPlugin loader;
-    @Getter
     private final BukkitLightEcoPlugin plugin = new BukkitLightEcoPlugin(this);
 
+    @Getter
+    private final JavaPlugin loader;
     @Getter
     private final PluginLogger logger;
     @Getter
@@ -28,7 +29,6 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     public BukkitLightEcoBootstrap(JavaPlugin loader) {
         this.loader = loader;
-
         this.logger = new BukkitLogger(loader.getLogger());
         this.scheduler = new BukkitSchedulerAdapter(this);
     }
@@ -36,20 +36,21 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     @Override
     public void onLoad() {
         this.plugin.load();
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this.loader)
+                .verboseOutput(this.getPlugin().getConfig().debug)
+        );
     }
 
     @Override
     public void onEnable() {
+        CommandAPI.onEnable();
         this.plugin.enable();
     }
 
     @Override
     public void onDisable() {
+        CommandAPI.onDisable();
         this.plugin.disable();
-    }
-
-    public Server getServer() {
-        return this.loader.getServer();
     }
 
     @Override
@@ -59,7 +60,7 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     @Override
     public List<UUID> getOnlinePlayers() {
-        return getServer().getOnlinePlayers().stream()
+        return this.loader.getServer().getOnlinePlayers().stream()
                 .map(Entity::getUniqueId)
                 .toList();
     }

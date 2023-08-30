@@ -6,7 +6,6 @@ import dev.xhyrom.lighteco.common.api.LightEcoApi;
 import dev.xhyrom.lighteco.common.config.Config;
 import dev.xhyrom.lighteco.common.dependencies.DependencyManager;
 import dev.xhyrom.lighteco.common.dependencies.DependencyManagerImpl;
-import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.storage.Storage;
 import dev.xhyrom.lighteco.common.storage.StorageFactory;
 import dev.xhyrom.lighteco.common.task.UserSaveTask;

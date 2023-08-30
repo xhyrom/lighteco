@@ -1,0 +1,36 @@
+{
+  "loader": {
+    "name": "java_plain",
+    "version": "1.0.0"
+  },
+  "license": "Apache-2.0",
+  "plugins": [
+    {
+      "id": "lighteco-sponge",
+      "name": "LightEco Sponge",
+      "description": "${description}",
+      "version": "${version}",
+      "entrypoint": "dev.xhyrom.lighteco.sponge.SpongeLightEcoBootstrap",
+      "links": {
+        "homepage": "https://modrinth.com/plugin/lighteco",
+        "source": "https://github.com/xHyroM/lighteco",
+        "issues": "https://github.com/xHyroM/lighteco/issues"
+      },
+      "contributors": [
+        {
+          "name": "xHyroM",
+          "description": "Developer",
+          "links": {
+            "homepage": "https://xhyrom.dev"
+          }
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "spongeapi",
+          "version": "8.0.0"
+        }
+      ]
+    }
+  ]
+}
