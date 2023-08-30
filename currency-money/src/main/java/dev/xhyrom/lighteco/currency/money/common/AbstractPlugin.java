@@ -7,10 +7,10 @@ import lombok.Getter;
 
 import java.nio.file.Path;
 
+@Getter
 public class AbstractPlugin implements Plugin {
-    @Getter
     private Config config;
-    private Path dataDirectory;
+    private final Path dataDirectory;
 
     public AbstractPlugin(Path dataDirectory) {
         this.dataDirectory = dataDirectory;
