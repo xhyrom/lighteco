@@ -2,6 +2,7 @@ package dev.xhyrom.lighteco.common.dependencies;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.MoreFiles;
+import dev.xhyrom.lighteco.common.config.Config;
 import dev.xhyrom.lighteco.common.dependencies.relocation.Relocation;
 import dev.xhyrom.lighteco.common.dependencies.relocation.RelocationHandler;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
@@ -24,6 +25,7 @@ public class DependencyManagerImpl implements DependencyManager {
     private final EnumMap<Dependency, Path> loaded = new EnumMap<>(Dependency.class);
     private final Map<ImmutableSet<Dependency>, IsolatedClassLoader> loaders = new HashMap<>();
 
+    private final Config config;
     private final PluginLogger logger;
     private final DependencyRegistry registry;
     private final Path cacheDirectory;
@@ -31,6 +33,7 @@ public class DependencyManagerImpl implements DependencyManager {
     private @MonotonicNonNull RelocationHandler relocationHandler;
 
     public DependencyManagerImpl(LightEcoPlugin plugin) {
+        this.config = plugin.getConfig();
         this.logger = plugin.getBootstrap().getLogger();
         this.registry = new DependencyRegistry();
         this.cacheDirectory = setupCacheDirectory(plugin);
@@ -48,7 +51,9 @@ public class DependencyManagerImpl implements DependencyManager {
     @Override
     public void loadDependencies(Set<Dependency> dependencies) {
         CountDownLatch latch = new CountDownLatch(dependencies.size());
-        this.logger.info("Loading dependencies: " + dependencies);
+
+        if (this.config.debug)
+            this.logger.info("Loading dependencies: " + dependencies);
 
         for (Dependency dependency : dependencies) {
             if (this.loaded.containsKey(dependency)) {
@@ -57,14 +62,18 @@ public class DependencyManagerImpl implements DependencyManager {
             }
 
             CompletableFuture.runAsync(() -> {
-                System.out.println("Loading dependency " + dependency);
+                if (this.config.debug)
+                    this.logger.info("Loading dependency " + dependency);
+
                 try {
                     loadDependency(dependency);
                 } catch (Exception e) {
                     throw new RuntimeException("Failed to load dependency " + dependency, e);
                 } finally {
                     latch.countDown();
-                    System.out.println("Loaded dependency " + dependency);
+
+                    if (this.config.debug)
+                        this.logger.info("Loaded dependency " + dependency);
                 }
             });
         }
@@ -72,7 +81,8 @@ public class DependencyManagerImpl implements DependencyManager {
         try {
             latch.await();
 
-            this.logger.info("Loaded dependencies: " + dependencies);
+            if (this.config.debug)
+                this.logger.info("Loaded dependencies: " + dependencies);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

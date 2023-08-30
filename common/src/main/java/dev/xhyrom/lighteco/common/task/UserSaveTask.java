@@ -14,14 +14,12 @@ public class UserSaveTask implements Runnable {
 
     @Override
     public void run() {
-        if (this.plugin.getConfig().debug)
-            this.plugin.getBootstrap().getLogger().info("Saving users in task");
-
         User[] users = this.plugin.getUserManager().values().stream()
                 .filter(User::isDirty)
                 .toArray(User[]::new);
 
-        System.out.println("Saving " + users.length + " users");
+        if (this.plugin.getConfig().debug)
+            this.plugin.getBootstrap().getLogger().info("Saving %s users in task", users.length);
 
         if (users.length == 0) {
             return;
