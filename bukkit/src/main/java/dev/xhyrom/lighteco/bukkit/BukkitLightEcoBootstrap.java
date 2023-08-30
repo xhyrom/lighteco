@@ -10,7 +10,6 @@ import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
@@ -24,11 +23,14 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     @Getter
     private final PluginLogger logger;
+    @Getter
+    private final SchedulerAdapter scheduler;
 
     public BukkitLightEcoBootstrap(JavaPlugin loader) {
         this.loader = loader;
 
         this.logger = new BukkitLogger(loader.getSLF4JLogger());
+        this.scheduler = new BukkitSchedulerAdapter(this);
     }
 
     @Override
@@ -48,11 +50,6 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     public Server getServer() {
         return this.loader.getServer();
-    }
-
-    @Override
-    public SchedulerAdapter getScheduler() {
-        return new BukkitSchedulerAdapter(this);
     }
 
     @Override

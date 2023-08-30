@@ -22,4 +22,8 @@ public class Config extends OkaeriConfig {
 
     @Comment("Messages")
     public MessageConfig messages = new MessageConfig();
+
+    @Comment("Debug mode")
+    @Comment("Prints additional information to the console.")
+    public boolean debug = false;
 }

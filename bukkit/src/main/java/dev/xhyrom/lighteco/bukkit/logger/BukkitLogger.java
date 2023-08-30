@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 
 public class BukkitLogger implements PluginLogger {
     private final Logger logger;
+
     public BukkitLogger(Logger logger) {
         this.logger = logger;
     }

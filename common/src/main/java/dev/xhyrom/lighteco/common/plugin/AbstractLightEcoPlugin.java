@@ -6,6 +6,7 @@ import dev.xhyrom.lighteco.common.api.LightEcoApi;
 import dev.xhyrom.lighteco.common.config.Config;
 import dev.xhyrom.lighteco.common.dependencies.DependencyManager;
 import dev.xhyrom.lighteco.common.dependencies.DependencyManagerImpl;
+import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.storage.Storage;
 import dev.xhyrom.lighteco.common.storage.StorageFactory;
 import dev.xhyrom.lighteco.common.task.UserSaveTask;
@@ -24,6 +25,8 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
     @Getter
     private Storage storage;
     private LightEcoApi api;
+
+    private UserSaveTask userSaveTask;
 
     public final void load() {
         this.dependencyManager = new DependencyManagerImpl(this);
@@ -55,10 +58,13 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
         LightEcoProvider.set(this.api);
         this.registerApiOnPlatform(this.api);
 
-        this.getBootstrap().getScheduler().asyncRepeating(new UserSaveTask(this), this.config.saveInterval, TimeUnit.SECONDS);
+        this.userSaveTask = new UserSaveTask(this);
+        this.getBootstrap().getScheduler().asyncRepeating(userSaveTask, this.config.saveInterval, TimeUnit.SECONDS);
     }
 
     public final void disable() {
+        this.userSaveTask.run(); // save all users synchronously
+
         this.storage.shutdown();
     }
 
