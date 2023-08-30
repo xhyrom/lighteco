@@ -32,7 +32,7 @@ public class BukkitMCLoader extends JavaPlugin {
         CurrencyManager currencyManager = provider.getCurrencyManager();
         CommandManager commandManager = provider.getCommandManager();
 
-        Currency currency = new MoneyCurrency();
+        Currency currency = new MoneyCurrency(this.plugin);
 
         currencyManager.registerCurrency(currency);
         commandManager.registerCurrencyCommand(currency, true);

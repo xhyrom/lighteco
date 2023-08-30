@@ -15,4 +15,8 @@ public class Config extends OkaeriConfig {
     @Comment("Used for formatting currency")
     @Comment("See https://en.wikipedia.org/wiki/ISO_4217 for more information")
     public String currencyCode = "USD";
+
+    @Comment("Fractional digits")
+    @Comment("How many digits after the decimal point")
+    public int fractionalDigits = 2;
 }
