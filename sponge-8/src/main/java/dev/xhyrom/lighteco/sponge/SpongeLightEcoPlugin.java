@@ -1,9 +1,9 @@
 package dev.xhyrom.lighteco.sponge;
 
 import dev.xhyrom.lighteco.api.LightEco;
-import dev.xhyrom.lighteco.api.manager.CommandManager;
 import dev.xhyrom.lighteco.api.manager.ContextManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
+import dev.xhyrom.lighteco.common.manager.command.CommandManager;
 import dev.xhyrom.lighteco.common.manager.currency.StandardCurrencyManager;
 import dev.xhyrom.lighteco.common.manager.user.StandardUserManager;
 import dev.xhyrom.lighteco.common.plugin.AbstractLightEcoPlugin;
@@ -11,8 +11,8 @@ import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.api.entity.living.player.Player;
 
+@Getter
 public class SpongeLightEcoPlugin extends AbstractLightEcoPlugin {
-    @Getter
     private final SpongeLightEcoBootstrap bootstrap;
 
     @Getter

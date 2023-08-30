@@ -21,6 +21,8 @@ public class UserSaveTask implements Runnable {
                 .filter(User::isDirty)
                 .toArray(User[]::new);
 
+        System.out.println("Saving " + users.length + " users");
+
         if (users.length == 0) {
             return;
         }

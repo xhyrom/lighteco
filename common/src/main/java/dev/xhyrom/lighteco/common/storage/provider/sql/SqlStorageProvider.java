@@ -25,6 +25,8 @@ public class SqlStorageProvider implements StorageProvider {
     private static String LOAD_WHOLE_USER;
     private static final String GET_TOP_X_USERS_LOCAL = "SELECT uuid, balance FROM {prefix}_{context}_users WHERE currency_identifier = ? ORDER BY balance DESC LIMIT ?;";
     private static final String GET_TOP_X_USERS_GLOBAL = "SELECT uuid, balance FROM {prefix}_users WHERE currency_identifier = ? ORDER BY balance DESC LIMIT ?;";
+    private static final String DELETE_GLOBAL_USER_IF_BALANCE = "DELETE FROM {prefix}_{context}_users WHERE uuid = ? AND currency_identifier = ? AND balance = ?;";
+    private static final String DELETE_LOCAL_USER_IF_BALANCE = "DELETE FROM {prefix}_{context}_users WHERE uuid = ? AND currency_identifier = ? AND balance = ?;";
 
     private final LightEcoPlugin plugin;
     private final ConnectionFactory connectionFactory;
@@ -110,13 +112,8 @@ public class SqlStorageProvider implements StorageProvider {
         String uniqueIdString = user.getUniqueId().toString();
 
         try (Connection c = this.connectionFactory.getConnection()) {
-            try (PreparedStatement psGlobal = c.prepareStatement(this.statementProcessor.apply(SAVE_USER_GLOBAL_CURRENCY));
-                 PreparedStatement psLocal = c.prepareStatement(this.statementProcessor.apply(SAVE_USER_LOCAL_CURRENCY))) {
-
-                saveBalances(psGlobal, psLocal, user, uniqueIdString);
-
-                psGlobal.executeBatch();
-                psLocal.executeBatch();
+            try {
+                saveBalances(c, user, uniqueIdString);
             } catch (SQLException e) {
                 throw new SQLException("Failed to save user " + user.getUniqueId(), e);
             }
@@ -130,19 +127,10 @@ public class SqlStorageProvider implements StorageProvider {
             try {
                 c.setAutoCommit(false);
 
-                try (PreparedStatement psGlobal = c.prepareStatement(this.statementProcessor.apply(SAVE_USER_GLOBAL_CURRENCY));
-                     PreparedStatement psLocal = c.prepareStatement(this.statementProcessor.apply(SAVE_USER_LOCAL_CURRENCY))) {
+                for (User user : users) {
+                    String uniqueIdString = user.getUniqueId().toString();
 
-                    for (User user : users) {
-                        String uniqueIdString = user.getUniqueId().toString();
-
-                        saveBalances(psGlobal, psLocal, user, uniqueIdString);
-                    }
-
-                    psGlobal.executeBatch();
-                    psLocal.executeBatch();
-                } catch (SQLException e) {
-                    throw new SQLException("Failed to save users", e);
+                    saveBalances(c, user, uniqueIdString);
                 }
 
                 c.commit();
@@ -185,32 +173,64 @@ public class SqlStorageProvider implements StorageProvider {
         }
     }
 
-    private void saveBalances(PreparedStatement psGlobal, PreparedStatement psLocal, User user, String uniqueIdString) throws SQLException {
-        for (Currency currency : this.plugin.getCurrencyManager().getRegisteredCurrencies()) {
-            BigDecimal balance = user.getBalance(currency.getProxy());
+    private void saveBalances(Connection c, User user, String uniqueIdString) throws SQLException {
+        try (PreparedStatement psGlobal = c.prepareStatement(this.statementProcessor.apply(SAVE_USER_GLOBAL_CURRENCY));
+             PreparedStatement psLocal = c.prepareStatement(this.statementProcessor.apply(SAVE_USER_LOCAL_CURRENCY));
+             PreparedStatement psDeleteGlobal = c.prepareStatement(this.statementProcessor.apply(DELETE_GLOBAL_USER_IF_BALANCE));
+             PreparedStatement psDeleteLocal = c.prepareStatement(this.statementProcessor.apply(DELETE_LOCAL_USER_IF_BALANCE))) {
 
-            if (balance.compareTo(BigDecimal.ZERO) == 0) continue;
+            for (Currency currency : this.plugin.getCurrencyManager().getRegisteredCurrencies()) {
+                BigDecimal balance = user.getBalance(currency.getProxy());
 
-            switch (currency.getType()) {
-                case GLOBAL -> {
-                    psGlobal.setString(1, uniqueIdString);
-                    psGlobal.setString(2, currency.getIdentifier());
-                    psGlobal.setBigDecimal(3, balance);
-                    if (SqlStatements.mustDuplicateParameters(this.connectionFactory.getImplementationName()))
-                        psGlobal.setBigDecimal(4, balance);
+                if (balance.compareTo(BigDecimal.ZERO) == 0) {
+                    switch (currency.getType()) {
+                        case GLOBAL -> {
+                            psDeleteGlobal.setString(1, uniqueIdString);
+                            psDeleteGlobal.setString(2, currency.getIdentifier());
+                            psDeleteGlobal.setBigDecimal(3, balance);
 
-                    psGlobal.addBatch();
+                            psDeleteGlobal.addBatch();
+                        }
+                        case LOCAL -> {
+                            psDeleteLocal.setString(1, uniqueIdString);
+                            psDeleteLocal.setString(2, currency.getIdentifier());
+                            psDeleteLocal.setBigDecimal(3, balance);
+
+                            psDeleteLocal.addBatch();
+                        }
+                    }
+
+                    continue;
                 }
-                case LOCAL -> {
-                    psLocal.setString(1, uniqueIdString);
-                    psLocal.setString(2, currency.getIdentifier());
-                    psLocal.setBigDecimal(3, balance);
-                    if (SqlStatements.mustDuplicateParameters(this.connectionFactory.getImplementationName()))
-                        psLocal.setBigDecimal(4, balance);
 
-                    psLocal.addBatch();
+                switch (currency.getType()) {
+                    case GLOBAL -> {
+                        psGlobal.setString(1, uniqueIdString);
+                        psGlobal.setString(2, currency.getIdentifier());
+                        psGlobal.setBigDecimal(3, balance);
+                        if (SqlStatements.mustDuplicateParameters(this.connectionFactory.getImplementationName()))
+                            psGlobal.setBigDecimal(4, balance);
+
+                        psGlobal.addBatch();
+                    }
+                    case LOCAL -> {
+                        psLocal.setString(1, uniqueIdString);
+                        psLocal.setString(2, currency.getIdentifier());
+                        psLocal.setBigDecimal(3, balance);
+                        if (SqlStatements.mustDuplicateParameters(this.connectionFactory.getImplementationName()))
+                            psLocal.setBigDecimal(4, balance);
+
+                        psLocal.addBatch();
+                    }
                 }
             }
+
+            psGlobal.executeBatch();
+            psLocal.executeBatch();
+            psDeleteGlobal.executeBatch();
+            psDeleteLocal.executeBatch();
+        } catch (SQLException e) {
+            throw new SQLException("Failed to save user " + user.getUniqueId(), e);
         }
     }
 }
