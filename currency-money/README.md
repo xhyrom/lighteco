@@ -3,9 +3,12 @@
 **Money** 💰 is an addon that adds currency to LightEco that uses Vault to hook into other economy plugins.
 
 ## Requirements
+- Don't forget to install **LightEco** specific platform implementation.
 
-- At least **Paper** (or paper-like) 1.16.5
-- LightEco
+| Platform | Version   |
+| -------- |-----------|
+| Bukkit   | 1.16.5+   |
+| Sponge   | N/A [WIP] |
 
 ## Features
 
