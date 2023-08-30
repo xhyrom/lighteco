@@ -40,10 +40,15 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
         Currency currency = this.plugin.getCurrencyManager().getIfLoaded(currencyIdentifier);
         if (currency == null) return null;
 
-        if (type.equalsIgnoreCase("balance")) {
-            User user = this.plugin.getUserManager().loadUser(player.getUniqueId()).join();
+        User user = this.plugin.getUserManager().loadUser(player.getUniqueId()).join();
 
-            return user.getBalance(currency).toPlainString();
+        switch (type.toLowerCase()) {
+            case "balance" -> {
+                return user.getBalance(currency).toPlainString();
+            }
+            case "balance_formatted" -> {
+                return currency.format(user.getBalance(currency));
+            }
         }
 
         return null;

@@ -24,6 +24,10 @@ public class Currency {
         return proxy.getType();
     }
 
+    public String format(BigDecimal amount) {
+        return proxy.format(amount);
+    }
+
     public BigDecimal getDefaultBalance() {
         return proxy.getDefaultBalance();
     }
