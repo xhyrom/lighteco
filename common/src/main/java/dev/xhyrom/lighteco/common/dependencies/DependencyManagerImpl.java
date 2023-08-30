@@ -3,6 +3,7 @@ package dev.xhyrom.lighteco.common.dependencies;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.MoreFiles;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 import dev.xhyrom.lighteco.common.util.URLClassLoaderAccess;
 import dev.xhyrom.lighteco.common.storage.StorageType;
 
@@ -22,11 +23,13 @@ public class DependencyManagerImpl implements DependencyManager {
     private final EnumMap<Dependency, Path> loaded = new EnumMap<>(Dependency.class);
     private final Map<ImmutableSet<Dependency>, IsolatedClassLoader> loaders = new HashMap<>();
 
+    private final PluginLogger logger;
     private final DependencyRegistry registry;
     private final Path cacheDirectory;
     private final URLClassLoaderAccess classLoader;
 
     public DependencyManagerImpl(LightEcoPlugin plugin) {
+        this.logger = plugin.getBootstrap().getLogger();
         this.registry = new DependencyRegistry();
         this.cacheDirectory = setupCacheDirectory(plugin);
         this.classLoader = URLClassLoaderAccess.create((URLClassLoader) plugin.getBootstrap().getClass().getClassLoader());
@@ -159,7 +162,7 @@ public class DependencyManagerImpl implements DependencyManager {
         }
 
         if (exception != null) {
-            throw new RuntimeException(exception);
+            this.logger.error("Failed to close class loader", exception);
         }
     }
 }

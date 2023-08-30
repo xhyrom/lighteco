@@ -10,6 +10,8 @@ import dev.xhyrom.lighteco.currency.money.common.MoneyCurrency;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BukkitMCLoader extends JavaPlugin {
+    private VaultFactory vaultFactory;
+
     @Override
     public void onEnable() {
         LightEco provider = LightEcoProvider.get();
@@ -23,8 +25,15 @@ public class BukkitMCLoader extends JavaPlugin {
 
         if (getServer().getPluginManager().getPlugin("Vault") != null) {
             getSLF4JLogger().info("Vault found, hooking...");
-            new VaultFactory(this).hook();
+
+            this.vaultFactory = new VaultFactory(this);
+            this.vaultFactory.hook();
         }
+    }
+
+    @Override
+    public void onDisable() {
+        this.vaultFactory.unhook();
     }
 }
 

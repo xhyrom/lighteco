@@ -53,6 +53,9 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
         // setup managers
         this.setupManagers();
 
+        // register platform hooks
+        this.registerPlatformHooks();
+
         // register api
         this.api = new LightEcoApi(this);
         LightEcoProvider.set(this.api);
@@ -63,13 +66,24 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
     }
 
     public final void disable() {
-        this.userSaveTask.run(); // save all users synchronously
+        // save dirty users synchronously
+        this.userSaveTask.run();
 
+        // remove platform hooks
+        this.removePlatformHooks();
+
+        // shutdown storage
         this.storage.shutdown();
+
+        // close isolated class loaders
+        this.dependencyManager.close();
     }
 
     protected abstract void registerListeners();
 
     protected abstract void setupManagers();
     protected abstract void registerApiOnPlatform(LightEco api);
+
+    protected abstract void registerPlatformHooks();
+    protected abstract void removePlatformHooks();
 }

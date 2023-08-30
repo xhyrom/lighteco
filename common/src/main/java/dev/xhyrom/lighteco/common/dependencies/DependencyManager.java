@@ -12,5 +12,5 @@ public interface DependencyManager extends AutoCloseable {
     ClassLoader obtainClassLoaderWith(Set<Dependency> dependencies);
 
     @Override
-    void close() throws Exception;
+    void close();
 }

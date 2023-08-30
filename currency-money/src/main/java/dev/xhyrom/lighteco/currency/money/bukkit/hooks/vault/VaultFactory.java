@@ -21,4 +21,11 @@ public class VaultFactory {
         ServicesManager manager = Bukkit.getServicesManager();
         manager.register(Economy.class, vault, this.plugin, ServicePriority.Highest);
     }
+
+    public void unhook() {
+        if (this.vault == null) return;
+
+        ServicesManager manager = Bukkit.getServicesManager();
+        manager.unregister(Economy.class, vault);
+    }
 }

@@ -27,9 +27,6 @@ public class BukkitLightEcoLoader extends JavaPlugin {
     public void onEnable() {
         CommandAPI.onEnable();
         this.bootstrap.onEnable();
-
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
-            new PlaceholderAPIExpansion(this.bootstrap.getPlugin()).register();
     }
 
     @Override
