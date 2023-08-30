@@ -1,4 +1,4 @@
-package dev.xhyrom.lighteco.currency.money.common;
+package dev.xhyrom.lighteco.currency.money.common.currency;
 
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 

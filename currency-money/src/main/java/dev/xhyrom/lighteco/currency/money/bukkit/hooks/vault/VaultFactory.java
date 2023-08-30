@@ -7,19 +7,19 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.ServicesManager;
 
 public class VaultFactory {
-    private final BukkitMCLoader plugin;
+    private final BukkitMCLoader loader;
     private Vault vault;
 
-    public VaultFactory(BukkitMCLoader plugin) {
-        this.plugin = plugin;
+    public VaultFactory(BukkitMCLoader loader) {
+        this.loader = loader;
     }
 
     public void hook() {
         if (this.vault == null)
-            vault = new Vault();
+            vault = new Vault(this.loader.getPlugin());
 
         ServicesManager manager = Bukkit.getServicesManager();
-        manager.register(Economy.class, vault, this.plugin, ServicePriority.Highest);
+        manager.register(Economy.class, vault, this.loader, ServicePriority.Highest);
     }
 
     public void unhook() {

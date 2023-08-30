@@ -4,19 +4,25 @@ import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.LightEcoProvider;
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.api.model.user.User;
+import dev.xhyrom.lighteco.currency.money.bukkit.BukkitMCLoader;
+import dev.xhyrom.lighteco.currency.money.common.Plugin;
 import net.milkbowl.vault.economy.AbstractEconomy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class Vault extends AbstractEconomy {
+    private final Plugin plugin;
     private final LightEco provider;
     private final Currency currency;
 
-    public Vault() {
+    public Vault(Plugin plugin) {
+        this.plugin = plugin;
         this.provider = LightEcoProvider.get();
         this.currency = this.provider.getCurrencyManager().getCurrency("money");
     }
@@ -43,17 +49,20 @@ public class Vault extends AbstractEconomy {
 
     @Override
     public String format(double amount) {
-        return null;
+        NumberFormat format = NumberFormat.getInstance();
+        format.setCurrency(java.util.Currency.getInstance(this.plugin.getConfig().currencyCode));
+
+        return format.format(BigDecimal.valueOf(amount));
     }
 
     @Override
     public String currencyNamePlural() {
-        return null;
+        return this.plugin.getConfig().currencyNamePlural;
     }
 
     @Override
     public String currencyNameSingular() {
-        return null;
+        return this.plugin.getConfig().currencyNameSingular;
     }
 
     @Override

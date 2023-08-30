@@ -6,13 +6,25 @@ import dev.xhyrom.lighteco.api.manager.CommandManager;
 import dev.xhyrom.lighteco.api.manager.CurrencyManager;
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.currency.money.bukkit.hooks.vault.VaultFactory;
-import dev.xhyrom.lighteco.currency.money.common.MoneyCurrency;
+import dev.xhyrom.lighteco.currency.money.common.AbstractPlugin;
+import dev.xhyrom.lighteco.currency.money.common.Plugin;
+import dev.xhyrom.lighteco.currency.money.common.currency.MoneyCurrency;
+import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.UUID;
 
 public class BukkitMCLoader extends JavaPlugin {
     private VaultFactory vaultFactory;
+    @Getter
+    private final Plugin plugin;
+
+    public BukkitMCLoader() {
+        this.plugin = new AbstractPlugin(this.getDataFolder().toPath());
+    }
+
+    @Override
+    public void onLoad() {
+        this.plugin.load();
+    }
 
     @Override
     public void onEnable() {
