@@ -7,7 +7,11 @@ import dev.xhyrom.lighteco.api.manager.CurrencyManager;
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.currency.money.bukkit.hooks.vault.VaultFactory;
 import dev.xhyrom.lighteco.currency.money.common.MoneyCurrency;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.UUID;
 
 public class BukkitMCLoader extends JavaPlugin {
     private VaultFactory vaultFactory;
@@ -24,7 +28,7 @@ public class BukkitMCLoader extends JavaPlugin {
         commandManager.registerCurrencyCommand(currency, true);
 
         if (getServer().getPluginManager().getPlugin("Vault") != null) {
-            getSLF4JLogger().info("Vault found, hooking...");
+            getLogger().info("Vault found, hooking...");
 
             this.vaultFactory = new VaultFactory(this);
             this.vaultFactory.hook();

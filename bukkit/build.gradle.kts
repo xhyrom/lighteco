@@ -3,8 +3,11 @@ plugins {
 }
 
 repositories {
-    maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
+
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://oss.sonatype.org/content/repositories/central")
 }
 
 dependencies {
@@ -13,7 +16,7 @@ dependencies {
     implementation("dev.jorel:commandapi-bukkit-shade:9.1.0")
     implementation("net.kyori:adventure-platform-bukkit:4.2.0")
 
-    compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 
     // PlaceholderAPI
     compileOnly("me.clip:placeholderapi:2.11.3")

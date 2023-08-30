@@ -2,7 +2,9 @@ package dev.xhyrom.lighteco.bukkit.listeners;
 
 import dev.xhyrom.lighteco.bukkit.BukkitLightEcoPlugin;
 import dev.xhyrom.lighteco.common.model.user.User;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,9 +34,16 @@ public class BukkitConnectionListener implements Listener {
             this.plugin.getBootstrap().getLogger()
                     .error("Failed to load user data for %s (%s)", e, event.getName(), event.getUniqueId());
 
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, miniMessage.deserialize(
+            Component reason = miniMessage.deserialize(
                     "<bold>LightEco</bold> <red>Failed to load your data. Contact a staff member for assistance."
-            ));
+            );
+
+            event.disallow(
+                    AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                    LegacyComponentSerializer.legacySection().serialize(
+                            reason
+                    )
+            );
         }
     }
 

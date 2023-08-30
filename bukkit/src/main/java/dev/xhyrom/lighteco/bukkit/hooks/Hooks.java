@@ -1,8 +1,10 @@
 package dev.xhyrom.lighteco.bukkit.hooks;
 
 import dev.xhyrom.lighteco.bukkit.BukkitLightEcoPlugin;
+import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 
+@UtilityClass
 public class Hooks {
     private static PlaceholderAPIExpansion placeholderAPIExpansion;
 

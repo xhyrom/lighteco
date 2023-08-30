@@ -1,7 +1,9 @@
 package dev.xhyrom.lighteco.bukkit.logger;
 
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
-import org.slf4j.Logger;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BukkitLogger implements PluginLogger {
     private final Logger logger;
@@ -22,41 +24,41 @@ public class BukkitLogger implements PluginLogger {
 
     @Override
     public void warn(String message) {
-        this.logger.warn(message);
+        this.logger.log(Level.WARNING, message);
     }
 
     @Override
     public void warn(String message, Object... args) {
-        this.logger.warn(String.format(message, args));
+        this.logger.log(Level.WARNING, String.format(message, args));
     }
 
     @Override
     public void warn(String message, Throwable throwable) {
-        this.logger.warn(message, throwable);
+        this.logger.log(Level.WARNING, message, throwable);
     }
 
     @Override
     public void warn(String message, Throwable throwable, Object... args) {
-        this.logger.warn(String.format(message, args), throwable);
+        this.logger.log(Level.WARNING, String.format(message, args), throwable);
     }
 
     @Override
     public void error(String message) {
-        this.logger.error(message);
+        this.logger.severe(message);
     }
 
     @Override
     public void error(String message, Object... args) {
-        this.logger.error(String.format(message, args));
+        this.logger.severe(String.format(message, args));
     }
 
     @Override
     public void error(String message, Throwable throwable) {
-        this.logger.error(message, throwable);
+        this.logger.log(Level.SEVERE, message, throwable);
     }
 
     @Override
     public void error(String message, Throwable throwable, Object... args) {
-        this.logger.error(String.format(message, args), throwable);
+        this.logger.log(Level.SEVERE, String.format(message, args), throwable);
     }
 }

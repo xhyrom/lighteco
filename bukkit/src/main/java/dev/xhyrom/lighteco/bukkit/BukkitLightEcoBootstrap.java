@@ -29,7 +29,7 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     public BukkitLightEcoBootstrap(JavaPlugin loader) {
         this.loader = loader;
 
-        this.logger = new BukkitLogger(loader.getSLF4JLogger());
+        this.logger = new BukkitLogger(loader.getLogger());
         this.scheduler = new BukkitSchedulerAdapter(this);
     }
 
