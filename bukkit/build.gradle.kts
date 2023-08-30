@@ -37,5 +37,8 @@ tasks.shadowJar {
 
     relocate("org.yaml.snakeyaml", "dev.xhyrom.lighteco.libraries.org.yaml.snakeyaml")
 
-    relocate("com.zaxxer.hikari", "dev.xhyrom.lighteco.libraries.com.zaxxer.hikari")
+    relocate("org.mariadb.jdbc", "dev.xhyrom.lighteco.libraries.mariadb")
+    relocate("com.mysql", "dev.xhyrom.lighteco.libraries.mysql")
+    relocate("org.postgresql", "dev.xhyrom.lighteco.libraries.postgresql")
+    relocate("com.zaxxer.hikari", "dev.xhyrom.lighteco.libraries.hikari")
 }

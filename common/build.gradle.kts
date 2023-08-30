@@ -9,13 +9,16 @@ dependencies {
         exclude(module = "checker-qual")
         exclude(module = "annotations")
     }
-    api("net.kyori:adventure-text-minimessage:4.14.0")
+    api("net.kyori:adventure-text-minimessage:4.14.0") {
+        exclude(module = "adventure-bom")
+        exclude(module = "adventure-api")
+    }
     api("com.google.guava:guava:32.1.2-jre")
 
     implementation("eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.0-beta.5")
     implementation("eu.okaeri:okaeri-configs-validator-okaeri:5.0.0-beta.5")
 
-    implementation("com.zaxxer:HikariCP:5.0.1")
+    compileOnly("com.zaxxer:HikariCP:5.0.1")
 
     compileOnly("org.projectlombok:lombok:1.18.28")
     annotationProcessor("org.projectlombok:lombok:1.18.28")

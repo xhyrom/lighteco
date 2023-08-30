@@ -52,7 +52,7 @@ public class BukkitLightEcoPlugin extends AbstractLightEcoPlugin {
 
     @Override
     protected void registerPlatformHooks() {
-        Hooks.register();
+        Hooks.register(this);
     }
 
     @Override

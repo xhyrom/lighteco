@@ -2,22 +2,23 @@ package dev.xhyrom.lighteco.common.dependencies;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.MoreFiles;
+import dev.xhyrom.lighteco.common.dependencies.relocation.Relocation;
+import dev.xhyrom.lighteco.common.dependencies.relocation.RelocationHandler;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 import dev.xhyrom.lighteco.common.util.URLClassLoaderAccess;
 import dev.xhyrom.lighteco.common.storage.StorageType;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
 
 public class DependencyManagerImpl implements DependencyManager {
     private final EnumMap<Dependency, Path> loaded = new EnumMap<>(Dependency.class);
@@ -27,6 +28,7 @@ public class DependencyManagerImpl implements DependencyManager {
     private final DependencyRegistry registry;
     private final Path cacheDirectory;
     private final URLClassLoaderAccess classLoader;
+    private @MonotonicNonNull RelocationHandler relocationHandler;
 
     public DependencyManagerImpl(LightEcoPlugin plugin) {
         this.logger = plugin.getBootstrap().getLogger();
@@ -35,9 +37,18 @@ public class DependencyManagerImpl implements DependencyManager {
         this.classLoader = URLClassLoaderAccess.create((URLClassLoader) plugin.getBootstrap().getClass().getClassLoader());
     }
 
+    private synchronized RelocationHandler getRelocationHandler() {
+        if (this.relocationHandler == null) {
+            this.relocationHandler = new RelocationHandler(this);
+        }
+
+        return this.relocationHandler;
+    }
+
     @Override
     public void loadDependencies(Set<Dependency> dependencies) {
         CountDownLatch latch = new CountDownLatch(dependencies.size());
+        this.logger.info("Loading dependencies: " + dependencies);
 
         for (Dependency dependency : dependencies) {
             if (this.loaded.containsKey(dependency)) {
@@ -46,18 +57,22 @@ public class DependencyManagerImpl implements DependencyManager {
             }
 
             CompletableFuture.runAsync(() -> {
+                System.out.println("Loading dependency " + dependency);
                 try {
                     loadDependency(dependency);
                 } catch (Exception e) {
                     throw new RuntimeException("Failed to load dependency " + dependency, e);
                 } finally {
                     latch.countDown();
+                    System.out.println("Loaded dependency " + dependency);
                 }
             });
         }
 
         try {
             latch.await();
+
+            this.logger.info("Loaded dependencies: " + dependencies);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -68,7 +83,7 @@ public class DependencyManagerImpl implements DependencyManager {
             return;
         }
 
-        Path file = downloadDependency(dependency);
+        Path file = remapDependency(dependency, downloadDependency(dependency));
 
         this.loaded.put(dependency, file);
 
@@ -93,6 +108,24 @@ public class DependencyManagerImpl implements DependencyManager {
         DependencyRepository.MAVEN_CENTRAL.download(dependency, file);
 
         return file;
+    }
+
+    private Path remapDependency(Dependency dependency, Path normalFile) throws Exception {
+        List<Relocation> rules = new ArrayList<>(dependency.getRelocations());
+
+        if (rules.isEmpty()) {
+            return normalFile;
+        }
+
+        Path remappedFile = this.cacheDirectory.resolve(dependency.getFileName("remapped"));
+
+        // if the remapped source exists already, just use that.
+        if (Files.exists(remappedFile)) {
+            return remappedFile;
+        }
+
+        this.getRelocationHandler().remap(normalFile, remappedFile, rules);
+        return remappedFile;
     }
 
     @Override
