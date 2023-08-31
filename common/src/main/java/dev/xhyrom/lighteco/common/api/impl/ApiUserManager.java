@@ -16,6 +16,7 @@ public class ApiUserManager extends ApiAbstractManager<dev.xhyrom.lighteco.commo
     }
 
     private User wrap(dev.xhyrom.lighteco.common.model.user.User handler) {
+        this.plugin.getUserManager().getHousekeeper().registerUsage(handler.getUniqueId());
         return handler.getProxy();
     }
 

@@ -60,6 +60,11 @@ public class SpongeLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     }
 
     @Override
+    public boolean isPlayerOnline(UUID uniqueId) {
+        return false;
+    }
+
+    @Override
     public List<UUID> getOnlinePlayers() {
         return null;
     }
