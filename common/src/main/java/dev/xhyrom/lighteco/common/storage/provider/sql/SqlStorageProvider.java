@@ -29,9 +29,9 @@ public class SqlStorageProvider implements StorageProvider {
     private static final String DELETE_LOCAL_USER_IF_BALANCE = "DELETE FROM {prefix}_local_{context}_{currency}_users WHERE uuid = ? AND balance = ?;";
     private static final String DELETE_GLOBAL_USER_IF_BALANCE = "DELETE FROM {prefix}_global_{currency}_users WHERE uuid = ? AND balance = ?;";
     private static final String CREATE_TABLE = """
-    CREATE TABLE IF NOT EXISTS `{prefix}_{table}` (
-        `uuid`                  VARCHAR(36)     NOT NULL,
-        `balance`               DECIMAL(10, 2)  NOT NULL,
+    CREATE TABLE IF NOT EXISTS '{prefix}_{table}' (
+        'uuid'                  VARCHAR(36)     NOT NULL,
+        'balance'               DECIMAL(10, 2)  NOT NULL,
         PRIMARY KEY (`uuid`)
     );
     """.trim();
