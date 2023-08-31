@@ -1,6 +1,7 @@
 package dev.xhyrom.lighteco.common.model.user;
 
 import dev.xhyrom.lighteco.common.api.impl.ApiUser;
+import dev.xhyrom.lighteco.common.cache.RedisBackedMap;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import lombok.Getter;
@@ -28,7 +29,7 @@ public class User {
     @Setter
     private String username;
 
-    private final HashMap<Currency, BigDecimal> balances = new HashMap<>();
+    private final HashMap<Currency, BigDecimal> balances = new RedisBackedMap<>();
 
     public User(LightEcoPlugin plugin, UUID uniqueId) {
         this(plugin, uniqueId, null);
