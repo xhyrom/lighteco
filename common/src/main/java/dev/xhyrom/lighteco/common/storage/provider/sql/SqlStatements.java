@@ -4,22 +4,28 @@ import dev.xhyrom.lighteco.common.storage.StorageType;
 
 public enum SqlStatements {
     SAVE_USER_LOCAL_CURRENCY(
-            "INSERT INTO {prefix}_{context}_users (uuid, currency_identifier, balance) VALUES (?1, ?2, ?3) ON CONFLICT (uuid, currency_identifier) DO UPDATE SET balance=?3;",
-            "INSERT INTO {prefix}_{context}_users (uuid, currency_identifier, balance) VALUES (?1, ?2, ?3) ON DUPLICATE KEY UPDATE balance=?3;",
-            "INSERT INTO {prefix}_{context}_users (uuid, currency_identifier, balance) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE balance=?;",
-            "INSERT INTO {prefix}_{context}_users (uuid, currency_identifier, balance) VALUES (?, ?, ?) ON CONFLICT (uuid, currency_identifier) DO UPDATE SET balance=?;"
+            "INSERT INTO '{prefix}_local_{context}_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON CONFLICT (uuid) DO UPDATE SET balance=?2;",
+            "INSERT INTO '{prefix}_local_{context}_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON DUPLICATE KEY UPDATE balance=?2;",
+            "INSERT INTO '{prefix}_local_{context}_{currency}_users' (uuid, balance) VALUES (?, ?) ON DUPLICATE KEY UPDATE balance=?;",
+            "INSERT INTO '{prefix}_local_{context}_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON CONFLICT (uuid) DO UPDATE SET balance=?2;"
     ),
     SAVE_USER_GLOBAL_CURRENCY(
-            "INSERT INTO {prefix}_users (uuid, currency_identifier, balance) VALUES (?1, ?2, ?3) ON CONFLICT (uuid, currency_identifier) DO UPDATE SET balance=?3;",
-            "INSERT INTO {prefix}_users (uuid, currency_identifier, balance) VALUES (?1, ?2, ?3) ON DUPLICATE KEY UPDATE balance=?3;",
-            "INSERT INTO {prefix}_users (uuid, currency_identifier, balance) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE balance=?;",
-            "INSERT INTO {prefix}_users (uuid, currency_identifier, balance) VALUES (?, ?, ?) ON CONFLICT (uuid, currency_identifier) DO UPDATE SET balance=?;"
+            "INSERT INTO '{prefix}_global_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON CONFLICT (uuid) DO UPDATE SET balance=?2;",
+            "INSERT INTO '{prefix}_global_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON DUPLICATE KEY UPDATE balance=?2;",
+            "INSERT INTO '{prefix}_global_{currency}_users' (uuid, balance) VALUES (?, ?) ON DUPLICATE KEY UPDATE balance=?;",
+            "INSERT INTO '{prefix}_global_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON CONFLICT (uuid) DO UPDATE SET balance=?2;"
     ),
-    LOAD_WHOLE_USER(
-            "SELECT currency_identifier, balance FROM ( SELECT currency_identifier, balance FROM '{prefix}_users' WHERE uuid = ?1 UNION ALL SELECT currency_identifier, balance FROM '{prefix}_{context}_users' WHERE uuid = ?1 ) AS combined_currencies;",
-            "SELECT currency_identifier, balance FROM ( SELECT currency_identifier, balance FROM '{prefix}_users' WHERE uuid = ?1 UNION ALL SELECT currency_identifier, balance FROM '{prefix}_{context}_users' WHERE uuid = ?1 ) AS combined_currencies;",
-            "SELECT currency_identifier, balance FROM ( SELECT currency_identifier, balance FROM '{prefix}_users' WHERE uuid = ? UNION ALL SELECT currency_identifier, balance FROM '{prefix}_{context}_users' WHERE uuid = ? ) AS combined_currencies;",
-            null // same as mariadb
+    LOAD_LOCAL_CURRENCY_USER(
+            "SELECT {identifier} AS name, balance FROM '{prefix}_local_{context}_{currency}_users' WHERE uuid = ?1",
+            "SELECT {identifier} AS name, balance FROM '{prefix}_local_{context}_{currency}_users' WHERE uuid = ?1",
+            "SELECT {identifier} AS name, balance FROM '{prefix}_local_{context}_{currency}_users' WHERE uuid = ?",
+            "SELECT {identifier} AS name, balance FROM '{prefix}_local_{context}_{currency}_users' WHERE uuid = ?1"
+    ),
+    LOAD_GLOBAL_CURRENCY_USER(
+            "SELECT {identifier} AS name, balance FROM '{prefix}_global_{currency}_users' WHERE uuid = ?1",
+            "SELECT {identifier} AS name, balance FROM '{prefix}_global_{currency}_users' WHERE uuid = ?1",
+            "SELECT {identifier} AS name, balance FROM '{prefix}_global_{currency}_users' WHERE uuid = ?",
+            "SELECT {identifier} AS name, balance FROM '{prefix}_global_{currency}_users' WHERE uuid = ?1"
     );
 
     public final String sqlite;

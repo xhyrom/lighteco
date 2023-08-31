@@ -15,7 +15,8 @@ public class ApiUserManager extends ApiAbstractManager<dev.xhyrom.lighteco.commo
         super(plugin, handler);
     }
 
-    public static User wrap(dev.xhyrom.lighteco.common.model.user.User handler) {
+    private User wrap(dev.xhyrom.lighteco.common.model.user.User handler) {
+        this.plugin.getUserManager().getHousekeeper().registerUsage(handler.getUniqueId());
         return handler.getProxy();
     }
 
@@ -27,7 +28,7 @@ public class ApiUserManager extends ApiAbstractManager<dev.xhyrom.lighteco.commo
     @Override
     public @NonNull CompletableFuture<User> loadUser(@NonNull UUID uniqueId, String username) {
         return this.plugin.getStorage().loadUser(uniqueId, username)
-                .thenApply(ApiUserManager::wrap);
+                .thenApply(this::wrap);
     }
 
     @Override

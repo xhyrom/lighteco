@@ -123,9 +123,6 @@ public class Vault extends AbstractEconomy {
             );
         }
 
-        // Can happen on background
-        this.provider.getUserManager().saveUser(user);
-
         return new EconomyResponse(
                 amount,
                 bigDecimalToDouble(user.getBalance(currency)),

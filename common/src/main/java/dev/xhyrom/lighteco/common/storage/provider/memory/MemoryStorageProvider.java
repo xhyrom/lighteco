@@ -1,6 +1,5 @@
 package dev.xhyrom.lighteco.common.storage.provider.memory;
 
-import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.api.model.user.User;
 import dev.xhyrom.lighteco.api.storage.StorageProvider;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
@@ -8,10 +7,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 public class MemoryStorageProvider implements StorageProvider {
@@ -51,16 +47,6 @@ public class MemoryStorageProvider implements StorageProvider {
         for (User user : users) {
             this.userDatabase.put(user.getUniqueId(), user);
         }
-    }
-
-    @Override
-    public @NonNull List<User> getTopUsers(Currency currency, int length) throws Exception {
-        return userDatabase.values().stream().sorted((user1, user2) -> {
-            BigDecimal balance1 = user1.getBalance(currency);
-            BigDecimal balance2 = user2.getBalance(currency);
-
-            return balance1.compareTo(balance2);
-        }).limit(length).toList();
     }
 
     private User createUser(UUID uniqueId, String username, User data) {

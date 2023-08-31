@@ -7,10 +7,10 @@ import dev.xhyrom.lighteco.common.storage.StorageType;
 import java.lang.reflect.Constructor;
 import java.nio.file.Path;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.EnumSet;
 import java.util.Properties;
+import java.util.function.Function;
 
 public class SqliteConnectionFactory extends FileConnectionFactory {
     private Constructor<?> connectionConstructor;
@@ -51,5 +51,10 @@ public class SqliteConnectionFactory extends FileConnectionFactory {
 
             throw new SQLException("Failed to create connection", e);
         }
+    }
+
+    @Override
+    public Function<String, String> getStatementProcessor() {
+        return s -> s.replace('\'', '`');
     }
 }

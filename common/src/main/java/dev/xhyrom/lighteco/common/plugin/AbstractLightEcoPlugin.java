@@ -28,8 +28,6 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
     private UserSaveTask userSaveTask;
 
     public final void load() {
-        this.dependencyManager = new DependencyManagerImpl(this);
-
         this.config = ConfigManager.create(Config.class, it -> {
             it.withConfigurer(new YamlSnakeYamlConfigurer());
             it.withBindFile(this.getBootstrap().getDataDirectory().resolve("config.yml"));
@@ -37,6 +35,8 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
             it.saveDefaults();
             it.load(true);
         });
+
+        this.dependencyManager = new DependencyManagerImpl(this);
     }
 
     public final void enable() {

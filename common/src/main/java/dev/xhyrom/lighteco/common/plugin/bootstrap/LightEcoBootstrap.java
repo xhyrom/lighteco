@@ -13,6 +13,7 @@ public interface LightEcoBootstrap {
     PluginLogger getLogger();
     SchedulerAdapter getScheduler();
     Path getDataDirectory();
+    boolean isPlayerOnline(UUID uniqueId);
     List<UUID> getOnlinePlayers();
     InputStream getResourceStream(String filename);
 }

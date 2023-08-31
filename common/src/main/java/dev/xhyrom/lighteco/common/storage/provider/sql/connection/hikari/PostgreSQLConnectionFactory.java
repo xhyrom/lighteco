@@ -42,6 +42,6 @@ public class PostgreSQLConnectionFactory extends DriverBasedHikariConnectionFact
 
     @Override
     public Function<String, String> getStatementProcessor() {
-        return s -> s.replace("\'", "\"");
+        return s -> s.replace('\'', '`');
     }
 }

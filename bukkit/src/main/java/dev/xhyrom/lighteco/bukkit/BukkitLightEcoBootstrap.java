@@ -9,6 +9,7 @@ import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 import dev.xhyrom.lighteco.common.plugin.scheduler.SchedulerAdapter;
 import lombok.Getter;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.InputStream;
@@ -56,6 +57,12 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     @Override
     public Path getDataDirectory() {
         return this.loader.getDataFolder().toPath();
+    }
+
+    @Override
+    public boolean isPlayerOnline(UUID uniqueId) {
+        Player player = this.loader.getServer().getPlayer(uniqueId);
+        return player != null && player.isOnline();
     }
 
     @Override

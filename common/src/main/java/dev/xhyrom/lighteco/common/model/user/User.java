@@ -1,6 +1,7 @@
 package dev.xhyrom.lighteco.common.model.user;
 
 import dev.xhyrom.lighteco.common.api.impl.ApiUser;
+import dev.xhyrom.lighteco.common.cache.RedisBackedMap;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Getter
 public class User {
     private final LightEcoPlugin plugin;
+
     @Getter
     private final ApiUser proxy = new ApiUser(this);
 
@@ -28,7 +30,7 @@ public class User {
     @Setter
     private String username;
 
-    private final HashMap<Currency, BigDecimal> balances = new HashMap<>();
+    private final HashMap<Currency, BigDecimal> balances = new RedisBackedMap<>();
 
     public User(LightEcoPlugin plugin, UUID uniqueId) {
         this(plugin, uniqueId, null);
@@ -45,6 +47,10 @@ public class User {
     }
 
     public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance) {
+        this.setBalance(currency, balance, false);
+    }
+
+    public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance, boolean force) {
         if (balance.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Balance cannot be negative");
         }
@@ -52,7 +58,8 @@ public class User {
         balance = balance.setScale(currency.fractionalDigits(), RoundingMode.DOWN);
         balances.put(currency, balance);
 
-        this.setDirty(true);
+        if (!force)
+            this.setDirty(true);
     }
 
     public void deposit(@NonNull Currency currency, @NonNull BigDecimal amount) throws IllegalArgumentException {
