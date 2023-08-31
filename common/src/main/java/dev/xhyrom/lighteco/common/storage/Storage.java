@@ -1,11 +1,11 @@
 package dev.xhyrom.lighteco.common.storage;
 
-import dev.xhyrom.lighteco.common.model.user.User;
+import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.api.storage.StorageProvider;
+import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.util.ThrowableRunnable;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -86,17 +86,19 @@ public class Storage {
         return future(() -> this.provider.saveUsers(users));
     }
 
+    public void registerCurrencySync(Currency currency) {
+        try {
+            this.provider.registerCurrency(currency);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to register currency", e);
+        }
+    }
+
     public void saveUsersSync(dev.xhyrom.lighteco.api.model.user.User... users) {
         try {
             this.provider.saveUsers(users);
         } catch (Exception e) {
             throw new RuntimeException("Failed to save users", e);
         }
-    }
-
-    // Return ApiUser instead of User
-    // We don't do anything with this
-    public CompletableFuture<List<dev.xhyrom.lighteco.api.model.user.User>> getTopUsers(dev.xhyrom.lighteco.api.model.currency.Currency currency, int length) {
-        return future(() -> this.provider.getTopUsers(currency, length));
     }
 }

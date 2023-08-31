@@ -3,6 +3,8 @@ package dev.xhyrom.lighteco.common.storage.provider.sql.connection.hikari;
 import dev.xhyrom.lighteco.common.config.storage.StorageDataConfig;
 import dev.xhyrom.lighteco.common.storage.StorageType;
 
+import java.util.function.Function;
+
 public class MariaDBConnectionFactory extends DriverBasedHikariConnectionFactory {
     public MariaDBConnectionFactory(StorageDataConfig configuration) {
         super(configuration);
@@ -26,5 +28,10 @@ public class MariaDBConnectionFactory extends DriverBasedHikariConnectionFactory
     @Override
     protected String driverJdbcIdentifier() {
         return "mariadb";
+    }
+
+    @Override
+    public Function<String, String> getStatementProcessor() {
+        return s -> s.replace('\'', '`');
     }
 }

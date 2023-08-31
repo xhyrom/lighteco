@@ -4,6 +4,7 @@ import dev.xhyrom.lighteco.common.config.storage.StorageDataConfig;
 import dev.xhyrom.lighteco.common.storage.StorageType;
 
 import java.util.Map;
+import java.util.function.Function;
 
 public class MySQLConnectionFactory extends DriverBasedHikariConnectionFactory {
     public MySQLConnectionFactory(StorageDataConfig configuration) {
@@ -50,5 +51,10 @@ public class MySQLConnectionFactory extends DriverBasedHikariConnectionFactory {
         // It's not super important which timezone we pick, because we don't use time-based
         // data types in any of our schemas/queries.
         properties.putIfAbsent("serverTimezone", "UTC");
+    }
+
+    @Override
+    public Function<String, String> getStatementProcessor() {
+        return s -> s.replace('\'', '`');
     }
 }
