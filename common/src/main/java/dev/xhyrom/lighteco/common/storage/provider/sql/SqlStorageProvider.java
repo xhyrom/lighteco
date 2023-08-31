@@ -26,8 +26,8 @@ public class SqlStorageProvider implements StorageProvider {
     private static String LOAD_LOCAL_CURRENCY_USER;
     private static String LOAD_GLOBAL_CRRENCY_USER;
 
-    private static final String DELETE_LOCAL_USER_IF_BALANCE = "DELETE FROM {prefix}_local_{context}_{currency}_users WHERE uuid = ? AND balance = ?;";
-    private static final String DELETE_GLOBAL_USER_IF_BALANCE = "DELETE FROM {prefix}_global_{currency}_users WHERE uuid = ? AND balance = ?;";
+    private static final String DELETE_LOCAL_USER = "DELETE FROM {prefix}_local_{context}_{currency}_users WHERE uuid = ?;";
+    private static final String DELETE_GLOBAL_USER = "DELETE FROM {prefix}_global_{currency}_users WHERE uuid = ?;";
     private static final String CREATE_TABLE = """
     CREATE TABLE IF NOT EXISTS '{prefix}_{table}' (
         'uuid'                  VARCHAR(36)     NOT NULL,
@@ -197,20 +197,17 @@ public class SqlStorageProvider implements StorageProvider {
             if (balance.compareTo(BigDecimal.ZERO) == 0) {
                 switch (currency.getType()) {
                     case GLOBAL -> {
-                        try (PreparedStatement ps = c.prepareStatement(this.statementProcessor.apply(DELETE_GLOBAL_USER_IF_BALANCE
+                        try (PreparedStatement ps = c.prepareStatement(this.statementProcessor.apply(DELETE_GLOBAL_USER
                                 .replace("{currency}", currency.getIdentifier())))) {
                             ps.setString(1, uniqueIdString);
-                            ps.setBigDecimal(2, balance);
 
                             ps.execute();
                         }
                     }
                     case LOCAL -> {
-                        try (PreparedStatement ps = c.prepareStatement(this.statementProcessor.apply(DELETE_LOCAL_USER_IF_BALANCE
+                        try (PreparedStatement ps = c.prepareStatement(this.statementProcessor.apply(DELETE_LOCAL_USER
                                 .replace("{currency}", currency.getIdentifier())))) {
                             ps.setString(1, uniqueIdString);
-                            ps.setString(2, currency.getIdentifier());
-                            ps.setBigDecimal(2, balance);
 
                             ps.execute();
                         }
