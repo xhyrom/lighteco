@@ -33,7 +33,7 @@ public class ApiCurrencyManager extends ApiAbstractManager<dev.xhyrom.lighteco.c
 
     @Override
     public void registerCurrency(@NonNull Currency currency) {
-        dev.xhyrom.lighteco.common.model.currency.Currency internal = new dev.xhyrom.lighteco.common.model.currency.Currency(plugin, currency);
+        dev.xhyrom.lighteco.common.model.currency.Currency internal = new dev.xhyrom.lighteco.common.model.currency.Currency(currency);
         this.handler.registerCurrency(internal);
     }
 

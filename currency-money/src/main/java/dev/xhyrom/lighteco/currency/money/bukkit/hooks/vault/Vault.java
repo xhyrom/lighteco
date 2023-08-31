@@ -4,7 +4,6 @@ import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.LightEcoProvider;
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.api.model.user.User;
-import dev.xhyrom.lighteco.currency.money.bukkit.BukkitMCLoader;
 import dev.xhyrom.lighteco.currency.money.common.Plugin;
 import net.milkbowl.vault.economy.AbstractEconomy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -13,7 +12,6 @@ import org.bukkit.Bukkit;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 public class Vault extends AbstractEconomy {
@@ -226,6 +224,7 @@ public class Vault extends AbstractEconomy {
     private double bigDecimalToDouble(final BigDecimal value) {
         double amount = value.doubleValue();
 
+        // Don't return bigger balance than user actually has
         if (BigDecimal.valueOf(amount).compareTo(value) > 0) {
             amount = Math.nextAfter(amount, Double.NEGATIVE_INFINITY);
         }

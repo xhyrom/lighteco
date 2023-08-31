@@ -1,18 +1,14 @@
 package dev.xhyrom.lighteco.common.model.currency;
 
-import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 
+@Getter
 public class Currency {
-    private final LightEcoPlugin plugin;
-
-    @Getter
     private final dev.xhyrom.lighteco.api.model.currency.Currency proxy;
 
-    public Currency(LightEcoPlugin plugin, dev.xhyrom.lighteco.api.model.currency.Currency proxy) {
-        this.plugin = plugin;
+    public Currency(dev.xhyrom.lighteco.api.model.currency.Currency proxy) {
         this.proxy = proxy;
     }
 
