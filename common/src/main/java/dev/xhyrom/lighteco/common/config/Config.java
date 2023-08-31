@@ -1,5 +1,6 @@
 package dev.xhyrom.lighteco.common.config;
 
+import dev.xhyrom.lighteco.common.config.housekeeper.HousekeeperConfig;
 import dev.xhyrom.lighteco.common.config.message.MessageConfig;
 import dev.xhyrom.lighteco.common.config.storage.StorageConfig;
 import eu.okaeri.configs.OkaeriConfig;
@@ -22,6 +23,10 @@ public class Config extends OkaeriConfig {
 
     @Comment("Messages")
     public MessageConfig messages = new MessageConfig();
+
+    @Comment("Housekeeper")
+    @Comment("Task that runs periodically to clean up the cache.")
+    public HousekeeperConfig housekeeper = new HousekeeperConfig();
 
     @Comment("Debug mode")
     @Comment("Prints additional information to the console.")

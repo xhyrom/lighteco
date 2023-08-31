@@ -8,7 +8,6 @@ import lombok.Getter;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 public class StandardUserManager extends ConcurrentManager<UUID, User> implements UserManager {
     private final LightEcoPlugin plugin;
@@ -17,9 +16,16 @@ public class StandardUserManager extends ConcurrentManager<UUID, User> implement
 
     public StandardUserManager(LightEcoPlugin plugin) {
         this.plugin = plugin;
-        this.housekeeper = new UserHousekeeper(plugin, this, UserHousekeeper.timeoutSettings(1, TimeUnit.MINUTES));
+        this.housekeeper = new UserHousekeeper(plugin, this, UserHousekeeper.timeoutSettings(
+                this.plugin.getConfig().housekeeper.expireAfterWrite,
+                this.plugin.getConfig().housekeeper.expireAfterWriteUnit
+        ));
 
-        this.plugin.getBootstrap().getScheduler().asyncRepeating(this.housekeeper, 30, TimeUnit.SECONDS);
+        this.plugin.getBootstrap().getScheduler().asyncRepeating(
+                this.housekeeper,
+                this.plugin.getConfig().housekeeper.runInterval,
+                this.plugin.getConfig().housekeeper.runIntervalUnit
+        );
     }
 
     @Override
