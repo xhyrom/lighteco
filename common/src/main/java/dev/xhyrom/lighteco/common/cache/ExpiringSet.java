@@ -13,7 +13,7 @@ public class ExpiringSet<T> {
         this.cache = CacheBuilder.newBuilder()
             .expireAfterWrite(duration, unit)
             .build();
-        this.lifetime = duration;
+        this.lifetime = unit.toMillis(duration);
     }
 
     public boolean add(T item) {
