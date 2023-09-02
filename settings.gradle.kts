@@ -5,7 +5,7 @@ sequenceOf(
     "common",
     "bukkit",
     "bukkittest",
-    "sponge-8",
+    "sponge-9",
     "currency-money"
 ).forEach {
     include("lighteco-$it")

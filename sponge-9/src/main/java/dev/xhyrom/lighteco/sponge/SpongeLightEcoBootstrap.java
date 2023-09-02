@@ -1,27 +1,31 @@
 package dev.xhyrom.lighteco.sponge;
 
-import com.google.inject.Inject;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LightEcoBootstrap;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LoaderBootstrap;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 import dev.xhyrom.lighteco.common.plugin.scheduler.SchedulerAdapter;
-import org.apache.logging.log4j.Logger;
-import org.spongepowered.plugin.builtin.jvm.Plugin;
+import dev.xhyrom.lighteco.sponge.logger.SpongeLogger;
+import lombok.Getter;
 
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
-@Plugin("lighteco-sponge")
 public class SpongeLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstrap {
-    private final SpongeLightEcoPlugin plugin;
+    private final SpongeLightEcoPlugin plugin = new SpongeLightEcoPlugin(this);
 
-    @Inject
-    private Logger logger;
+    @Getter
+    private final SpongeLightEcoLoader loader;
+    @Getter
+    private final PluginLogger logger;
+    @Getter
+    private final SchedulerAdapter scheduler;
 
-    public SpongeLightEcoBootstrap() {
-        this.plugin = new SpongeLightEcoPlugin(this);
+    public SpongeLightEcoBootstrap(SpongeLightEcoLoader loader) {
+        this.loader = loader;
+        this.logger = new SpongeLogger(loader.logger);
+        this.scheduler = new SpongeSchedulerAdapter(this);
     }
 
     @Override
@@ -37,21 +41,6 @@ public class SpongeLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     @Override
     public void onDisable() {
         this.plugin.disable();
-    }
-
-    @Override
-    public Object getLoader() {
-        return null;
-    }
-
-    @Override
-    public PluginLogger getLogger() {
-        return null;
-    }
-
-    @Override
-    public SchedulerAdapter getScheduler() {
-        return null;
     }
 
     @Override
