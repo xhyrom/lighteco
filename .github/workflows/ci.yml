@@ -12,8 +12,8 @@ jobs:
           distribution: 'adopt'
       - name: Build with Gradle
         run: |
-          ./gradlew shadowJar -p lighteco-bukkittest
-          ./gradlew shadowJar -p lighteco-bukkit
+          ./gradlew shadowJar -p bukkittest
+          ./gradlew shadowJar -p bukkit
       - uses: actions/upload-artifact@v3
         with:
           name: Built Jars
