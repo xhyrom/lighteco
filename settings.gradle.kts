@@ -17,5 +17,6 @@ pluginManagement {
         mavenLocal()
         mavenCentral()
         gradlePluginPortal()
+        maven("https://repo.jopga.me/releases")
     }
 }
