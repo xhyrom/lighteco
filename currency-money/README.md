@@ -15,7 +15,7 @@
 - **Vault support** - Money supports Vault, allowing you to use other economy plugins with Money.
 - **Configurable** - Money is configurable, allowing you to change the currency's name, symbol, and more.
 - **Lightweight** - Money is lightweight, and is designed to be as efficient as possible.
-- **Open-source** - Money is open-source, and is available on [GitHub](https://github.com/xHyroM/tree/main/currency-money)
+- **Open-source** - Money is open-source, and is available on [GitHub](https://github.com/xHyroM/lighteco/tree/main/currency-money)
 
 ## License
 
