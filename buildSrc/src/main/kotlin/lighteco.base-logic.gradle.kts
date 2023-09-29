@@ -43,8 +43,13 @@ publishing {
 
         pom {
             name.set("LightEco")
+
         }
 
-        artifact(tasks.named("jar"))
+        artifact(tasks.named("jar")) {
+            classifier = ""
+        }
+
+        artifact(tasks.named("sourcesJar"))
     }
 }
