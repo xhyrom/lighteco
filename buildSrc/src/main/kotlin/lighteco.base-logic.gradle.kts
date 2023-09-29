@@ -43,7 +43,37 @@ publishing {
 
         pom {
             name.set("LightEco")
-
+            url.set("https://github.com/xHyroM/lighteco")
+            description.set(project.description)
+            organization {
+                name.set("xHyroM")
+                url.set("https://xhyrom.dev")
+            }
+            developers {
+                developer {
+                    id.set("xHyroM")
+                    name.set("xHyroM")
+                    email.set("lol@xhyrom.dev")
+                    timezone.set("Europe/Bratislava")
+                    url.set("https://xhyrom.dev")
+                }
+            }
+            scm {
+                connection.set("scm:git:https://github.com/xHyroM/lighteco.git")
+                developerConnection.set("scm:git:git@github.com:xHyroM/lighteco.git")
+                url.set("https://github.com/xHyroM/lighteco")
+            }
+            licenses {
+                license {
+                    name.set("Apache License 2.0")
+                    url.set("https://github.com/xHyroM/lighteco/blob/main/LICENSE")
+                    distribution.set("repo")
+                }
+            }
+            ciManagement {
+                system.set("GitHub Actions")
+                url.set("https://github.com/xHyroM/lighteco/actions")
+            }
         }
 
         artifact(tasks.named("jar")) {
