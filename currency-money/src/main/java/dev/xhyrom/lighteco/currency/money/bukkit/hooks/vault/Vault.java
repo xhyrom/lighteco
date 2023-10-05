@@ -52,7 +52,7 @@ public class Vault extends AbstractEconomy {
         NumberFormat format = NumberFormat.getInstance();
         format.setCurrency(java.util.Currency.getInstance(this.plugin.getConfig().currencyCode));
 
-        return format.format(BigDecimal.valueOf(amount));
+        return format.format(amount);
     }
 
     @Override
