@@ -18,4 +18,5 @@ public class CurrencyMessageConfig extends OkaeriConfig {
     public String wait = "<red>Please wait a moment before using this command again.";
     public String notEnoughMoney = "<red>You don't have enough money!";
     public String cannotPaySelf = "<red>You cannot pay yourself!";
+    public String cannotBeGreaterThan = "<red>Amount cannot be greater than <gold><max>";
 }

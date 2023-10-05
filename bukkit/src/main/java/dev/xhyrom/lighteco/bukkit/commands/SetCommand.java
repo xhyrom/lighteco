@@ -7,6 +7,7 @@ import dev.jorel.commandapi.arguments.OfflinePlayerArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.xhyrom.lighteco.bukkit.chat.BukkitCommandSender;
 import dev.xhyrom.lighteco.bukkit.manager.BukkitCommandManager;
+import dev.xhyrom.lighteco.bukkit.util.Util;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.OfflinePlayer;
@@ -27,8 +28,8 @@ public class SetCommand implements Command {
                 .withArguments(
                         new OfflinePlayerArgument("target"),
                         currency.getProxy().fractionalDigits() > 0
-                                ? new DoubleArgument("amount", 0)
-                                : new IntegerArgument("amount", 0)
+                                ? new DoubleArgument("amount", 0, Util.bigDecimalToDouble(this.manager.plugin.getConfig().maximumBalance))
+                                : new IntegerArgument("amount", 0, this.manager.plugin.getConfig().maximumBalance.intValue())
                 )
                 .executes((sender, args) -> {
                     this.handleSet(sender, args, currency);

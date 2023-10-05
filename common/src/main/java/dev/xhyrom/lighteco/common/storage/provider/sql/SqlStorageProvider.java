@@ -31,7 +31,7 @@ public class SqlStorageProvider implements StorageProvider {
     private static final String CREATE_TABLE = """
     CREATE TABLE IF NOT EXISTS '{prefix}_{table}' (
         'uuid'                  VARCHAR(36)     NOT NULL,
-        'balance'               DECIMAL(10, 2)  NOT NULL,
+        'balance'               DECIMAL(20, 2)  NOT NULL,
         PRIMARY KEY (`uuid`)
     );
     """.trim();
