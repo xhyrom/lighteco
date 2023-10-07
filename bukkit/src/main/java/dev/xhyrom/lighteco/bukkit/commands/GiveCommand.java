@@ -7,7 +7,6 @@ import dev.jorel.commandapi.arguments.OfflinePlayerArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 import dev.xhyrom.lighteco.bukkit.chat.BukkitCommandSender;
 import dev.xhyrom.lighteco.bukkit.manager.BukkitCommandManager;
-import dev.xhyrom.lighteco.bukkit.util.Util;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.OfflinePlayer;
@@ -28,8 +27,8 @@ public class GiveCommand implements Command {
                 .withArguments(
                         new OfflinePlayerArgument("target"),
                         currency.getProxy().fractionalDigits() > 0
-                                ? new DoubleArgument("amount", 1, Util.bigDecimalToDouble(this.manager.plugin.getConfig().maximumBalance))
-                                : new IntegerArgument("amount", 1, this.manager.plugin.getConfig().maximumBalance.intValue())
+                                ? new DoubleArgument("amount", 1)
+                                : new IntegerArgument("amount", 1)
                 )
                 .executes((sender, args) -> {
                     this.handleGive(sender, args, currency);
