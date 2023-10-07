@@ -1,7 +1,5 @@
 package dev.xhyrom.lighteco.bukkit;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import org.bukkit.plugin.java.JavaPlugin;
 
 // Used inside plugin.yml
@@ -16,20 +14,15 @@ public class BukkitLightEcoLoader extends JavaPlugin {
     @Override
     public void onLoad() {
         this.bootstrap.onLoad();
-        CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
-                .verboseOutput(this.bootstrap.getPlugin().getConfig().debug)
-        );
     }
 
     @Override
     public void onEnable() {
-        CommandAPI.onEnable();
         this.bootstrap.onEnable();
     }
 
     @Override
     public void onDisable() {
-        CommandAPI.onDisable();
         this.bootstrap.onDisable();
     }
 }
