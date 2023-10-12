@@ -1,19 +1,20 @@
 package dev.xhyrom.lighteco.common.command.argument;
 
+import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import lombok.Getter;
-import net.kyori.adventure.text.Component;
 
-public class Argument {
+public abstract class Argument<T> {
     @Getter
     private final String name;
-    @Getter
-    private final boolean required;
-    @Getter
-    private final Component description;
+    protected final LightEcoPlugin plugin;
 
-    public Argument(String name, boolean required, Component description) {
+    protected Argument(LightEcoPlugin plugin, String name) {
+        this.plugin = plugin;
         this.name = name;
-        this.required = required;
-        this.description = description;
     }
+
+    public abstract Class<T> getPrimitiveType();
+    public abstract ArgumentType getArgumentType();
+
+    public abstract T parse(String input);
 }

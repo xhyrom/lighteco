@@ -8,6 +8,7 @@ import dev.xhyrom.lighteco.common.plugin.bootstrap.LoaderBootstrap;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 import dev.xhyrom.lighteco.common.plugin.scheduler.SchedulerAdapter;
 import lombok.Getter;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Getter
@@ -57,6 +59,11 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     @Override
     public Path getDataDirectory() {
         return this.loader.getDataFolder().toPath();
+    }
+
+    @Override
+    public Optional<UUID> lookupUniqueId(String username) {
+        return Optional.ofNullable(this.loader.getServer().getOfflinePlayer(username)).map(OfflinePlayer::getUniqueId);
     }
 
     @Override
