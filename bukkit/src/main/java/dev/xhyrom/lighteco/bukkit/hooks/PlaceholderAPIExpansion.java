@@ -6,31 +6,30 @@ import dev.xhyrom.lighteco.common.model.user.User;
 import lombok.RequiredArgsConstructor;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 @RequiredArgsConstructor
 public class PlaceholderAPIExpansion extends PlaceholderExpansion {
     private final BukkitLightEcoPlugin plugin;
 
     @Override
-    public @NotNull String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return "lighteco";
     }
 
     @Override
-    public @NotNull String getAuthor() {
+    public @NonNull String getAuthor() {
         return this.plugin.getBootstrap().getLoader().getDescription().getAuthors().toString();
     }
 
     @Override
-    public @NotNull String getVersion() {
+    public @NonNull String getVersion() {
         return this.plugin.getBootstrap().getLoader().getDescription().getVersion();
     }
 
     @Override
-    public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
+    public @Nullable String onRequest(OfflinePlayer player, @NonNull String params) {
         String[] args = params.split("_");
         if (args.length < 2) return null;
 

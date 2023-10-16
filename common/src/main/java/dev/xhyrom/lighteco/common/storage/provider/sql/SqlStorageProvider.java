@@ -8,7 +8,6 @@ import dev.xhyrom.lighteco.common.storage.StorageType;
 import dev.xhyrom.lighteco.common.storage.provider.sql.connection.ConnectionFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -163,7 +162,7 @@ public class SqlStorageProvider implements StorageProvider {
     }
 
     @Override
-    public void saveUsers(@NotNull @NonNull User... users) throws Exception {
+    public void saveUsers(@NonNull User... users) throws Exception {
         // use transaction
         try (Connection c = this.connectionFactory.getConnection()) {
             try {
