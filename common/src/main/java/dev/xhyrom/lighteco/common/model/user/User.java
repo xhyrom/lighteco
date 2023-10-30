@@ -8,6 +8,7 @@ import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import lombok.Getter;
 import lombok.Setter;
+import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.math.BigDecimal;
@@ -95,5 +96,9 @@ public class User {
         }
 
         this.setBalance(currency, this.getBalance(currency).subtract(amount));
+    }
+
+    public void sendMessage(@NonNull Component message) {
+        this.plugin.getBootstrap().getPlayerAudience(this.getUniqueId()).sendMessage(message);
     }
 }
