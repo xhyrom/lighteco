@@ -56,5 +56,5 @@ fun determineCommitHash(project: Project): String {
         standardOutput = commitHashInfo
     }
 
-    return commitHashInfo.toString()
+    return commitHashInfo.toString().strip()
 }
