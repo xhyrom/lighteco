@@ -242,12 +242,27 @@ public abstract class AbstractCommandManager implements CommandManager {
                 ? this.getConfig(currency).payWithTax
                 : this.getConfig(currency).pay;
 
+        String templateReceived = tax.compareTo(BigDecimal.ZERO) > 0
+                ? this.getConfig(currency).payReceivedWithTax
+                : this.getConfig(currency).payReceived;
 
         sender.sendMessage(
                 miniMessage.deserialize(
                         template,
                         Placeholder.parsed("currency", currency.getIdentifier()),
                         Placeholder.parsed("target", target.getUsername()),
+                        Placeholder.parsed("amount", amount.toPlainString()),
+                        Placeholder.parsed("taxed_amount", taxedAmount.toPlainString()),
+                        Placeholder.parsed("sender_balance", user.getBalance(currency).toPlainString()),
+                        Placeholder.parsed("receiver_balance", target.getBalance(currency).toPlainString())
+                )
+        );
+
+        target.sendMessage(
+                miniMessage.deserialize(
+                        templateReceived,
+                        Placeholder.parsed("currency", currency.getIdentifier()),
+                        Placeholder.parsed("sender", user.getUsername()),
                         Placeholder.parsed("amount", amount.toPlainString()),
                         Placeholder.parsed("taxed_amount", taxedAmount.toPlainString()),
                         Placeholder.parsed("sender_balance", user.getBalance(currency).toPlainString()),

@@ -1,6 +1,7 @@
 package dev.xhyrom.lighteco.api.model.user;
 
 import dev.xhyrom.lighteco.api.model.currency.Currency;
+import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -59,4 +60,12 @@ public interface User {
      * @throws IllegalArgumentException if the amount is negative
      */
     void withdraw(@NonNull Currency currency, @NonNull BigDecimal amount) throws IllegalArgumentException;
+
+    /**
+     * Send a message to this user.
+     * Message will be silently dropped if the user is offline.
+     *
+     * @param message the message
+     */
+    void sendMessage(Component message);
 }
