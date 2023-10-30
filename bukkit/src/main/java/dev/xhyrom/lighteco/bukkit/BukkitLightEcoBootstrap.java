@@ -29,14 +29,12 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     private final PluginLogger logger;
     @Getter
     private final SchedulerAdapter scheduler;
-    private final BukkitAudiences audience;
+    private BukkitAudiences audience;
 
     public BukkitLightEcoBootstrap(JavaPlugin loader) {
         this.loader = loader;
         this.logger = new BukkitLogger(loader.getLogger());
         this.scheduler = new BukkitSchedulerAdapter(this);
-
-        this.audience = BukkitAudiences.create(loader);
     }
 
     @Override
@@ -51,6 +49,8 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     public void onEnable() {
         CommandAPI.onEnable();
         this.plugin.enable();
+
+        this.audience = BukkitAudiences.create(loader);
     }
 
     @Override
