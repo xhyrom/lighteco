@@ -5,7 +5,6 @@ import dev.xhyrom.lighteco.api.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -37,7 +36,7 @@ public class ApiUserManager extends ApiAbstractManager<dev.xhyrom.lighteco.commo
     }
 
     @Override
-    public @NonNull CompletableFuture<Void> saveUsers(@NotNull @NonNull User... users) {
+    public @NonNull CompletableFuture<Void> saveUsers(@NonNull User... users) {
         return this.plugin.getStorage().saveUsers(users);
     }
 

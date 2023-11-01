@@ -4,6 +4,7 @@ version: ${version}
 main: dev.xhyrom.lighteco.currency.money.bukkit.BukkitMCLoader
 author: ${author}
 api-version: 1.20
+load: STARTUP
 
 softdepend:
   - Vault

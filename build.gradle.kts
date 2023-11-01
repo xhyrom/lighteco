@@ -13,9 +13,11 @@ val commitHash = determineCommitHash(project)
 allprojects {
     group = "dev.xhyrom"
     version = "$majorVersion.$minorVersion.$patchVersion"
+    description = "Incredibly fast, lightweight, and modular plugin that excels across multiple platforms."
 
     ext {
         set("version", "$majorVersion.$minorVersion.$patchVersion+$commitHash")
+        set("description", description)
     }
 }
 
@@ -54,5 +56,5 @@ fun determineCommitHash(project: Project): String {
         standardOutput = commitHashInfo
     }
 
-    return commitHashInfo.toString()
+    return commitHashInfo.toString().strip()
 }

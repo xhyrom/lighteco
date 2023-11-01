@@ -9,6 +9,8 @@ import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 import dev.xhyrom.lighteco.common.plugin.scheduler.SchedulerAdapter;
 import lombok.Getter;
 import org.bukkit.OfflinePlayer;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,6 +31,7 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     private final PluginLogger logger;
     @Getter
     private final SchedulerAdapter scheduler;
+    private BukkitAudiences audience;
 
     public BukkitLightEcoBootstrap(JavaPlugin loader) {
         this.loader = loader;
@@ -48,6 +51,8 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     public void onEnable() {
         CommandAPI.onEnable();
         this.plugin.enable();
+
+        this.audience = BukkitAudiences.create(loader);
     }
 
     @Override
@@ -82,5 +87,10 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     @Override
     public InputStream getResourceStream(String filename) {
         return this.loader.getResource(filename);
+    }
+
+    @Override
+    public Audience getPlayerAudience(UUID uniqueId) {
+        return audience.player(uniqueId);
     }
 }

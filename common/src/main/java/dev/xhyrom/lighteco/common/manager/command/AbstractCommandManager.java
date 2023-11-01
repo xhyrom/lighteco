@@ -1,5 +1,6 @@
 package dev.xhyrom.lighteco.common.manager.command;
 
+import dev.xhyrom.lighteco.api.exception.CannotBeGreaterThan;
 import dev.xhyrom.lighteco.common.config.message.CurrencyMessageConfig;
 import dev.xhyrom.lighteco.common.model.chat.CommandSender;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
@@ -101,7 +102,19 @@ public abstract class AbstractCommandManager implements CommandManager {
         addToMustWait(sender.getUniqueId(), target.getUniqueId());
         amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
-        target.setBalance(currency, amount);
+        try {
+            target.setBalance(currency, amount);
+        } catch (CannotBeGreaterThan e) {
+            removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
+            sender.sendMessage(
+                    miniMessage.deserialize(
+                            this.getConfig(currency).cannotBeGreaterThan,
+                            Placeholder.parsed("max", this.plugin.getConfig().maximumBalance.toPlainString())
+                    )
+            );
+
+            return;
+        }
 
         sender.sendMessage(
                 miniMessage.deserialize(
@@ -120,7 +133,19 @@ public abstract class AbstractCommandManager implements CommandManager {
         addToMustWait(sender.getUniqueId(), target.getUniqueId());
         amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
-        target.deposit(currency, amount);
+        try {
+            target.deposit(currency, amount);
+        } catch (CannotBeGreaterThan e) {
+            removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
+            sender.sendMessage(
+                    miniMessage.deserialize(
+                            this.getConfig(currency).cannotBeGreaterThan,
+                            Placeholder.parsed("max", this.plugin.getConfig().maximumBalance.toPlainString())
+                    )
+            );
+
+            return;
+        }
 
         sender.sendMessage(
                 miniMessage.deserialize(
@@ -140,7 +165,19 @@ public abstract class AbstractCommandManager implements CommandManager {
         addToMustWait(sender.getUniqueId(), target.getUniqueId());
         amount = amount.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
 
-        target.withdraw(currency, amount);
+        try {
+            target.withdraw(currency, amount);
+        } catch (CannotBeGreaterThan e) {
+            removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
+            sender.sendMessage(
+                    miniMessage.deserialize(
+                            this.getConfig(currency).cannotBeGreaterThan,
+                            Placeholder.parsed("max", this.plugin.getConfig().maximumBalance.toPlainString())
+                    )
+            );
+
+            return;
+        }
 
         sender.sendMessage(
                 miniMessage.deserialize(
@@ -186,19 +223,46 @@ public abstract class AbstractCommandManager implements CommandManager {
         // subtract tax from amount
         BigDecimal taxedAmount = amount.subtract(tax);
 
-        target.deposit(currency, taxedAmount);
-        user.withdraw(currency, amount);
+        try {
+            target.deposit(currency, taxedAmount);
+            user.withdraw(currency, amount);
+        } catch (CannotBeGreaterThan e) {
+            removeFromMustWait(target.getUniqueId(), sender.getUniqueId());
+            sender.sendMessage(
+                    miniMessage.deserialize(
+                            this.getConfig(currency).cannotBeGreaterThan,
+                            Placeholder.parsed("max", this.plugin.getConfig().maximumBalance.toPlainString())
+                    )
+            );
+
+            return;
+        }
 
         String template = tax.compareTo(BigDecimal.ZERO) > 0
                 ? this.getConfig(currency).payWithTax
                 : this.getConfig(currency).pay;
 
+        String templateReceived = tax.compareTo(BigDecimal.ZERO) > 0
+                ? this.getConfig(currency).payReceivedWithTax
+                : this.getConfig(currency).payReceived;
 
         sender.sendMessage(
                 miniMessage.deserialize(
                         template,
                         Placeholder.parsed("currency", currency.getIdentifier()),
                         Placeholder.parsed("target", target.getUsername()),
+                        Placeholder.parsed("amount", amount.toPlainString()),
+                        Placeholder.parsed("taxed_amount", taxedAmount.toPlainString()),
+                        Placeholder.parsed("sender_balance", user.getBalance(currency).toPlainString()),
+                        Placeholder.parsed("receiver_balance", target.getBalance(currency).toPlainString())
+                )
+        );
+
+        target.sendMessage(
+                miniMessage.deserialize(
+                        templateReceived,
+                        Placeholder.parsed("currency", currency.getIdentifier()),
+                        Placeholder.parsed("sender", user.getUsername()),
                         Placeholder.parsed("amount", amount.toPlainString()),
                         Placeholder.parsed("taxed_amount", taxedAmount.toPlainString()),
                         Placeholder.parsed("sender_balance", user.getBalance(currency).toPlainString()),

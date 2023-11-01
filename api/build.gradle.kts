@@ -3,6 +3,12 @@ plugins {
 }
 
 dependencies {
+    api("net.kyori:adventure-api:4.12.0") {
+        exclude(module = "adventure-bom")
+        exclude(module = "checker-qual")
+        exclude(module = "annotations")
+    }
+
     compileOnly("org.projectlombok:lombok:1.18.28")
     annotationProcessor("org.projectlombok:lombok:1.18.28")
 

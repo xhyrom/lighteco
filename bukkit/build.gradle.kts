@@ -13,7 +13,7 @@ repositories {
 dependencies {
     implementation(project(":lighteco-common"))
 
-    implementation("dev.jorel:commandapi-bukkit-shade:9.1.0")
+    implementation("dev.jorel:commandapi-bukkit-shade:9.2.0")
     implementation("net.kyori:adventure-platform-bukkit:4.2.0")
 
     compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")

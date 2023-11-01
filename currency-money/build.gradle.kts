@@ -2,6 +2,8 @@ plugins {
     id("lighteco.addon-logic")
 }
 
+description = "Addon that adds main currency to LightEco that uses Vault to hook into other economy plugins."
+
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://jitpack.io")

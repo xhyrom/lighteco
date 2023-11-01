@@ -20,28 +20,11 @@ public class BukkitCommandManager extends AbstractCommandManager {
 
     @Override
     public void registerCurrencyCommand(@NonNull Currency currency) {
-        String permissionBase = "lighteco.currency." + currency.getIdentifier() + ".command.";
+        registerCommands(currency.getIdentifier(), currency);
 
-        // Balance
-        for (CommandAPICommand cmd : new BalanceCommand(
-                this,
-                currency.getIdentifier(),
-                currency,
-                permissionBase
-        ).multipleBuild()) {
-            cmd.register();
+        for (String alias : currency.getIdentifierAliases()) {
+            registerCommands(alias, currency);
         }
-
-        CommandAPICommand cmd = new CommandAPICommand(currency.getIdentifier())
-                .withSubcommand(new SetCommand(this, currency, permissionBase).build())
-                .withSubcommand(new GiveCommand(this, currency, permissionBase).build())
-                .withSubcommand(new TakeCommand(this, currency, permissionBase).build())
-                .withSubcommands(new BalanceCommand(this, "balance", currency, permissionBase).multipleBuild());
-
-        if (currency.isPayable())
-            cmd = cmd.withSubcommand(new PayCommand(this, currency, permissionBase).build());
-
-        cmd.register();
     }
 
     @Override
@@ -69,6 +52,30 @@ public class BukkitCommandManager extends AbstractCommandManager {
         ).multipleBuild()) {
             cmd.register();
         }
+    }
 
+    private void registerCommands(@NonNull String name, @NonNull Currency currency) {
+        String permissionBase = "lighteco.currency." + currency.getIdentifier() + ".command.";
+
+        // Balance
+        for (CommandAPICommand cmd : new BalanceCommand(
+                this,
+                name,
+                currency,
+                permissionBase
+        ).multipleBuild()) {
+            cmd.register();
+        }
+
+        CommandAPICommand cmd = new CommandAPICommand(name)
+                .withSubcommand(new SetCommand(this, currency, permissionBase).build())
+                .withSubcommand(new GiveCommand(this, currency, permissionBase).build())
+                .withSubcommand(new TakeCommand(this, currency, permissionBase).build())
+                .withSubcommands(new BalanceCommand(this, "balance", currency, permissionBase).multipleBuild());
+
+        if (currency.isPayable())
+            cmd = cmd.withSubcommand(new PayCommand(this, currency, permissionBase).build());
+
+        cmd.register();
     }
 }

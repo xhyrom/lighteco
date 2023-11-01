@@ -2,6 +2,8 @@ package dev.xhyrom.lighteco.currency.money.bukkit.hooks.vault;
 
 import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.LightEcoProvider;
+import dev.xhyrom.lighteco.api.exception.CannotBeGreaterThan;
+import dev.xhyrom.lighteco.api.exception.CannotBeNegative;
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.api.model.user.User;
 import dev.xhyrom.lighteco.currency.money.common.Plugin;
@@ -50,7 +52,7 @@ public class Vault extends AbstractEconomy {
         NumberFormat format = NumberFormat.getInstance();
         format.setCurrency(java.util.Currency.getInstance(this.plugin.getConfig().currencyCode));
 
-        return format.format(BigDecimal.valueOf(amount));
+        return format.format(amount);
     }
 
     @Override
@@ -114,12 +116,12 @@ public class Vault extends AbstractEconomy {
 
         try {
             user.withdraw(currency, BigDecimal.valueOf(amount));
-        } catch (IllegalArgumentException e) {
+        } catch (CannotBeGreaterThan | CannotBeNegative e) {
             return new EconomyResponse(
                     amount,
                     bigDecimalToDouble(user.getBalance(currency)),
                     EconomyResponse.ResponseType.FAILURE,
-                    "Cannot withdraw negative funds"
+                    e.getMessage()
             );
         }
 
@@ -143,12 +145,12 @@ public class Vault extends AbstractEconomy {
 
         try {
             user.deposit(currency, BigDecimal.valueOf(amount));
-        } catch (IllegalArgumentException e) {
+        } catch (CannotBeGreaterThan | CannotBeNegative e) {
             return new EconomyResponse(
                     amount,
                     bigDecimalToDouble(user.getBalance(currency)),
                     EconomyResponse.ResponseType.FAILURE,
-                    "Cannot deposit negative funds"
+                    e.getMessage()
             );
         }
 

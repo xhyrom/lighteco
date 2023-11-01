@@ -7,6 +7,8 @@ import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
 
+import java.math.BigDecimal;
+
 @Header("LightEco configuration file.")
 @Header("")
 public class Config extends OkaeriConfig {
@@ -20,6 +22,10 @@ public class Config extends OkaeriConfig {
 
     @Comment("Save interval to storage in seconds.")
     public long saveInterval = 5L;
+
+    @Comment("Maximum allowed balance.")
+    @Comment("If you want to change this value, you must also change the data type in the database.")
+    public BigDecimal maximumBalance = BigDecimal.valueOf(999999999999999.99);
 
     @Comment("Messages")
     public MessageConfig messages = new MessageConfig();
