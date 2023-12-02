@@ -5,6 +5,7 @@ import com.google.common.io.MoreFiles;
 import dev.xhyrom.lighteco.common.config.Config;
 import dev.xhyrom.lighteco.common.dependencies.relocation.Relocation;
 import dev.xhyrom.lighteco.common.dependencies.relocation.RelocationHandler;
+import dev.xhyrom.lighteco.common.messaging.MessagingType;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 import dev.xhyrom.lighteco.common.util.URLClassLoaderAccess;
@@ -140,6 +141,11 @@ public class DependencyManagerImpl implements DependencyManager {
     @Override
     public void loadStorageDependencies(Set<StorageType> types) {
         loadDependencies(this.registry.resolveStorageDependencies(types));
+    }
+
+    @Override
+    public void loadMessagingDependencies(Set<MessagingType> types) {
+        loadDependencies(this.registry.resolveMessagingDependencies(types));
     }
 
     @Override

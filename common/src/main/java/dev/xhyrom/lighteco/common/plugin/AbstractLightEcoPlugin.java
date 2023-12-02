@@ -6,6 +6,8 @@ import dev.xhyrom.lighteco.common.api.LightEcoApi;
 import dev.xhyrom.lighteco.common.config.Config;
 import dev.xhyrom.lighteco.common.dependencies.DependencyManager;
 import dev.xhyrom.lighteco.common.dependencies.DependencyManagerImpl;
+import dev.xhyrom.lighteco.common.messaging.MessagingFactory;
+import dev.xhyrom.lighteco.common.messaging.MessagingService;
 import dev.xhyrom.lighteco.common.storage.Storage;
 import dev.xhyrom.lighteco.common.storage.StorageFactory;
 import dev.xhyrom.lighteco.common.task.UserSaveTask;
@@ -23,6 +25,7 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
 
     @Getter
     private Storage storage;
+    private MessagingService messagingService;
     private LightEcoApi api;
 
     private UserSaveTask userSaveTask;
@@ -41,10 +44,18 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
 
     public final void enable() {
         // setup storage
-        StorageFactory factory = new StorageFactory(this);
-        this.dependencyManager.loadStorageDependencies(factory.getRequiredTypes());
+        StorageFactory storageFactory = new StorageFactory(this);
+        this.dependencyManager.loadStorageDependencies(
+                storageFactory.getRequiredTypes()
+        );
 
-        this.storage = factory.get();
+        MessagingFactory messagingFactory = new MessagingFactory(this);
+        this.dependencyManager.loadMessagingDependencies(
+                messagingFactory.getRequiredTypes()
+        );
+
+        this.storage = storageFactory.get();
+        this.messagingService = messagingFactory.get();
 
         // register listeners
         this.registerListeners();

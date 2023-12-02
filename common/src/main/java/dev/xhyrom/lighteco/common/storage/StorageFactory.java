@@ -1,6 +1,5 @@
 package dev.xhyrom.lighteco.common.storage;
 
-import com.google.common.collect.ImmutableSet;
 import dev.xhyrom.lighteco.api.storage.StorageProvider;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.storage.provider.memory.MemoryStorageProvider;
@@ -21,7 +20,7 @@ public class StorageFactory {
     }
 
     public Set<StorageType> getRequiredTypes() {
-        return ImmutableSet.of(this.plugin.getConfig().storage.provider);
+        return Set.of(this.plugin.getConfig().storage.provider);
     }
 
     public Storage get() {

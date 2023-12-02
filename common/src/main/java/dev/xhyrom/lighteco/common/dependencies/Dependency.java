@@ -61,6 +61,29 @@ public enum Dependency {
             "postgresql",
             "42.6.0",
             Relocation.of("postgresql", "org{}postgresql")
+    ),
+    JEDIS(
+            "redis.clients",
+            "jedis",
+            "5.1.0",
+            Relocation.of("jedis", "redis{}clients{}jedis"),
+            Relocation.of("commonspool2", "org{}apache{}commons{}pool2")
+    ),
+    SLF4J_SIMPLE(
+            "org.slf4j",
+            "slf4j-simple",
+            "1.7.30"
+    ),
+    SLF4J_API(
+            "org.slf4j",
+            "slf4j-api",
+            "1.7.30"
+    ),
+    COMMONS_POOL_2(
+            "org.apache.commons",
+            "commons-pool2",
+            "2.9.0",
+            Relocation.of("commonspool2", "org{}apache{}commons{}pool2")
     );
 
     private final String fullPath;

@@ -20,6 +20,7 @@ dependencies {
     implementation("eu.okaeri:okaeri-configs-validator-okaeri:5.0.0-beta.5")
 
     compileOnly("com.zaxxer:HikariCP:5.0.1")
+    compileOnly("redis.clients:jedis:5.1.0")
 
     compileOnly("org.projectlombok:lombok:1.18.28")
     annotationProcessor("org.projectlombok:lombok:1.18.28")
