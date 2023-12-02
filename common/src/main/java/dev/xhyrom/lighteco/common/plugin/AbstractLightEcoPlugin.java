@@ -85,6 +85,9 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
         // shutdown storage
         this.storage.shutdown();
 
+        if (this.messagingService != null)
+            this.messagingService.shutdown();
+
         // close isolated class loaders
         this.dependencyManager.close();
     }

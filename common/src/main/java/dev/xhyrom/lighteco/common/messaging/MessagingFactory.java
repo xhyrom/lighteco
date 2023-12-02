@@ -22,14 +22,17 @@ public class MessagingFactory {
     }
 
     public MessagingService get() {
-        MessagingType provider = this.plugin.getConfig().messaging.provider;
-        return new LightEcoMessagingService(this.plugin, createProvider(provider));
+        MessagingType type = this.plugin.getConfig().messaging.provider;
+        MessengerProvider provider = this.createProvider(type);
+        if (provider == null) return null;
+
+        return new LightEcoMessagingService(this.plugin, provider);
     }
 
     private MessengerProvider createProvider(MessagingType type) {
         return switch (type) {
             case REDIS -> new RedisMessengerProvider(this.plugin);
-            default -> throw new IllegalArgumentException("Unknown messaging provider: " + type.name());
+            default -> null;
         };
     }
 }

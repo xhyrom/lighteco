@@ -137,7 +137,7 @@ public class LightEcoMessagingService implements MessagingService, IncomingMessa
     }
 
     @Override
-    public void close() {
+    public void shutdown() {
         this.messenger.close();
     }
 }
