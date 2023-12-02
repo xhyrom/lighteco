@@ -52,10 +52,14 @@ public class User {
     }
 
     public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance) throws CannotBeNegative, CannotBeGreaterThan {
-        this.setBalance(currency, balance, false);
+        this.setBalance(currency, balance, false, true);
     }
 
     public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance, boolean force) throws CannotBeNegative, CannotBeGreaterThan {
+        this.setBalance(currency, balance, force, true);
+    }
+
+    public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance, boolean force, boolean publish) throws CannotBeNegative, CannotBeGreaterThan {
         if (balance.compareTo(BigDecimal.ZERO) < 0) {
             throw new CannotBeNegative("Balance cannot be negative");
         }
@@ -70,8 +74,10 @@ public class User {
         if (!force)
             this.setDirty(true);
 
-        @NonNull Optional<InternalMessagingService> messagingService = this.plugin.getMessagingService();
-        messagingService.ifPresent(internalMessagingService -> internalMessagingService.pushUserUpdate(this, currency));
+        if (publish) {
+            @NonNull Optional<InternalMessagingService> messagingService = this.plugin.getMessagingService();
+            messagingService.ifPresent(internalMessagingService -> internalMessagingService.pushUserUpdate(this, currency));
+        }
     }
 
     public void deposit(@NonNull Currency currency, @NonNull BigDecimal amount) throws CannotBeNegative, CannotBeGreaterThan {

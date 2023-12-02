@@ -131,7 +131,7 @@ public class LightEcoMessagingService implements InternalMessagingService, Incom
                     return;
                 }
 
-                user.setBalance(currency, userUpdateMessage.getNewBalance());
+                user.setBalance(currency, userUpdateMessage.getNewBalance(), false, false);
             });
         } else {
             throw new IllegalStateException("Unknown message type: " + message.getClass().getName());
