@@ -21,7 +21,7 @@ public class MessagingFactory {
         return Set.of(this.plugin.getConfig().messaging.provider);
     }
 
-    public MessagingService get() {
+    public InternalMessagingService get() {
         MessagingType type = this.plugin.getConfig().messaging.provider;
         MessengerProvider provider = this.createProvider(type);
         if (provider == null) return null;

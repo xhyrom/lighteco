@@ -9,7 +9,7 @@ import java.util.UUID;
 /**
  * Represents a message that is sent when a user updates their profile.
  */
-public interface UserBalanceUpdateMessage extends Message {
+public interface UserUpdateMessage extends Message {
     /**
      * Gets the unique id of the user that updated their profile.
      *

@@ -7,21 +7,23 @@ import dev.xhyrom.lighteco.api.messenger.IncomingMessageConsumer;
 import dev.xhyrom.lighteco.api.messenger.Messenger;
 import dev.xhyrom.lighteco.api.messenger.MessengerProvider;
 import dev.xhyrom.lighteco.api.messenger.message.Message;
-import dev.xhyrom.lighteco.api.messenger.message.type.UserBalanceUpdateMessage;
+import dev.xhyrom.lighteco.api.messenger.message.type.UserUpdateMessage;
 import dev.xhyrom.lighteco.common.cache.ExpiringSet;
 import dev.xhyrom.lighteco.common.messaging.message.MessageType;
-import dev.xhyrom.lighteco.common.messaging.message.UserBalanceUpdateMessageImpl;
+import dev.xhyrom.lighteco.common.messaging.message.UserUpdateMessageImpl;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.util.gson.GsonProvider;
+import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class LightEcoMessagingService implements MessagingService, IncomingMessageConsumer {
+public class LightEcoMessagingService implements InternalMessagingService, IncomingMessageConsumer {
+    @Getter
     private final LightEcoPlugin plugin;
     private final ExpiringSet<UUID> receivedMessages;
 
@@ -47,7 +49,7 @@ public class LightEcoMessagingService implements MessagingService, IncomingMessa
     public void pushUserUpdate(User user, Currency currency) {
         this.plugin.getBootstrap().getScheduler().async().execute(() ->
                 this.messenger.sendOutgoingMessage(
-                        new UserBalanceUpdateMessageImpl(generateMessageId(), user.getUniqueId(), currency.getIdentifier(), user.getBalance(currency))
+                        new UserUpdateMessageImpl(generateMessageId(), user.getUniqueId(), currency.getIdentifier(), user.getBalance(currency))
                 )
         );
     }
@@ -107,7 +109,7 @@ public class LightEcoMessagingService implements MessagingService, IncomingMessa
         Message deserialized;
         switch (type) {
             case USER_UPDATE:
-                deserialized = UserBalanceUpdateMessageImpl.deserialize(id, contentElement);
+                deserialized = UserUpdateMessageImpl.deserialize(id, contentElement);
                 break;
             default:
                 return;
@@ -117,7 +119,7 @@ public class LightEcoMessagingService implements MessagingService, IncomingMessa
     }
 
     private void processIncomingMessage(Message message) {
-        if (message instanceof UserBalanceUpdateMessage userUpdateMessage) {
+        if (message instanceof UserUpdateMessage userUpdateMessage) {
             this.plugin.getBootstrap().getScheduler().async().execute(() -> {
                 User user = this.plugin.getUserManager().getIfLoaded(userUpdateMessage.getUserUniqueId());
                 if (user == null) {

@@ -3,7 +3,7 @@ package dev.xhyrom.lighteco.common.messaging.message;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import dev.xhyrom.lighteco.api.messenger.message.type.UserBalanceUpdateMessage;
+import dev.xhyrom.lighteco.api.messenger.message.type.UserUpdateMessage;
 import dev.xhyrom.lighteco.common.messaging.LightEcoMessagingService;
 import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -11,7 +11,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class UserBalanceUpdateMessageImpl extends AbstractMessage implements UserBalanceUpdateMessage {
+public class UserUpdateMessageImpl extends AbstractMessage implements UserUpdateMessage {
     private static final MessageType TYPE = MessageType.USER_UPDATE;
 
     @Getter
@@ -21,16 +21,16 @@ public class UserBalanceUpdateMessageImpl extends AbstractMessage implements Use
     @Getter
     private final BigDecimal newBalance;
 
-    public static UserBalanceUpdateMessage deserialize(UUID id, @NonNull JsonElement data) {
+    public static UserUpdateMessage deserialize(UUID id, @NonNull JsonElement data) {
         JsonObject obj = data.getAsJsonObject();
         UUID userUniqueId = UUID.fromString(obj.get("u").getAsString());
         String currencyIdentifier = obj.get("c").getAsString();
         BigDecimal newBalance = obj.get("b").getAsBigDecimal();
 
-        return new UserBalanceUpdateMessageImpl(id, userUniqueId, currencyIdentifier, newBalance);
+        return new UserUpdateMessageImpl(id, userUniqueId, currencyIdentifier, newBalance);
     }
 
-    public UserBalanceUpdateMessageImpl(UUID id, UUID userUniqueId, String currencyIdentifier, BigDecimal newBalance) {
+    public UserUpdateMessageImpl(UUID id, UUID userUniqueId, String currencyIdentifier, BigDecimal newBalance) {
         super(id);
         this.userUniqueId = userUniqueId;
         this.currencyIdentifier = currencyIdentifier;
