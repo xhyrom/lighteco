@@ -9,7 +9,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import redis.clients.jedis.*;
 
 public class RedisMessenger implements Messenger {
-    private static final String CHANNEL = "lighteco:update";
+    private static final String CHANNEL = "lighteco:{}:messages";
+    private static String[] CHANNELS;
 
     private final LightEcoPlugin plugin;
     private final IncomingMessageConsumer consumer;
@@ -34,8 +35,15 @@ public class RedisMessenger implements Messenger {
         this.sub = new Subscription(this);
 
         this.plugin.getBootstrap().getScheduler().async().execute(() -> {
-            this.jedis.subscribe(this.sub, CHANNEL);
+            this.jedis.subscribe(this.sub, this.getChannels());
         });
+    }
+
+    private String[] getChannels() {
+        if (CHANNELS.length > 0) return CHANNELS;
+
+        CHANNELS = new String[] { CHANNEL.replace("}:", ""), CHANNEL.replace("{}", this.plugin.getConfig().server) };
+        return CHANNELS;
     }
 
     private static JedisClientConfig jedisConfig(@Nullable String username, @Nullable String password, boolean ssl) {
@@ -56,8 +64,8 @@ public class RedisMessenger implements Messenger {
     }
 
     @Override
-    public void sendOutgoingMessage(@NonNull OutgoingMessage message) {
-        this.jedis.publish(CHANNEL, message.serialize());
+    public void sendOutgoingMessage(@NonNull OutgoingMessage message, boolean global) {
+        this.jedis.publish(global ? getChannels()[0] : getChannels()[1], message.serialize());
     }
 
     @Override
@@ -75,7 +83,8 @@ public class RedisMessenger implements Messenger {
 
         @Override
         public void onMessage(String channel, String message) {
-            if (!channel.equals(CHANNEL)) {
+            String[] channels = this.messenger.getChannels();
+            if (!channel.equals(channels[0]) && !channel.equals(channels[1])) {
                 return;
             }
 

@@ -49,7 +49,8 @@ public class LightEcoMessagingService implements InternalMessagingService, Incom
     public void pushUserUpdate(User user, Currency currency) {
         this.plugin.getBootstrap().getScheduler().async().execute(() ->
                 this.messenger.sendOutgoingMessage(
-                        new UserUpdateMessageImpl(generateMessageId(), user.getUniqueId(), currency.getIdentifier(), user.getBalance(currency))
+                        new UserUpdateMessageImpl(generateMessageId(), user.getUniqueId(), currency.getIdentifier(), user.getBalance(currency)),
+                        currency.getType() == dev.xhyrom.lighteco.api.model.currency.Currency.Type.GLOBAL
                 )
         );
     }
