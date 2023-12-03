@@ -40,7 +40,7 @@ public class RedisMessenger implements Messenger {
     }
 
     private String[] getChannels() {
-        if (CHANNELS.length > 0) return CHANNELS;
+        if (CHANNELS != null) return CHANNELS;
 
         CHANNELS = new String[] { CHANNEL.replace("{}:", ""), CHANNEL.replace("{}", this.plugin.getConfig().server) };
         return CHANNELS;
