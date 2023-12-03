@@ -61,7 +61,6 @@ public class LightEcoMessagingService implements InternalMessagingService, Incom
         data.add("i", new JsonPrimitive(id.toString()));
         data.add("t", new JsonPrimitive(type.name()));
         data.add("c", content);
-        // TODO: add server_name
 
         return GsonProvider.get().toJson(data);
     }
