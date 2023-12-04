@@ -4,13 +4,15 @@ import dev.xhyrom.lighteco.api.messenger.IncomingMessageConsumer;
 import dev.xhyrom.lighteco.api.messenger.Messenger;
 import dev.xhyrom.lighteco.api.messenger.message.OutgoingMessage;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import redis.clients.jedis.*;
 
 public class RedisMessenger implements Messenger {
     private static final String CHANNEL = "lighteco:{}:messages";
-    private static String[] CHANNELS;
+    @Getter
+    private final String[] channels;
 
     private final LightEcoPlugin plugin;
     private final IncomingMessageConsumer consumer;
@@ -21,6 +23,11 @@ public class RedisMessenger implements Messenger {
     public RedisMessenger(LightEcoPlugin plugin, IncomingMessageConsumer consumer) {
         this.plugin = plugin;
         this.consumer = consumer;
+
+        this.channels = new String[] {
+                CHANNEL.replace("{}:", ""),
+                CHANNEL.replace("{}", this.plugin.getConfig().server)
+        };
     }
 
     public void init(@Nullable String address, @Nullable String username, String password, boolean ssl) {
@@ -37,13 +44,6 @@ public class RedisMessenger implements Messenger {
         this.plugin.getBootstrap().getScheduler().async().execute(() -> {
             this.jedis.subscribe(this.sub, this.getChannels());
         });
-    }
-
-    private String[] getChannels() {
-        if (CHANNELS != null) return CHANNELS;
-
-        CHANNELS = new String[] { CHANNEL.replace("{}:", ""), CHANNEL.replace("{}", this.plugin.getConfig().server) };
-        return CHANNELS;
     }
 
     private static JedisClientConfig jedisConfig(@Nullable String username, @Nullable String password, boolean ssl) {
