@@ -4,6 +4,7 @@ import dev.xhyrom.lighteco.api.exception.CannotBeGreaterThan;
 import dev.xhyrom.lighteco.api.exception.CannotBeNegative;
 import dev.xhyrom.lighteco.common.api.impl.ApiUser;
 import dev.xhyrom.lighteco.common.cache.RedisBackedMap;
+import dev.xhyrom.lighteco.common.messaging.InternalMessagingService;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.UUID;
 
 @Getter
@@ -50,10 +52,14 @@ public class User {
     }
 
     public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance) throws CannotBeNegative, CannotBeGreaterThan {
-        this.setBalance(currency, balance, false);
+        this.setBalance(currency, balance, false, true);
     }
 
     public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance, boolean force) throws CannotBeNegative, CannotBeGreaterThan {
+        this.setBalance(currency, balance, force, true);
+    }
+
+    public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance, boolean force, boolean publish) throws CannotBeNegative, CannotBeGreaterThan {
         if (balance.compareTo(BigDecimal.ZERO) < 0) {
             throw new CannotBeNegative("Balance cannot be negative");
         }
@@ -67,6 +73,11 @@ public class User {
 
         if (!force)
             this.setDirty(true);
+
+        if (publish) {
+            @NonNull Optional<InternalMessagingService> messagingService = this.plugin.getMessagingService();
+            messagingService.ifPresent(internalMessagingService -> internalMessagingService.pushUserUpdate(this, currency));
+        }
     }
 
     public void deposit(@NonNull Currency currency, @NonNull BigDecimal amount) throws CannotBeNegative, CannotBeGreaterThan {

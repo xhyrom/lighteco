@@ -1,11 +1,11 @@
 package dev.xhyrom.lighteco.bukkit.listeners;
 
 import dev.xhyrom.lighteco.bukkit.BukkitLightEcoPlugin;
+import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.model.user.User;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -58,11 +58,10 @@ public class BukkitConnectionListener implements Listener {
         }
 
         this.plugin.getUserManager().saveUser(user)
-                .thenAccept(v -> {
-                    // make sure the player is offline before unloading
-                    if (Bukkit.getPlayer(uniqueId) != null) return;
-
-                    this.plugin.getUserManager().unload(uniqueId);
-                });
+                .thenAccept(v -> this.plugin.getMessagingService().ifPresent(service -> {
+                    for (Currency currency : this.plugin.getCurrencyManager().getRegisteredCurrencies()) {
+                        service.pushUserUpdate(user, currency);
+                    }
+                }));
     }
 }

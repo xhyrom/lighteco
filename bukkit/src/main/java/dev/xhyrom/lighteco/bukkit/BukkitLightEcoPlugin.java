@@ -8,6 +8,7 @@ import dev.xhyrom.lighteco.bukkit.listeners.BukkitConnectionListener;
 import dev.xhyrom.lighteco.bukkit.manager.BukkitCommandManager;
 import dev.xhyrom.lighteco.bukkit.manager.BukkitContextManager;
 import dev.xhyrom.lighteco.common.manager.currency.StandardCurrencyManager;
+import dev.xhyrom.lighteco.common.messaging.MessagingFactory;
 import dev.xhyrom.lighteco.common.plugin.AbstractLightEcoPlugin;
 import dev.xhyrom.lighteco.common.manager.user.StandardUserManager;
 import lombok.Getter;
@@ -43,6 +44,11 @@ public class BukkitLightEcoPlugin extends AbstractLightEcoPlugin {
         this.currencyManager = new StandardCurrencyManager(this);
         this.commandManager = new BukkitCommandManager(this);
         this.contextManager = new BukkitContextManager();
+    }
+
+    @Override
+    protected MessagingFactory getMessagingFactory() {
+        return new MessagingFactory(this);
     }
 
     @Override

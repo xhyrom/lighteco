@@ -5,10 +5,11 @@ import com.google.common.io.MoreFiles;
 import dev.xhyrom.lighteco.common.config.Config;
 import dev.xhyrom.lighteco.common.dependencies.relocation.Relocation;
 import dev.xhyrom.lighteco.common.dependencies.relocation.RelocationHandler;
+import dev.xhyrom.lighteco.common.messaging.MessagingType;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
-import dev.xhyrom.lighteco.common.util.URLClassLoaderAccess;
 import dev.xhyrom.lighteco.common.storage.StorageType;
+import dev.xhyrom.lighteco.common.util.URLClassLoaderAccess;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.io.IOException;
@@ -17,8 +18,6 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
 
 public class DependencyManagerImpl implements DependencyManager {
     private final EnumMap<Dependency, Path> loaded = new EnumMap<>(Dependency.class);
@@ -49,42 +48,29 @@ public class DependencyManagerImpl implements DependencyManager {
 
     @Override
     public void loadDependencies(Set<Dependency> dependencies) {
-        CountDownLatch latch = new CountDownLatch(dependencies.size());
-
         if (this.config.debug)
             this.logger.info("Loading dependencies: " + dependencies);
 
         for (Dependency dependency : dependencies) {
             if (this.loaded.containsKey(dependency)) {
-                latch.countDown();
                 continue;
             }
 
-            CompletableFuture.runAsync(() -> {
-                if (this.config.debug)
-                    this.logger.info("Loading dependency " + dependency);
-
-                try {
-                    loadDependency(dependency);
-                } catch (Exception e) {
-                    throw new RuntimeException("Failed to load dependency " + dependency, e);
-                } finally {
-                    latch.countDown();
-
-                    if (this.config.debug)
-                        this.logger.info("Loaded dependency " + dependency);
-                }
-            });
-        }
-
-        try {
-            latch.await();
-
             if (this.config.debug)
-                this.logger.info("Loaded dependencies: " + dependencies);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+                this.logger.info("Loading dependency " + dependency);
+
+            try {
+                loadDependency(dependency);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to load dependency " + dependency, e);
+            } finally {
+                if (this.config.debug)
+                    this.logger.info("Loaded dependency " + dependency);
+            }
         }
+
+        if (this.config.debug)
+            this.logger.info("Loaded dependencies: " + dependencies);
     }
 
     private void loadDependency(Dependency dependency) throws Exception {
@@ -140,6 +126,11 @@ public class DependencyManagerImpl implements DependencyManager {
     @Override
     public void loadStorageDependencies(Set<StorageType> types) {
         loadDependencies(this.registry.resolveStorageDependencies(types));
+    }
+
+    @Override
+    public void loadMessagingDependencies(Set<MessagingType> types) {
+        loadDependencies(this.registry.resolveMessagingDependencies(types));
     }
 
     @Override

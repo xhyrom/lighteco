@@ -2,6 +2,7 @@ package dev.xhyrom.lighteco.common.config;
 
 import dev.xhyrom.lighteco.common.config.housekeeper.HousekeeperConfig;
 import dev.xhyrom.lighteco.common.config.message.MessageConfig;
+import dev.xhyrom.lighteco.common.config.messaging.MessagingConfig;
 import dev.xhyrom.lighteco.common.config.storage.StorageConfig;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
@@ -19,6 +20,9 @@ public class Config extends OkaeriConfig {
 
     @Comment("Storage settings.")
     public StorageConfig storage = new StorageConfig();
+
+    @Comment("Messaging settings.")
+    public MessagingConfig messaging = new MessagingConfig();
 
     @Comment("Save interval to storage in seconds.")
     public long saveInterval = 5L;
