@@ -8,8 +8,8 @@ import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import java.util.UUID;
 
 public class OfflineUserArgument extends Argument<User> {
-    public OfflineUserArgument(LightEcoPlugin plugin, String name) {
-        super(plugin, name);
+    public OfflineUserArgument(String name) {
+        super(name);
     }
 
     @Override
@@ -23,12 +23,12 @@ public class OfflineUserArgument extends Argument<User> {
     }
 
     @Override
-    public User parse(String input) {
-        UUID uniqueId = this.plugin.getBootstrap().lookupUniqueId(input).orElse(null);
+    public User parse(LightEcoPlugin plugin, String input) {
+        UUID uniqueId = plugin.getBootstrap().lookupUniqueId(input).orElse(null);
         if (uniqueId == null) {
             return null;
         }
 
-        return this.plugin.getUserManager().loadUser(uniqueId).join();
+        return plugin.getUserManager().loadUser(uniqueId).join();
     }
 }

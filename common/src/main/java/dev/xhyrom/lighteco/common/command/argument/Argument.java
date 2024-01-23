@@ -6,15 +6,13 @@ import lombok.Getter;
 public abstract class Argument<T> {
     @Getter
     private final String name;
-    protected final LightEcoPlugin plugin;
 
-    protected Argument(LightEcoPlugin plugin, String name) {
-        this.plugin = plugin;
+    protected Argument(String name) {
         this.name = name;
     }
 
     public abstract Class<T> getPrimitiveType();
     public abstract ArgumentType getArgumentType();
 
-    public abstract T parse(String input);
+    public abstract T parse(LightEcoPlugin plugin, String input);
 }
