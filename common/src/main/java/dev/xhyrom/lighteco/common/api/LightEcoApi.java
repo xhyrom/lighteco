@@ -4,11 +4,14 @@ import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.manager.CommandManager;
 import dev.xhyrom.lighteco.api.manager.CurrencyManager;
 import dev.xhyrom.lighteco.api.manager.UserManager;
+import dev.xhyrom.lighteco.api.messaging.MessagingService;
 import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.api.platform.PlayerAdapter;
 import dev.xhyrom.lighteco.common.api.impl.*;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.Optional;
 
 public class LightEcoApi implements LightEco {
     private final LightEcoPlugin plugin;
@@ -47,6 +50,11 @@ public class LightEcoApi implements LightEco {
     @Override
     public @NonNull CommandManager getCommandManager() {
         return this.commandManager;
+    }
+
+    @Override
+    public @NonNull Optional<MessagingService> getMessagingService() {
+        return this.plugin.getMessagingService().map(ApiMessagingService::new);
     }
 
     @Override

@@ -57,21 +57,17 @@ public class BukkitCommandManager extends AbstractCommandManager {
     private void registerCommands(@NonNull String name, @NonNull Currency currency) {
         String permissionBase = "lighteco.currency." + currency.getIdentifier() + ".command.";
 
-        // Balance
-        for (CommandAPICommand cmd : new BalanceCommand(
-                this,
-                name,
-                currency,
-                permissionBase
-        ).multipleBuild()) {
-            cmd.register();
-        }
+        BalanceCommand balanceCommand = new BalanceCommand(this, "balance", currency, permissionBase);
 
         CommandAPICommand cmd = new CommandAPICommand(name)
                 .withSubcommand(new SetCommand(this, currency, permissionBase).build())
                 .withSubcommand(new GiveCommand(this, currency, permissionBase).build())
                 .withSubcommand(new TakeCommand(this, currency, permissionBase).build())
-                .withSubcommands(new BalanceCommand(this, "balance", currency, permissionBase).multipleBuild());
+                .withSubcommands(balanceCommand.multipleBuild())
+                // We want balance to be the default command
+                .executesPlayer((sender, args) -> {
+                    balanceCommand.handleBalance(sender, args, currency);
+                });
 
         if (currency.isPayable())
             cmd = cmd.withSubcommand(new PayCommand(this, currency, permissionBase).build());

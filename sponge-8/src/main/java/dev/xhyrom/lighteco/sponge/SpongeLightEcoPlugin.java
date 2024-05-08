@@ -6,6 +6,7 @@ import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.common.manager.command.CommandManager;
 import dev.xhyrom.lighteco.common.manager.currency.StandardCurrencyManager;
 import dev.xhyrom.lighteco.common.manager.user.StandardUserManager;
+import dev.xhyrom.lighteco.common.messaging.MessagingFactory;
 import dev.xhyrom.lighteco.common.plugin.AbstractLightEcoPlugin;
 import lombok.Getter;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -39,6 +40,11 @@ public class SpongeLightEcoPlugin extends AbstractLightEcoPlugin {
         this.currencyManager = new StandardCurrencyManager(this);
         //this.commandManager = new BukkitCommandManager(this);
         //this.contextManager = new BukkitContextManager();
+    }
+
+    @Override
+    protected MessagingFactory getMessagingFactory() {
+        return new MessagingFactory(this);
     }
 
     @Override

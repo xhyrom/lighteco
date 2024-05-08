@@ -10,13 +10,13 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class ApiUserManager extends ApiAbstractManager<dev.xhyrom.lighteco.common.manager.user.UserManager> implements UserManager {
-    public ApiUserManager(LightEcoPlugin plugin, dev.xhyrom.lighteco.common.manager.user.UserManager handler) {
-        super(plugin, handler);
+    public ApiUserManager(LightEcoPlugin plugin, dev.xhyrom.lighteco.common.manager.user.UserManager handle) {
+        super(plugin, handle);
     }
 
-    private User wrap(dev.xhyrom.lighteco.common.model.user.User handler) {
-        this.plugin.getUserManager().getHousekeeper().registerUsage(handler.getUniqueId());
-        return handler.getProxy();
+    private User wrap(dev.xhyrom.lighteco.common.model.user.User handle) {
+        this.plugin.getUserManager().getHousekeeper().registerUsage(handle.getUniqueId());
+        return handle.getProxy();
     }
 
     @Override
@@ -42,11 +42,11 @@ public class ApiUserManager extends ApiAbstractManager<dev.xhyrom.lighteco.commo
 
     @Override
     public @Nullable User getUser(@NonNull UUID uniqueId) {
-        return wrap(this.handler.getIfLoaded(uniqueId));
+        return wrap(this.handle.getIfLoaded(uniqueId));
     }
 
     @Override
     public boolean isLoaded(@NonNull UUID uniqueId) {
-        return this.handler.isLoaded(uniqueId);
+        return this.handle.isLoaded(uniqueId);
     }
 }

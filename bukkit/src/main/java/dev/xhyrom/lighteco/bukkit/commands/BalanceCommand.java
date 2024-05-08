@@ -34,7 +34,7 @@ public class BalanceCommand implements Command {
         };
     }
 
-    private void handleBalance(CommandSender originalSender, CommandArguments args, Currency currency) {
+    public void handleBalance(CommandSender originalSender, CommandArguments args, Currency currency) {
         BukkitCommandSender sender = new BukkitCommandSender(originalSender, this.manager.audienceFactory);
         OfflinePlayer target = (OfflinePlayer) args.get("target");
 

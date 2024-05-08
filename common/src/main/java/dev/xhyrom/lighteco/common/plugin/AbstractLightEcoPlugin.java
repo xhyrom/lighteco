@@ -6,13 +6,17 @@ import dev.xhyrom.lighteco.common.api.LightEcoApi;
 import dev.xhyrom.lighteco.common.config.Config;
 import dev.xhyrom.lighteco.common.dependencies.DependencyManager;
 import dev.xhyrom.lighteco.common.dependencies.DependencyManagerImpl;
+import dev.xhyrom.lighteco.common.messaging.MessagingFactory;
+import dev.xhyrom.lighteco.common.messaging.InternalMessagingService;
 import dev.xhyrom.lighteco.common.storage.Storage;
 import dev.xhyrom.lighteco.common.storage.StorageFactory;
 import dev.xhyrom.lighteco.common.task.UserSaveTask;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import lombok.Getter;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Getter
@@ -23,6 +27,7 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
 
     @Getter
     private Storage storage;
+    private InternalMessagingService messagingService;
     private LightEcoApi api;
 
     private UserSaveTask userSaveTask;
@@ -41,10 +46,18 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
 
     public final void enable() {
         // setup storage
-        StorageFactory factory = new StorageFactory(this);
-        this.dependencyManager.loadStorageDependencies(factory.getRequiredTypes());
+        StorageFactory storageFactory = new StorageFactory(this);
+        this.dependencyManager.loadStorageDependencies(
+                storageFactory.getRequiredTypes()
+        );
 
-        this.storage = factory.get();
+        MessagingFactory messagingFactory = this.getMessagingFactory();
+        this.dependencyManager.loadMessagingDependencies(
+                messagingFactory.getRequiredTypes()
+        );
+
+        this.storage = storageFactory.get();
+        this.messagingService = messagingFactory.get();
 
         // register listeners
         this.registerListeners();
@@ -74,6 +87,9 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
         // shutdown storage
         this.storage.shutdown();
 
+        if (this.messagingService != null)
+            this.messagingService.shutdown();
+
         // close isolated class loaders
         this.dependencyManager.close();
     }
@@ -81,8 +97,14 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
     protected abstract void registerListeners();
 
     protected abstract void setupManagers();
+    protected abstract MessagingFactory getMessagingFactory();
     protected abstract void registerApiOnPlatform(LightEco api);
 
     protected abstract void registerPlatformHooks();
     protected abstract void removePlatformHooks();
+
+    @Override
+    public @NonNull Optional<InternalMessagingService> getMessagingService() {
+        return Optional.ofNullable(this.messagingService);
+    }
 }
