@@ -5,8 +5,8 @@ import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class ApiCommandManager extends ApiAbstractManager<dev.xhyrom.lighteco.common.manager.command.CommandManager> implements CommandManager {
-    public ApiCommandManager(LightEcoPlugin plugin, dev.xhyrom.lighteco.common.manager.command.CommandManager handle) {
+public class ApiCommandManager extends ApiAbstractManager<dev.xhyrom.lighteco.common.command.CommandManager> implements CommandManager {
+    public ApiCommandManager(LightEcoPlugin plugin, dev.xhyrom.lighteco.common.command.CommandManager handle) {
         super(plugin, handle);
     }
 
@@ -15,7 +15,7 @@ public class ApiCommandManager extends ApiAbstractManager<dev.xhyrom.lighteco.co
         dev.xhyrom.lighteco.common.model.currency.Currency internal = this.plugin.getCurrencyManager()
                 .getIfLoaded(currency.getIdentifier());
 
-        this.handle.registerCurrencyCommand(internal);
+        this.handle.register(internal);
     }
 
     @Override
@@ -23,6 +23,6 @@ public class ApiCommandManager extends ApiAbstractManager<dev.xhyrom.lighteco.co
         dev.xhyrom.lighteco.common.model.currency.Currency internal = this.plugin.getCurrencyManager()
                 .getIfLoaded(currency.getIdentifier());
 
-        this.handle.registerCurrencyCommand(internal, main);
+        this.handle.register(internal, main);
     }
 }

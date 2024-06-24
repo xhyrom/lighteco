@@ -1,7 +1,9 @@
 package dev.xhyrom.lighteco.common.commands;
 
+import dev.xhyrom.lighteco.common.command.abstraction.Command;
 import dev.xhyrom.lighteco.common.command.argument.Arguments;
 import dev.xhyrom.lighteco.common.command.argument.type.OfflineUserArgument;
+import dev.xhyrom.lighteco.common.config.message.CurrencyMessageConfig;
 import dev.xhyrom.lighteco.common.model.chat.CommandSender;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.model.user.User;
@@ -12,12 +14,17 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
-public class BalanceOtherCommand extends BalanceCommand {
+public class BalanceOtherCommand extends Command {
     private final Currency currency;
 
+    public static BalanceOtherCommand create(@NonNull Currency currency) {
+        return new BalanceOtherCommand(currency.getIdentifier() + ".balance.others", currency);
+    }
+
     public BalanceOtherCommand(@Nullable String permission, @NonNull Currency currency) {
-        super(permission + ".balance.others", currency, new OfflineUserArgument("target"));
+        super("balance", permission, new OfflineUserArgument("target"));
 
         this.currency = currency;
     }
@@ -29,7 +36,7 @@ public class BalanceOtherCommand extends BalanceCommand {
 
         sender.sendMessage(
                 MiniMessage.miniMessage().deserialize(
-                        getConfig(plugin, currency).balanceOthers,
+                        getCurrencyMessageConfig(plugin, currency).balanceOthers,
                         Placeholder.parsed("currency", currency.getIdentifier()),
                         Placeholder.parsed("target", target.getUsername()),
                         Placeholder.parsed("balance", balance.toPlainString())

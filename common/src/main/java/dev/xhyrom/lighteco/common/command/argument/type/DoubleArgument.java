@@ -1,12 +1,10 @@
 package dev.xhyrom.lighteco.common.command.argument.type;
 
-import dev.xhyrom.lighteco.common.command.argument.Argument;
 import dev.xhyrom.lighteco.common.command.argument.ArgumentType;
-import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 
-public class DoubleArgument extends Argument<Double> {
-    protected DoubleArgument(String name) {
-        super(name);
+public class DoubleArgument extends NumberArgument<Double> {
+    protected DoubleArgument(String name, Double min, Double max) {
+        super(name, min, max);
     }
 
     @Override
@@ -20,7 +18,7 @@ public class DoubleArgument extends Argument<Double> {
     }
 
     @Override
-    public Double parse(LightEcoPlugin plugin, String input) {
+    public Double parse(String input) {
         return Double.parseDouble(input);
     }
 }

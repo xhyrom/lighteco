@@ -3,7 +3,7 @@ package dev.xhyrom.lighteco.sponge;
 import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.manager.ContextManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
-import dev.xhyrom.lighteco.common.manager.command.CommandManager;
+import dev.xhyrom.lighteco.common.command.CommandManager;
 import dev.xhyrom.lighteco.common.manager.currency.StandardCurrencyManager;
 import dev.xhyrom.lighteco.common.manager.user.StandardUserManager;
 import dev.xhyrom.lighteco.common.messaging.MessagingFactory;

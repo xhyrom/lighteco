@@ -1,77 +1,52 @@
 package dev.xhyrom.lighteco.bukkit.manager;
 
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.xhyrom.lighteco.bukkit.commands.*;
-import dev.xhyrom.lighteco.common.manager.command.AbstractCommandManager;
+import dev.xhyrom.lighteco.bukkit.chat.BukkitCommandSender;
+import dev.xhyrom.lighteco.common.command.CommandManager;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
-public class BukkitCommandManager extends AbstractCommandManager {
+import java.lang.reflect.Field;
+
+public class BukkitCommandManager extends CommandManager {
     public final BukkitAudiences audienceFactory;
+    private CommandMap commandMap;
 
     public BukkitCommandManager(LightEcoPlugin plugin) {
         super(plugin);
 
         this.audienceFactory = BukkitAudiences.create((JavaPlugin) this.plugin.getBootstrap().getLoader());
-    }
 
-    @Override
-    public void registerCurrencyCommand(@NonNull Currency currency) {
-        registerCommands(currency.getIdentifier(), currency);
+        try {
+            Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 
-        for (String alias : currency.getIdentifierAliases()) {
-            registerCommands(alias, currency);
+            field.setAccessible(true);
+            this.commandMap = (CommandMap) field.get(Bukkit.getServer());
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void registerCurrencyCommand(@NonNull Currency currency, boolean main) {
-        if (!main) {
-            registerCurrencyCommand(currency);
-            return;
-        }
+    public void register(Currency currency, boolean main) {
+        super.register(currency, main);
 
-        String permissionBase = "lighteco.currency." + currency.getIdentifier() + ".command.";
-
-        // Register main command
-        registerCurrencyCommand(currency);
-
-        // Expose pay as main command
-        if (currency.isPayable())
-            new PayCommand(this, currency, permissionBase).build().register();
-
-        // Expose balance as main command
-        for (CommandAPICommand cmd : new BalanceCommand(
-                this,
-                "balance",
-                currency,
-                permissionBase
-        ).multipleBuild()) {
-            cmd.register();
-        }
+        commandMap.register(currency.getIdentifier(), new Command(currency.getIdentifier()) {
+            @Override
+            public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+                bukkitCommandManagerExecute(new BukkitCommandSender(commandSender, audienceFactory), s, strings);
+                return true;
+            }
+        });
     }
 
-    private void registerCommands(@NonNull String name, @NonNull Currency currency) {
-        String permissionBase = "lighteco.currency." + currency.getIdentifier() + ".command.";
-
-        BalanceCommand balanceCommand = new BalanceCommand(this, "balance", currency, permissionBase);
-
-        CommandAPICommand cmd = new CommandAPICommand(name)
-                .withSubcommand(new SetCommand(this, currency, permissionBase).build())
-                .withSubcommand(new GiveCommand(this, currency, permissionBase).build())
-                .withSubcommand(new TakeCommand(this, currency, permissionBase).build())
-                .withSubcommands(balanceCommand.multipleBuild())
-                // We want balance to be the default command
-                .executesPlayer((sender, args) -> {
-                    balanceCommand.handleBalance(sender, args, currency);
-                });
-
-        if (currency.isPayable())
-            cmd = cmd.withSubcommand(new PayCommand(this, currency, permissionBase).build());
-
-        cmd.register();
+    private void bukkitCommandManagerExecute(dev.xhyrom.lighteco.common.model.chat.CommandSender sender, String name, String[] args) {
+        super.execute(sender, name, args);
     }
 }
