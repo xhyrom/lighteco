@@ -36,13 +36,14 @@ public class CommandManager {
     public void execute(CommandSender sender, String name, String[] args) {
         Command command = this.commands.stream()
                 .filter(cmd -> cmd.getName().equalsIgnoreCase(name) && cmd.getArgs().size() == args.length)
-                .findFirst().orElse(null);
+                .findFirst()
+                .orElse(null);
 
         if (command == null) {
             sender.sendMessage(Component.text("Command not found.")); // TODO: change
             return;
         }
 
-        command.execute(this.plugin, sender, new Arguments(List.of(args)));
+        command.execute(this.plugin, sender, new Arguments(plugin, command, List.of(args)));
     }
 }

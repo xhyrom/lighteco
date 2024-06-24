@@ -6,8 +6,8 @@ plugins {
 }
 
 server {
-    version = "1.20.1"
-    type = "paper"
+    version = "1.20.6"
+    type = "purpur"
 }
 
 repositories {
