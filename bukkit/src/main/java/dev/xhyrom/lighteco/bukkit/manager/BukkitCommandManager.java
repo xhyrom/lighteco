@@ -1,9 +1,12 @@
 package dev.xhyrom.lighteco.bukkit.manager;
 
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import dev.xhyrom.lighteco.bukkit.brigadier.BukkitBrigadier;
 import dev.xhyrom.lighteco.bukkit.chat.BukkitCommandSender;
 import dev.xhyrom.lighteco.common.command.CommandManager;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+import me.lucko.commodore.CommodoreProvider;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -37,23 +40,29 @@ public class BukkitCommandManager extends CommandManager {
     public void register(Currency currency, boolean main) {
         super.register(currency, main);
 
-        commandMap.register(currency.getIdentifier(), new Command(currency.getIdentifier()) {
+        this.registerToBukkit(currency.getIdentifier());
+
+        if (main) {
+            this.registerToBukkit("balance");
+        }
+    }
+
+    private void registerToBukkit(String name) {
+        /*BukkitBrigadier.setCustomSuggestionProvider(
+                this.getDispatcher().getRoot().getChild(name),
+                (context, builder) -> { throw new UnsupportedOperationException(); }
+        );*/
+        System.out.println(this.getDispatcher().getRoot().getChild(name).getCommand());
+        CommodoreProvider.getCommodore((JavaPlugin) this.plugin.getBootstrap().getLoader())
+                        .register((LiteralCommandNode<?>) this.getDispatcher().getRoot().getChild(name));
+
+        commandMap.register(name, new Command(name) {
             @Override
             public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
                 bukkitCommandManagerExecute(new BukkitCommandSender(commandSender, audienceFactory), s, strings);
                 return true;
             }
         });
-
-        if (main) {
-            commandMap.register("balance", new Command("balance") {
-                @Override
-                public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
-                    bukkitCommandManagerExecute(new BukkitCommandSender(commandSender, audienceFactory), s, strings);
-                    return true;
-                }
-            });
-        }
     }
 
     private void bukkitCommandManagerExecute(dev.xhyrom.lighteco.common.model.chat.CommandSender sender, String name, String[] args) {

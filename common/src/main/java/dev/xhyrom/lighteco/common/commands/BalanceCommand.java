@@ -1,10 +1,13 @@
 package dev.xhyrom.lighteco.common.commands;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.CommandNode;
 import dev.xhyrom.lighteco.common.command.CommandSource;
 import dev.xhyrom.lighteco.common.command.abstraction.Command;
 import dev.xhyrom.lighteco.common.command.argument.type.OfflineUserArgument;
+import dev.xhyrom.lighteco.common.command.suggestion.type.OfflineUserSuggestionProvider;
 import dev.xhyrom.lighteco.common.model.chat.CommandSender;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.model.user.User;
@@ -34,12 +37,13 @@ public class BalanceCommand extends Command {
     public CommandNode<CommandSource> build() {
         return builder()
                 .then(
-                        RequiredArgumentBuilder.<CommandSource, String>argument("target", OfflineUserArgument.offlineUserArgument())
+                        RequiredArgumentBuilder.<CommandSource, String>argument("target", StringArgumentType.word())
+                                .suggests(OfflineUserSuggestionProvider.create())
                                 .executes(context -> {
                                     LightEcoPlugin plugin = context.getSource().plugin();
                                     CommandSender sender = context.getSource().sender();
 
-                                    User target = OfflineUserArgument.get(context, "target");
+                                    User target = OfflineUserArgument.getOfflineUser(context, "target");
                                     if (target == null || target.getUsername() == null) {
                                         return SINGLE_SUCCESS;
                                     }

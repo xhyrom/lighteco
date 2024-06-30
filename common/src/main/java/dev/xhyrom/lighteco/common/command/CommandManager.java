@@ -8,10 +8,12 @@ import dev.xhyrom.lighteco.common.commands.CurrencyParentCommand;
 import dev.xhyrom.lighteco.common.model.chat.CommandSender;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 
 public class CommandManager {
     protected final LightEcoPlugin plugin;
+    @Getter
     private final CommandDispatcher<CommandSource> dispatcher = new CommandDispatcher<>();
 
     public CommandManager(LightEcoPlugin plugin) {
@@ -31,7 +33,6 @@ public class CommandManager {
 
     public void execute(CommandSender sender, String name, String[] args) {
         final CommandSource source = new CommandSource(this.plugin, sender);
-        System.out.println("Parsing: " + name + " " + String.join(" ", args));
         final ParseResults<CommandSource> parseResults = dispatcher.parse(name + " " + String.join(" ", args), source);
 
         try {

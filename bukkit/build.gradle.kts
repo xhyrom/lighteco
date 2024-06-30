@@ -5,7 +5,7 @@ plugins {
 repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
 
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://oss.sonatype.org/content/repositories/central")
 }
@@ -13,10 +13,11 @@ repositories {
 dependencies {
     implementation(project(":lighteco-common"))
 
-    implementation("dev.jorel:commandapi-bukkit-shade:9.5.0")
     implementation("net.kyori:adventure-platform-bukkit:4.2.0")
+    implementation("me.lucko:commodore:2.2")
 
-    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.19.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-mojangapi:1.19.1-R0.1-SNAPSHOT")
 
     // PlaceholderAPI
     compileOnly("me.clip:placeholderapi:2.11.3")
@@ -29,7 +30,10 @@ dependencies {
 }
 
 tasks.shadowJar {
-    relocate("dev.jorel.commandapi", "dev.xhyrom.lighteco.libraries.commandapi")
+    dependencies {
+        exclude(dependency("com.mojang:brigadier"))
+    }
+    relocate("me.lucko.commodore", "dev.xhyrom.lighteco.libraries.commodore")
 
     // common
     relocate("eu.okaeri.configs", "dev.xhyrom.lighteco.libraries.okaeri.configs")
