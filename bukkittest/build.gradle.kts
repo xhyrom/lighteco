@@ -8,6 +8,15 @@ plugins {
 server {
     version = "1.20.6"
     type = "purpur"
+
+    // Minecraft 1.20.6 requires java 21
+    java {
+        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_21
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(21))
+        }
+    }
 }
 
 repositories {

@@ -34,15 +34,22 @@ public class CommandManager {
     }
 
     public void execute(CommandSender sender, String name, String[] args) {
-        Command command = this.commands.stream()
-                .filter(cmd -> cmd.getName().equalsIgnoreCase(name) && cmd.getArgs().size() == args.length)
-                .findFirst()
-                .orElse(null);
+        List<Command> possibleCommands = this.commands.stream()
+                .filter(cmd -> cmd.getName().equalsIgnoreCase(name))
+                .toList();
 
-        if (command == null) {
+        if (possibleCommands.isEmpty()) {
             sender.sendMessage(Component.text("Command not found.")); // TODO: change
             return;
         }
+
+        // get command according to args
+        Command command = possibleCommands.stream()
+                .filter(cmd -> cmd.getArgs().size() == args.length)
+                .findFirst()
+                .orElse(null);
+
+        System.out.println("[Manager] Command: " + command.getName() + " (" + command.getClass().getName() + ")" + " / " + command.getArgs());
 
         command.execute(this.plugin, sender, new Arguments(plugin, command, List.of(args)));
     }

@@ -25,14 +25,16 @@ public class ParentCommand extends Command {
     public void execute(LightEcoPlugin plugin, CommandSender sender, Arguments args) {
         String childName = args.string("child");
         Command child = Arrays.stream(getChildren())
-                .filter(cmd -> cmd.getName().equalsIgnoreCase(childName) && cmd.getArgs().size() == args.size() - 1)
-                .findFirst()
+                .filter(cmd -> cmd.getName().equalsIgnoreCase(childName) && (cmd.getArgs().size() == args.size() - 1 || cmd.getArgs().size() < args.size()))
+                .max((cmd1, cmd2) -> Integer.compare(cmd2.getArgs().size(), cmd1.getArgs().size()))
                 .orElse(null);
 
         if (child == null) {
             sender.sendMessage(Component.text("Command not found. / Parent Command"));
             return;
         }
+
+        System.out.println("Parent Command: " + getName() + " (" + getClass().getName() + ") " + " / Child Command: " + child.getName() + " (" + child.getClass().getName() + ")");
 
         child.execute(plugin, sender, args.subList(1));
     }

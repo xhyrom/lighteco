@@ -2,6 +2,10 @@ plugins {
     id("lighteco.shadow-logic")
 }
 
+repositories {
+    maven("https://libraries.minecraft.net")
+}
+
 dependencies {
     api(project(":lighteco-api"))
     api("org.checkerframework:checker-qual:3.8.0")
@@ -18,6 +22,8 @@ dependencies {
 
     implementation("eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.0-beta.5")
     implementation("eu.okaeri:okaeri-configs-validator-okaeri:5.0.0-beta.5")
+
+    implementation("com.mojang:brigadier:1.0.18")
 
     compileOnly("com.zaxxer:HikariCP:5.0.1")
     compileOnly("redis.clients:jedis:5.1.0")

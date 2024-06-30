@@ -19,8 +19,11 @@ public class Arguments {
         this.command = command;
         this.arguments = arguments;
 
-        for (int i = 0; i < arguments.size(); i++) {
+        System.out.println("Arguments: " + arguments);
+        System.out.println("Command: " + command.getName() + " (" + command.getClass().getName() + ")" + " / " + command.getArgs());
+        for (int i = 0; i < command.getArgs().size(); i++) {
             String arg = arguments.get(i);
+            System.out.println("Argument: " + arg + " / " + command.getArgs().get(i).getName());
             this.mappedArguments.put(command.getArgs().get(i).getName(), (Object) command.getArgs().get(i).parse(plugin, arg));
         }
     }
