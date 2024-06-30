@@ -44,6 +44,16 @@ public class BukkitCommandManager extends CommandManager {
                 return true;
             }
         });
+
+        if (main) {
+            commandMap.register("balance", new Command("balance") {
+                @Override
+                public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+                    bukkitCommandManagerExecute(new BukkitCommandSender(commandSender, audienceFactory), s, strings);
+                    return true;
+                }
+            });
+        }
     }
 
     private void bukkitCommandManagerExecute(dev.xhyrom.lighteco.common.model.chat.CommandSender sender, String name, String[] args) {

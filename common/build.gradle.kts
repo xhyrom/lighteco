@@ -2,10 +2,6 @@ plugins {
     id("lighteco.shadow-logic")
 }
 
-repositories {
-    maven("https://libraries.minecraft.net")
-}
-
 dependencies {
     api(project(":lighteco-api"))
     api("org.checkerframework:checker-qual:3.8.0")
