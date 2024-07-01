@@ -16,6 +16,7 @@ public class BukkitCommandSuggestionsListener implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked", "deprecation"})
     @EventHandler
     public void onPlayerSendCommandsEvent(AsyncPlayerSendCommandsEvent<?> event) {
         BukkitCommandSender sender = new BukkitCommandSender(event.getPlayer(), this.plugin.getCommandManager().audienceFactory);

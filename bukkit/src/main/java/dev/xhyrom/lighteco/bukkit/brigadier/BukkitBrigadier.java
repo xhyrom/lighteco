@@ -30,7 +30,8 @@ public class BukkitBrigadier {
         }
     }
 
-    public static void removeChild(RootCommandNode root, String name) {
+    @SuppressWarnings("unchecked")
+    public static void removeChild(RootCommandNode<?> root, String name) {
         try {
             for (Field field : CHILDREN_FIELDS) {
                 Map<String, ?> children = (Map<String, ?>) field.get(root);
