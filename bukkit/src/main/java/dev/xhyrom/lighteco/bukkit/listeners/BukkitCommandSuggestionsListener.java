@@ -23,10 +23,11 @@ public class BukkitCommandSuggestionsListener implements Listener {
         CommandSource source = new CommandSource(this.plugin, sender);
         if (event.isAsynchronous() || !event.hasFiredAsync()) {
             for (CommandNode<CommandSource> command : this.plugin.getCommandManager().getDispatcher().getRoot().getChildren()) {
-                if (!command.canUse(source)) continue;
-
                 BukkitBrigadier.removeChild(event.getCommandNode(), command.getName());
-                event.getCommandNode().addChild((CommandNode) command);
+                BukkitBrigadier.removeChild(event.getCommandNode(), command.getName() + ":" + command.getName());
+
+                if (command.canUse(source))
+                    event.getCommandNode().addChild((CommandNode) command);
             }
         }
     }

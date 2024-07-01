@@ -24,16 +24,16 @@ import java.math.RoundingMode;
 
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
 
-public class PayCommand extends Command {
+public class TakeCommand extends Command {
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
     private final Currency currency;
 
-    public static PayCommand create(@NonNull Currency currency) {
-        return new PayCommand(currency);
+    public static TakeCommand create(@NonNull Currency currency) {
+        return new TakeCommand(currency);
     }
 
-    public PayCommand(@NonNull Currency currency) {
-        super("pay", "Pay a player");
+    public TakeCommand(@NonNull Currency currency) {
+        super("take", "Take money from a player");
 
         this.currency = currency;
     }
@@ -53,29 +53,8 @@ public class PayCommand extends Command {
 
         amount = amount.setScale(currency.fractionalDigits(), RoundingMode.DOWN);
 
-        final User user = plugin.getUserManager().getIfLoaded(sender.getUniqueId());
-        if (user == null) {
-            return;
-        }
-
-        if (user.getBalance(this.currency).compareTo(amount) < 0) {
-            sender.sendMessage(
-                    miniMessage.deserialize(this.getCurrencyMessageConfig(plugin, this.currency).notEnoughMoney)
-            );
-
-            return;
-        }
-
-        // calculate tax using Currency#calculateTax
-        BigDecimal tax = currency.getProxy().calculateTax(user.getProxy(), amount);
-        tax = tax.setScale(currency.getProxy().fractionalDigits(), RoundingMode.DOWN);
-
-        // subtract tax from amount
-        BigDecimal taxedAmount = amount.subtract(tax);
-
         try {
-            target.deposit(currency, taxedAmount);
-            user.withdraw(currency, amount);
+            target.withdraw(currency, amount);
         } catch (CannotBeGreaterThan e) {
             sender.sendMessage(
                     miniMessage.deserialize(
@@ -87,35 +66,12 @@ public class PayCommand extends Command {
             return;
         }
 
-        String template = tax.compareTo(BigDecimal.ZERO) > 0
-                ? this.getCurrencyMessageConfig(plugin, this.currency).payWithTax
-                : this.getCurrencyMessageConfig(plugin, this.currency).pay;
-
-        String templateReceived = tax.compareTo(BigDecimal.ZERO) > 0
-                ? this.getCurrencyMessageConfig(plugin, this.currency).payReceivedWithTax
-                : this.getCurrencyMessageConfig(plugin, this.currency).payReceived;
-
         sender.sendMessage(
                 miniMessage.deserialize(
-                        template,
+                        this.getCurrencyMessageConfig(plugin, this.currency).set,
                         Placeholder.parsed("currency", currency.getIdentifier()),
                         Placeholder.parsed("target", target.getUsername()),
-                        Placeholder.parsed("amount", amount.toPlainString()),
-                        Placeholder.parsed("taxed_amount", taxedAmount.toPlainString()),
-                        Placeholder.parsed("sender_balance", user.getBalance(currency).toPlainString()),
-                        Placeholder.parsed("receiver_balance", target.getBalance(currency).toPlainString())
-                )
-        );
-
-        target.sendMessage(
-                miniMessage.deserialize(
-                        templateReceived,
-                        Placeholder.parsed("currency", currency.getIdentifier()),
-                        Placeholder.parsed("sender", user.getUsername()),
-                        Placeholder.parsed("amount", amount.toPlainString()),
-                        Placeholder.parsed("taxed_amount", taxedAmount.toPlainString()),
-                        Placeholder.parsed("sender_balance", user.getBalance(currency).toPlainString()),
-                        Placeholder.parsed("receiver_balance", target.getBalance(currency).toPlainString())
+                        Placeholder.parsed("amount", amount.toPlainString())
                 )
         );
     }
@@ -124,11 +80,11 @@ public class PayCommand extends Command {
     public CommandNode<CommandSource> build() {
         if (currency.fractionalDigits() > 0) {
             return builder()
-                    .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.pay"))
+                    .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.take"))
                     .then(RequiredArgumentBuilder.<CommandSource, String>argument("target", StringArgumentType.word())
                             .suggests(OfflineUserSuggestionProvider.create())
                             .then(RequiredArgumentBuilder.<CommandSource, Double>argument("amount", DoubleArgumentType.doubleArg(1))
-                                    .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.pay"))
+                                    .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.take"))
                                     .executes(c -> {
                                         execute(c);
                                         return SINGLE_SUCCESS;
@@ -137,11 +93,11 @@ public class PayCommand extends Command {
         }
 
         return builder()
-                .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.pay"))
+                .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.take"))
                 .then(RequiredArgumentBuilder.<CommandSource, String>argument("target", StringArgumentType.word())
                         .suggests(OfflineUserSuggestionProvider.create())
                         .then(RequiredArgumentBuilder.<CommandSource, Integer>argument("amount", IntegerArgumentType.integer(1))
-                                .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.pay"))
+                                .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.take"))
                                 .executes(c -> {
                                     execute(c);
                                     return SINGLE_SUCCESS;

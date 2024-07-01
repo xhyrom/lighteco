@@ -2,6 +2,7 @@ package dev.xhyrom.lighteco.common.commands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.CommandNode;
 import dev.xhyrom.lighteco.common.command.CommandSource;
@@ -39,6 +40,7 @@ public class BalanceCommand extends Command {
                 .then(
                         RequiredArgumentBuilder.<CommandSource, String>argument("target", StringArgumentType.word())
                                 .suggests(OfflineUserSuggestionProvider.create())
+                                .requires((source) -> source.sender().eligible("lighteco.currency."+currency.getIdentifier()+".command.balance.others"))
                                 .executes(context -> {
                                     LightEcoPlugin plugin = context.getSource().plugin();
                                     CommandSender sender = context.getSource().sender();
@@ -61,6 +63,7 @@ public class BalanceCommand extends Command {
 
                                     return SINGLE_SUCCESS;
                                 }))
+                .requires((source) -> source.sender().eligible("lighteco.currency."+currency.getIdentifier()+".command.balance"))
                 .executes(context -> {
                     LightEcoPlugin plugin = context.getSource().plugin();
                     CommandSender sender = context.getSource().sender();

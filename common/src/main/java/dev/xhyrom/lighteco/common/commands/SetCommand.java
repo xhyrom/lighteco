@@ -80,9 +80,11 @@ public class SetCommand extends Command {
     public CommandNode<CommandSource> build() {
         if (currency.fractionalDigits() > 0) {
             return builder()
+                    .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.set"))
                     .then(RequiredArgumentBuilder.<CommandSource, String>argument("target", StringArgumentType.word())
                             .suggests(OfflineUserSuggestionProvider.create())
                             .then(RequiredArgumentBuilder.<CommandSource, Double>argument("amount", DoubleArgumentType.doubleArg(1))
+                                    .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.set"))
                                     .executes(c -> {
                                         execute(c);
                                         return SINGLE_SUCCESS;
@@ -91,9 +93,11 @@ public class SetCommand extends Command {
         }
 
         return builder()
+                .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.set"))
                 .then(RequiredArgumentBuilder.<CommandSource, String>argument("target", StringArgumentType.word())
                         .suggests(OfflineUserSuggestionProvider.create())
                         .then(RequiredArgumentBuilder.<CommandSource, Integer>argument("amount", IntegerArgumentType.integer(1))
+                                .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.set"))
                                 .executes(c -> {
                                     execute(c);
                                     return SINGLE_SUCCESS;

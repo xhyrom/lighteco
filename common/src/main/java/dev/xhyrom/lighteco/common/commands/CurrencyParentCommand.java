@@ -24,6 +24,8 @@ public class CurrencyParentCommand extends Command {
                 .then(BalanceCommand.create(currency).build())
                 .then(PayCommand.create(currency).build())
                 .then(SetCommand.create(currency).build())
+                .then(GiveCommand.create(currency).build())
+                .then(TakeCommand.create(currency).build())
                 .build();
     }
 }
