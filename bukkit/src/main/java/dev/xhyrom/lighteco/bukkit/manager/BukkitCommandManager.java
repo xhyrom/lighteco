@@ -1,12 +1,12 @@
 package dev.xhyrom.lighteco.bukkit.manager;
 
-import com.mojang.brigadier.tree.LiteralCommandNode;
-import dev.xhyrom.lighteco.bukkit.brigadier.BukkitBrigadier;
+import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.tree.CommandNode;
 import dev.xhyrom.lighteco.bukkit.chat.BukkitCommandSender;
 import dev.xhyrom.lighteco.common.command.CommandManager;
+import dev.xhyrom.lighteco.common.command.CommandSource;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
-import me.lucko.commodore.CommodoreProvider;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -16,6 +16,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BukkitCommandManager extends CommandManager {
     public final BukkitAudiences audienceFactory;
@@ -48,21 +50,29 @@ public class BukkitCommandManager extends CommandManager {
     }
 
     private void registerToBukkit(String name) {
-        /*BukkitBrigadier.setCustomSuggestionProvider(
-                this.getDispatcher().getRoot().getChild(name),
-                (context, builder) -> { throw new UnsupportedOperationException(); }
-        );*/
-        System.out.println(this.getDispatcher().getRoot().getChild(name).getCommand());
-        CommodoreProvider.getCommodore((JavaPlugin) this.plugin.getBootstrap().getLoader())
-                        .register((LiteralCommandNode<?>) this.getDispatcher().getRoot().getChild(name));
+        Command command = new Command(name) {
+            private final CommandNode<CommandSource> node = getDispatcher().getRoot().getChild(name);
 
-        commandMap.register(name, new Command(name) {
             @Override
             public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
                 bukkitCommandManagerExecute(new BukkitCommandSender(commandSender, audienceFactory), s, strings);
                 return true;
             }
-        });
+
+            @Override
+            public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+                final List<String> suggestions = new ArrayList<>();
+
+                final ParseResults<CommandSource> parseResults = getDispatcher().parse(name + " " + String.join(" ", args), new CommandSource(plugin, new BukkitCommandSender(sender, audienceFactory)));
+                getDispatcher().getCompletionSuggestions(
+                        parseResults
+                ).join().getList().forEach(suggestion -> suggestions.add(suggestion.getText()));
+
+                return suggestions;
+            }
+        };
+
+        commandMap.register(name, command);
     }
 
     private void bukkitCommandManagerExecute(dev.xhyrom.lighteco.common.model.chat.CommandSender sender, String name, String[] args) {

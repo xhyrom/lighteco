@@ -6,6 +6,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.xhyrom.lighteco.common.command.CommandSource;
 import dev.xhyrom.lighteco.common.model.user.User;
+import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -17,20 +18,16 @@ public class OfflineUserSuggestionProvider implements SuggestionProvider<Command
 
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSource> context, SuggestionsBuilder builder) {
-        //LightEcoPlugin plugin = context.getSource().plugin();
-
-        System.out.println("Trying to suggest things");
+        LightEcoPlugin plugin = context.getSource().plugin();
 
         String remaining = builder.getRemaining();
 
-        /*for (UUID uniqueId : plugin.getBootstrap().getOnlinePlayers()) {
+        for (UUID uniqueId : plugin.getBootstrap().getOnlinePlayers()) {
             User user = plugin.getUserManager().getIfLoaded(uniqueId);
             if (user == null) continue;
 
             builder.suggest(user.getUsername());
-        }*/
-
-        builder.suggest("hovno");
+        }
 
         return builder.buildFuture();
     }

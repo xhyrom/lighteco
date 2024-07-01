@@ -14,7 +14,6 @@ dependencies {
     implementation(project(":lighteco-common"))
 
     implementation("net.kyori:adventure-platform-bukkit:4.2.0")
-    implementation("me.lucko:commodore:2.2")
 
     compileOnly("io.papermc.paper:paper-api:1.19.1-R0.1-SNAPSHOT")
     compileOnly("io.papermc.paper:paper-mojangapi:1.19.1-R0.1-SNAPSHOT")
@@ -33,7 +32,6 @@ tasks.shadowJar {
     dependencies {
         exclude(dependency("com.mojang:brigadier"))
     }
-    relocate("me.lucko.commodore", "dev.xhyrom.lighteco.libraries.commodore")
 
     // common
     relocate("eu.okaeri.configs", "dev.xhyrom.lighteco.libraries.okaeri.configs")

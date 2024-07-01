@@ -37,7 +37,7 @@ public class BukkitLightEcoPlugin extends AbstractLightEcoPlugin {
     @Override
     protected void registerListeners() {
         this.bootstrap.getLoader().getServer().getPluginManager().registerEvents(new BukkitConnectionListener(this), this.bootstrap.getLoader());
-        //this.bootstrap.getLoader().getServer().getPluginManager().registerEvents(new BukkitCommandSuggestionsListener(this), this.bootstrap.getLoader());
+        this.bootstrap.getLoader().getServer().getPluginManager().registerEvents(new BukkitCommandSuggestionsListener(this), this.bootstrap.getLoader());
     }
 
     @Override
