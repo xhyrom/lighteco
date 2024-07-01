@@ -5,6 +5,7 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.xhyrom.lighteco.common.commands.BalanceCommand;
 import dev.xhyrom.lighteco.common.commands.CurrencyParentCommand;
+import dev.xhyrom.lighteco.common.commands.PayCommand;
 import dev.xhyrom.lighteco.common.model.chat.CommandSender;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
@@ -28,6 +29,7 @@ public class CommandManager {
         dispatcher.getRoot().addChild(new CurrencyParentCommand(currency).build());
         if (main) {
             dispatcher.getRoot().addChild(BalanceCommand.create(currency).build());
+            dispatcher.getRoot().addChild(PayCommand.create(currency).build());
         }
     }
 

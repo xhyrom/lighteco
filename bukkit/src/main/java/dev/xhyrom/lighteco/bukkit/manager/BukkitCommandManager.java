@@ -46,6 +46,7 @@ public class BukkitCommandManager extends CommandManager {
 
         if (main) {
             this.registerToBukkit("balance");
+            this.registerToBukkit("pay");
         }
     }
 

@@ -22,6 +22,8 @@ public class CurrencyParentCommand extends Command {
     public CommandNode<CommandSource> build() {
         return builder()
                 .then(BalanceCommand.create(currency).build())
+                .then(PayCommand.create(currency).build())
+                .then(SetCommand.create(currency).build())
                 .build();
     }
 }
