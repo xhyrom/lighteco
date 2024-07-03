@@ -1,0 +1,88 @@
+# LightEco configuration file.
+
+# This property must be unique for each server.
+# If you have multiple servers, you must set this property to a different value for each server.
+# Used for local currencies.
+server: none
+# Storage settings.
+storage:
+  # Storage provider.
+  # Available providers: h2, sqlite, mysql, mariadb, postgresql
+  provider: H2
+  # Data storage settings.
+  # You don't need to worry about this if you're using local database.
+  data:
+    # Define the address and port of the database.
+    address: localhost
+    # The name of the database to use.
+    database: lighteco
+    # Credentials for connecting to the database.
+    username: root
+    password: password
+    # Maximum number of connections in the pool.
+    maximumPoolSize: 10
+    # Minimum idle connections in the pool.
+    minimumIdle: 5
+    # Maximum lifetime of a connection in the pool.
+    maxLifetime: 1800000
+    # Keep alive interval in milliseconds.
+    keepAliveTime: 0
+    # Connection timeout in milliseconds.
+    connectionTimeout: 5000
+  # Table prefix.
+  tablePrefix: lighteco
+# Messaging settings.
+messaging:
+  # Messaging provider.
+  # Available providers: redis
+  provider: NONE
+  # Data storage settings.
+  # You don't need to worry about this if you're using plugin message.
+  data:
+    # Define the address and port of the messaging service.
+    address: localhost
+    # Credentials for connecting to the messaging service.
+    username: root
+    password: password
+    # Whether to use SSL to connect to the messaging service.
+    ssl: false
+# Save interval to storage in seconds.
+saveInterval: 5
+# Maximum allowed balance.
+# If you want to change this value, you must also change the data type in the database.
+maximumBalance: '1.0E+15'
+# Messages
+messages:
+  currency:
+    default:
+      balance: '<currency> <dark_gray>| <gray>Your balance: <yellow><balance> </yellow></gray>'
+      balanceOthers: <currency> <dark_gray>| <gray>Balance of <yellow><target> <dark_gray>|
+        <gray><yellow><balance> </yellow></gray>
+      set: <currency> <dark_gray>| <gray>Set balance of <gold><target> <yellow>to
+        <gold><amount>
+      give: <currency> <dark_gray>| <gray>Gave <gold><target> <gold><amount> <dark_gray>|
+        <gold><balance>
+      take: <currency> <dark_gray>| <gray>Took <gold><amount> <yellow>from <gold><target>
+      pay: <currency> <dark_gray>| <gray>Paid <gold><amount> <yellow>to <gold><target>
+      payWithTax: <currency> <dark_gray>| <gray>Paid <gold><amount> <yellow>to <gold><target>
+        <dark_gray>(<gold><taxed_amount> <yellow>after tax<dark_gray>)
+      payReceived: <currency> <dark_gray>| <gray>Received <gold><amount> <yellow>from
+        <gold><sender>
+      payReceivedWithTax: <currency> <dark_gray>| <gray>Received <gold><amount> <yellow>from
+        <gold><sender> <dark_gray>(<gold><taxed_amount> <yellow>after tax<dark_gray>)
+      wait: <red>Please wait a moment before using this command again.
+      notEnoughMoney: <red>You don't have enough money!
+      cannotPaySelf: <red>You cannot pay yourself!
+      cannotBeGreaterThan: <red>Amount cannot be greater than <gold><max>
+# Housekeeper
+# Task that runs periodically to clean up the cache.
+housekeeper:
+  # How long should the cache be kept after the last write
+  expireAfterWrite: 300
+  expireAfterWriteUnit: SECONDS
+  # How often should housekeeper run
+  runInterval: 60
+  runIntervalUnit: SECONDS
+# Debug mode
+# Prints additional information to the console.
+debug: false

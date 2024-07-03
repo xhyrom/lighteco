@@ -1,0 +1,10 @@
+name: ${name}
+description: ${description}
+version: ${version}
+main: dev.xhyrom.lighteco.bukkittest.TestPlugin
+author: ${author}
+api-version: 1.20
+
+softdepend:
+  - Vault
+  - LightEco
