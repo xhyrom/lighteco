@@ -2,6 +2,7 @@ package dev.xhyrom.lighteco.bukkit.listeners;
 
 import com.destroystokyo.paper.event.brigadier.AsyncPlayerSendCommandsEvent;
 import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.xhyrom.lighteco.bukkit.BukkitLightEcoPlugin;
 import dev.xhyrom.lighteco.bukkit.brigadier.BukkitBrigadier;
 import dev.xhyrom.lighteco.bukkit.chat.BukkitCommandSender;
@@ -26,8 +27,16 @@ public class BukkitCommandSuggestionsListener implements Listener {
                 BukkitBrigadier.removeChild(event.getCommandNode(), command.getName());
                 BukkitBrigadier.removeChild(event.getCommandNode(), command.getName() + ":" + command.getName());
 
-                if (command.canUse(source))
-                    event.getCommandNode().addChild((CommandNode) command);
+                if (!command.canUse(source)) continue;
+
+                CommandNode<CommandSource> clone = new LiteralCommandNode(command.getName(), command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
+
+                for (CommandNode<CommandSource> child : command.getChildren()) {
+                    if (child.canUse(source))
+                        clone.addChild(child);
+                }
+
+                event.getCommandNode().addChild((CommandNode) clone);
             }
         }
     }
