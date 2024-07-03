@@ -5,11 +5,11 @@ import com.mojang.brigadier.tree.CommandNode;
 import dev.xhyrom.lighteco.bukkit.chat.BukkitCommandSender;
 import dev.xhyrom.lighteco.common.command.CommandManager;
 import dev.xhyrom.lighteco.common.command.CommandSource;
+import dev.xhyrom.lighteco.common.command.abstraction.Command;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,20 +39,24 @@ public class BukkitCommandManager extends CommandManager {
     }
 
     @Override
-    public void register(Currency currency, boolean main) {
-        super.register(currency, main);
+    public Command[] register(Currency currency, boolean main) {
+        Command[] commands = super.register(currency, main);
 
-        this.registerToBukkit(currency.getIdentifier());
-
-        if (main) {
-            this.registerToBukkit("balance");
-            this.registerToBukkit("pay");
+        for (Command command : commands) {
+            this.registerToBukkit(command);
         }
+
+        return commands;
     }
 
-    private void registerToBukkit(String name) {
-        Command command = new Command(name) {
-            private final CommandNode<CommandSource> node = getDispatcher().getRoot().getChild(name);
+    private void registerToBukkit(Command command) {
+        org.bukkit.command.Command bukkitCommand = new org.bukkit.command.Command(
+                command.getName(),
+                command.getDescription(),
+                "/" + command.getName(),
+                command.getAliases()
+        ) {
+            private final CommandNode<CommandSource> node = getDispatcher().getRoot().getChild(getName());
 
             @Override
             public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
@@ -66,7 +70,7 @@ public class BukkitCommandManager extends CommandManager {
                 final CommandSource source = new CommandSource(plugin, new BukkitCommandSender(sender, audienceFactory));
 
                 final ParseResults<CommandSource> parseResults = getDispatcher().parse(
-                        name + (args.length > 0 ? " " + String.join(" ", args) : ""),
+                        getName() + (args.length > 0 ? " " + String.join(" ", args) : ""),
                         source
                 );
 
@@ -78,7 +82,7 @@ public class BukkitCommandManager extends CommandManager {
             }
         };
 
-        commandMap.register(name, command);
+        commandMap.register(command.getName(), bukkitCommand);
     }
 
     private void bukkitCommandManagerExecute(dev.xhyrom.lighteco.common.model.chat.CommandSender sender, String name, String[] args) {

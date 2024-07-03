@@ -3,6 +3,7 @@ package dev.xhyrom.lighteco.common.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.xhyrom.lighteco.common.command.abstraction.Command;
 import dev.xhyrom.lighteco.common.commands.BalanceCommand;
 import dev.xhyrom.lighteco.common.commands.CurrencyParentCommand;
 import dev.xhyrom.lighteco.common.commands.PayCommand;
@@ -14,6 +15,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommandManager {
     protected final LightEcoPlugin plugin;
@@ -28,12 +32,20 @@ public class CommandManager {
         register(currency, false);
     }
 
-    public void register(Currency currency, boolean main) {
-        dispatcher.getRoot().addChild(new CurrencyParentCommand(currency).build());
+    public Command[] register(Currency currency, boolean main) {
+        List<Command> commands = new ArrayList<>();
+        commands.add(new CurrencyParentCommand(currency));
+
+        dispatcher.getRoot().addChild(commands.get(0).build());
         if (main) {
-            dispatcher.getRoot().addChild(BalanceCommand.create(currency).build());
-            dispatcher.getRoot().addChild(PayCommand.create(currency).build());
+            commands.add(BalanceCommand.create(currency));
+            commands.add(PayCommand.create(currency));
+
+            dispatcher.getRoot().addChild(commands.get(1).build());
+            dispatcher.getRoot().addChild(commands.get(2).build());
         }
+
+        return commands.toArray(new Command[0]);
     }
 
     public void execute(CommandSender sender, String name, String[] args) {
