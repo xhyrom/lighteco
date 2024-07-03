@@ -4,6 +4,7 @@ import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.manager.ContextManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.bukkit.hooks.Hooks;
+import dev.xhyrom.lighteco.bukkit.listeners.BukkitCommandSuggestionsListener;
 import dev.xhyrom.lighteco.bukkit.listeners.BukkitConnectionListener;
 import dev.xhyrom.lighteco.bukkit.manager.BukkitCommandManager;
 import dev.xhyrom.lighteco.bukkit.manager.BukkitContextManager;
@@ -36,6 +37,7 @@ public class BukkitLightEcoPlugin extends AbstractLightEcoPlugin {
     @Override
     protected void registerListeners() {
         this.bootstrap.getLoader().getServer().getPluginManager().registerEvents(new BukkitConnectionListener(this), this.bootstrap.getLoader());
+        this.bootstrap.getLoader().getServer().getPluginManager().registerEvents(new BukkitCommandSuggestionsListener(this), this.bootstrap.getLoader());
     }
 
     @Override

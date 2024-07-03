@@ -33,6 +33,11 @@ public class BukkitCommandSender extends AbstractCommandSender<CommandSender> {
     }
 
     @Override
+    public boolean eligible(String permission) {
+        return this.delegate.hasPermission(permission);
+    }
+
+    @Override
     public void sendMessage(Component message) {
         this.audience.sendMessage(message);
     }

@@ -1,7 +1,5 @@
 package dev.xhyrom.lighteco.bukkit;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.xhyrom.lighteco.bukkit.logger.BukkitLogger;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LightEcoBootstrap;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LoaderBootstrap;
@@ -42,14 +40,10 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     @Override
     public void onLoad() {
         this.plugin.load();
-        CommandAPI.onLoad(new CommandAPIBukkitConfig(this.loader)
-                .verboseOutput(this.getPlugin().getConfig().debug)
-        );
     }
 
     @Override
     public void onEnable() {
-        CommandAPI.onEnable();
         this.plugin.enable();
 
         this.audience = BukkitAudiences.create(loader);
@@ -57,7 +51,6 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     @Override
     public void onDisable() {
-        CommandAPI.onDisable();
         this.plugin.disable();
     }
 
@@ -68,7 +61,7 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     @Override
     public Optional<UUID> lookupUniqueId(String username) {
-        return Optional.ofNullable(this.loader.getServer().getOfflinePlayer(username)).map(OfflinePlayer::getUniqueId);
+        return Optional.of(this.loader.getServer().getOfflinePlayer(username)).map(OfflinePlayer::getUniqueId);
     }
 
     @Override

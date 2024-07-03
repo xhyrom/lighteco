@@ -8,5 +8,6 @@ public interface CommandSender {
     String getUsername();
     UUID getUniqueId();
 
+    boolean eligible(String permission);
     void sendMessage(Component message);
 }
