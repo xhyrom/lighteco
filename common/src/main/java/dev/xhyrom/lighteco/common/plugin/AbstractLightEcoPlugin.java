@@ -65,6 +65,9 @@ public abstract class AbstractLightEcoPlugin implements LightEcoPlugin {
         // setup managers
         this.setupManagers();
 
+        // register built-in commands
+        this.getCommandManager().register();
+
         // register platform hooks
         this.registerPlatformHooks();
 

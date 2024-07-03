@@ -62,6 +62,11 @@ public class SpongeLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     }
 
     @Override
+    public String getVersion() {
+        return null;
+    }
+
+    @Override
     public Optional<UUID> lookupUniqueId(String username) {
         return Optional.empty();
     }

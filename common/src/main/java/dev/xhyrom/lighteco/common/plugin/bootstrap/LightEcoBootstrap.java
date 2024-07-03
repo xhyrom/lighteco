@@ -15,6 +15,7 @@ public interface LightEcoBootstrap {
     PluginLogger getLogger();
     SchedulerAdapter getScheduler();
     Path getDataDirectory();
+    String getVersion();
 
     Optional<UUID> lookupUniqueId(String username);
     boolean isPlayerOnline(UUID uniqueId);

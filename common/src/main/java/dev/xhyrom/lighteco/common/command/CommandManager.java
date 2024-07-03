@@ -6,6 +6,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.xhyrom.lighteco.common.command.abstraction.Command;
 import dev.xhyrom.lighteco.common.commands.BalanceCommand;
 import dev.xhyrom.lighteco.common.commands.CurrencyParentCommand;
+import dev.xhyrom.lighteco.common.commands.InfoCommand;
 import dev.xhyrom.lighteco.common.commands.PayCommand;
 import dev.xhyrom.lighteco.common.model.chat.CommandSender;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
@@ -16,9 +17,6 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CommandManager {
     protected final LightEcoPlugin plugin;
     @Getter
@@ -28,24 +26,22 @@ public class CommandManager {
         this.plugin = plugin;
     }
 
-    public void register(Currency currency) {
-        register(currency, false);
+    // Register built-in commands
+    public void register() {
+        register(new InfoCommand());
     }
 
-    public Command[] register(Currency currency, boolean main) {
-        List<Command> commands = new ArrayList<>();
-        commands.add(new CurrencyParentCommand(currency));
+    public void register(Currency currency, boolean main) {
+        register(new CurrencyParentCommand(currency));
 
-        dispatcher.getRoot().addChild(commands.get(0).build());
         if (main) {
-            commands.add(BalanceCommand.create(currency));
-            commands.add(PayCommand.create(currency));
-
-            dispatcher.getRoot().addChild(commands.get(1).build());
-            dispatcher.getRoot().addChild(commands.get(2).build());
+            register(BalanceCommand.create(currency));
+            register(PayCommand.create(currency));
         }
+    }
 
-        return commands.toArray(new Command[0]);
+    protected void register(Command command) {
+        dispatcher.getRoot().addChild(command.build());
     }
 
     public void execute(CommandSender sender, String name, String[] args) {

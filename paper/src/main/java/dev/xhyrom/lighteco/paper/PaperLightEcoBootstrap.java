@@ -61,6 +61,11 @@ public class PaperLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstra
     }
 
     @Override
+    public String getVersion() {
+        return this.loader.getDescription().getVersion();
+    }
+
+    @Override
     public Optional<UUID> lookupUniqueId(String username) {
         return Optional.of(this.loader.getServer().getOfflinePlayer(username)).map(OfflinePlayer::getUniqueId);
     }

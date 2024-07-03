@@ -24,17 +24,9 @@ public class PaperCommandManager extends CommandManager {
     }
 
     @Override
-    public Command[] register(Currency currency, boolean main) {
-        Command[] commands = super.register(currency, main);
+    protected void register(Command command) {
+        super.register(command);
 
-        for (Command command : commands) {
-            this.registerToBukkit(command);
-        }
-
-        return commands;
-    }
-
-    private void registerToBukkit(Command command) {
         CommandExecutor executor = (sender, bukkitCommand, s, args) -> {
             if (s.startsWith("lighteco:")) {
                 s = s.substring(9);

@@ -70,6 +70,6 @@ public class PaperLightEcoPlugin extends AbstractLightEcoPlugin {
 
     @Override
     public Platform.@NonNull Type getPlatformType() {
-        return Platform.Type.BUKKIT;
+        return Platform.Type.PAPER;
     }
 }
