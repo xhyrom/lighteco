@@ -18,7 +18,7 @@ public class TestCurrency2 implements Currency {
 
     @Override
     public boolean isPayable() {
-        return true;
+        return false;
     }
 
     @Override
