@@ -1,16 +1,12 @@
-package dev.xhyrom.lighteco.bukkit.brigadier;
+package dev.xhyrom.lighteco.paper.util;
 
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 
 import java.lang.reflect.Field;
-import java.util.Iterator;
 import java.util.Map;
 
-public class BukkitBrigadier {
+public class PaperBrigadier {
     private static final Field CHILDREN_FIELD;
     private static final Field LITERALS_FIELD;
     private static final Field ARGUMENTS_FIELD;

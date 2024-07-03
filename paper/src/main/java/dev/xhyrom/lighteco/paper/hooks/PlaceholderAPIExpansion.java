@@ -1,6 +1,6 @@
-package dev.xhyrom.lighteco.bukkit.hooks;
+package dev.xhyrom.lighteco.paper.hooks;
 
-import dev.xhyrom.lighteco.bukkit.BukkitLightEcoPlugin;
+import dev.xhyrom.lighteco.paper.PaperLightEcoPlugin;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.model.user.User;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 @RequiredArgsConstructor
 public class PlaceholderAPIExpansion extends PlaceholderExpansion {
-    private final BukkitLightEcoPlugin plugin;
+    private final PaperLightEcoPlugin plugin;
 
     @Override
     public @NonNull String getIdentifier() {

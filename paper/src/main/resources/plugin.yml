@@ -1,7 +1,7 @@
-name: ${name}
+name: ${coreName}
 description: ${description}
 version: ${version}
-main: dev.xhyrom.lighteco.bukkit.BukkitLightEcoLoader
+main: dev.xhyrom.lighteco.paper.PaperLightEcoLoader
 author: ${author}
 api-version: 1.16
 load: STARTUP

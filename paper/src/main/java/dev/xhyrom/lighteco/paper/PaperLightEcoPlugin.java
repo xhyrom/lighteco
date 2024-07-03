@@ -1,13 +1,13 @@
-package dev.xhyrom.lighteco.bukkit;
+package dev.xhyrom.lighteco.paper;
 
 import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.manager.ContextManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
-import dev.xhyrom.lighteco.bukkit.hooks.Hooks;
-import dev.xhyrom.lighteco.bukkit.listeners.BukkitCommandSuggestionsListener;
-import dev.xhyrom.lighteco.bukkit.listeners.BukkitConnectionListener;
-import dev.xhyrom.lighteco.bukkit.manager.BukkitCommandManager;
-import dev.xhyrom.lighteco.bukkit.manager.BukkitContextManager;
+import dev.xhyrom.lighteco.paper.hooks.Hooks;
+import dev.xhyrom.lighteco.paper.listeners.PaperCommandSuggestionsListener;
+import dev.xhyrom.lighteco.paper.listeners.PaperConnectionListener;
+import dev.xhyrom.lighteco.paper.manager.PaperCommandManager;
+import dev.xhyrom.lighteco.paper.manager.PaperContextManager;
 import dev.xhyrom.lighteco.common.manager.currency.StandardCurrencyManager;
 import dev.xhyrom.lighteco.common.messaging.MessagingFactory;
 import dev.xhyrom.lighteco.common.plugin.AbstractLightEcoPlugin;
@@ -18,34 +18,34 @@ import org.bukkit.plugin.ServicePriority;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 @Getter
-public class BukkitLightEcoPlugin extends AbstractLightEcoPlugin {
-    private final BukkitLightEcoBootstrap bootstrap;
+public class PaperLightEcoPlugin extends AbstractLightEcoPlugin {
+    private final PaperLightEcoBootstrap bootstrap;
 
     @Getter
     private StandardUserManager userManager;
     @Getter
     private StandardCurrencyManager currencyManager;
     @Getter
-    private BukkitCommandManager commandManager;
+    private PaperCommandManager commandManager;
     @Getter
     private ContextManager<Player> contextManager;
 
-    public BukkitLightEcoPlugin(BukkitLightEcoBootstrap bootstrap) {
+    public PaperLightEcoPlugin(PaperLightEcoBootstrap bootstrap) {
         this.bootstrap = bootstrap;
     }
 
     @Override
     protected void registerListeners() {
-        this.bootstrap.getLoader().getServer().getPluginManager().registerEvents(new BukkitConnectionListener(this), this.bootstrap.getLoader());
-        this.bootstrap.getLoader().getServer().getPluginManager().registerEvents(new BukkitCommandSuggestionsListener(this), this.bootstrap.getLoader());
+        this.bootstrap.getLoader().getServer().getPluginManager().registerEvents(new PaperConnectionListener(this), this.bootstrap.getLoader());
+        this.bootstrap.getLoader().getServer().getPluginManager().registerEvents(new PaperCommandSuggestionsListener(this), this.bootstrap.getLoader());
     }
 
     @Override
     public void setupManagers() {
         this.userManager = new StandardUserManager(this);
         this.currencyManager = new StandardCurrencyManager(this);
-        this.commandManager = new BukkitCommandManager(this);
-        this.contextManager = new BukkitContextManager();
+        this.commandManager = new PaperCommandManager(this);
+        this.contextManager = new PaperContextManager();
     }
 
     @Override

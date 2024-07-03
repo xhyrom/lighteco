@@ -1,6 +1,6 @@
-package dev.xhyrom.lighteco.bukkit.hooks;
+package dev.xhyrom.lighteco.paper.hooks;
 
-import dev.xhyrom.lighteco.bukkit.BukkitLightEcoPlugin;
+import dev.xhyrom.lighteco.paper.PaperLightEcoPlugin;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 
@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 public class Hooks {
     private static PlaceholderAPIExpansion placeholderAPIExpansion;
 
-    public static void register(BukkitLightEcoPlugin plugin) {
+    public static void register(PaperLightEcoPlugin plugin) {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             placeholderAPIExpansion = new PlaceholderAPIExpansion(plugin);
             placeholderAPIExpansion.register();

@@ -1,14 +1,14 @@
-package dev.xhyrom.lighteco.bukkit.logger;
+package dev.xhyrom.lighteco.paper.logger;
 
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class BukkitLogger implements PluginLogger {
+public class PaperLogger implements PluginLogger {
     private final Logger logger;
 
-    public BukkitLogger(Logger logger) {
+    public PaperLogger(Logger logger) {
         this.logger = logger;
     }
 

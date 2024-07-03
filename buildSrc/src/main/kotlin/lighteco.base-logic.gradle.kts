@@ -18,6 +18,7 @@ tasks {
         filesMatching(listOf("plugin.yml")) {
             expand(
                 "name" to project.name,
+                "coreName" to "LightEco",
                 "version" to project.version,
                 "description" to project.description,
                 "author" to "xHyroM"

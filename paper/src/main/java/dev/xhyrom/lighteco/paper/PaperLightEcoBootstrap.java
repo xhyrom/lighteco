@@ -1,6 +1,6 @@
-package dev.xhyrom.lighteco.bukkit;
+package dev.xhyrom.lighteco.paper;
 
-import dev.xhyrom.lighteco.bukkit.logger.BukkitLogger;
+import dev.xhyrom.lighteco.paper.logger.PaperLogger;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LightEcoBootstrap;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LoaderBootstrap;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
@@ -20,8 +20,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Getter
-public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstrap {
-    private final BukkitLightEcoPlugin plugin = new BukkitLightEcoPlugin(this);
+public class PaperLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstrap {
+    private final PaperLightEcoPlugin plugin = new PaperLightEcoPlugin(this);
 
     @Getter
     private final JavaPlugin loader;
@@ -29,12 +29,13 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     private final PluginLogger logger;
     @Getter
     private final SchedulerAdapter scheduler;
+    @Getter
     private BukkitAudiences audience;
 
-    public BukkitLightEcoBootstrap(JavaPlugin loader) {
+    public PaperLightEcoBootstrap(JavaPlugin loader) {
         this.loader = loader;
-        this.logger = new BukkitLogger(loader.getLogger());
-        this.scheduler = new BukkitSchedulerAdapter(this);
+        this.logger = new PaperLogger(loader.getLogger());
+        this.scheduler = new PaperSchedulerAdapter(this);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class BukkitLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     public void onEnable() {
         this.plugin.enable();
 
-        this.audience = BukkitAudiences.create(loader);
+        this.audience = BukkitAudiences.create(this.loader);
     }
 
     @Override

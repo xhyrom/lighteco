@@ -3,7 +3,7 @@ rootProject.name = "lighteco-parent"
 sequenceOf(
     "api",
     "common",
-    "bukkit",
+    "paper",
     "bukkittest",
     "sponge-8",
     "currency-money"

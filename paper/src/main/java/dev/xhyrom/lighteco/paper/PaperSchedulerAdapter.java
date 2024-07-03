@@ -1,21 +1,20 @@
-package dev.xhyrom.lighteco.bukkit;
+package dev.xhyrom.lighteco.paper;
 
 import dev.xhyrom.lighteco.common.plugin.scheduler.SchedulerAdapter;
 import dev.xhyrom.lighteco.common.plugin.scheduler.SchedulerTask;
-import lombok.Getter;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
-public class BukkitSchedulerAdapter implements SchedulerAdapter {
+public class PaperSchedulerAdapter implements SchedulerAdapter {
     private final Executor async;
 
-    private final BukkitLightEcoBootstrap bootstrap;
+    private final PaperLightEcoBootstrap bootstrap;
     private final BukkitScheduler scheduler;
 
-    public BukkitSchedulerAdapter(BukkitLightEcoBootstrap bootstrap) {
+    public PaperSchedulerAdapter(PaperLightEcoBootstrap bootstrap) {
         this.bootstrap = bootstrap;
         this.scheduler = bootstrap.getLoader().getServer().getScheduler();
 

@@ -1,6 +1,6 @@
-package dev.xhyrom.lighteco.bukkit.listeners;
+package dev.xhyrom.lighteco.paper.listeners;
 
-import dev.xhyrom.lighteco.bukkit.BukkitLightEcoPlugin;
+import dev.xhyrom.lighteco.paper.PaperLightEcoPlugin;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.model.user.User;
 import net.kyori.adventure.text.Component;
@@ -14,11 +14,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.UUID;
 
-public class BukkitConnectionListener implements Listener {
-    private final BukkitLightEcoPlugin plugin;
+public class PaperConnectionListener implements Listener {
+    private final PaperLightEcoPlugin plugin;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
 
-    public BukkitConnectionListener(BukkitLightEcoPlugin plugin) {
+    public PaperConnectionListener(PaperLightEcoPlugin plugin) {
         this.plugin = plugin;
     }
 

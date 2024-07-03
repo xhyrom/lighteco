@@ -1,21 +1,15 @@
-package dev.xhyrom.lighteco.bukkit.chat;
+package dev.xhyrom.lighteco.paper.chat;
 
 import dev.xhyrom.lighteco.common.model.chat.AbstractCommandSender;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class BukkitCommandSender extends AbstractCommandSender<CommandSender> {
-    private final Audience audience;
-
-    public BukkitCommandSender(CommandSender sender, BukkitAudiences audienceFactory) {
+public class PaperCommandSender extends AbstractCommandSender<CommandSender> {
+    public PaperCommandSender(CommandSender sender) {
         super(sender);
-
-        this.audience = audienceFactory.sender(sender);
     }
 
     @Override
@@ -39,6 +33,6 @@ public class BukkitCommandSender extends AbstractCommandSender<CommandSender> {
 
     @Override
     public void sendMessage(Component message) {
-        this.audience.sendMessage(message);
+        this.delegate.sendMessage(message);
     }
 }

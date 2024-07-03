@@ -1,14 +1,14 @@
-package dev.xhyrom.lighteco.bukkit;
+package dev.xhyrom.lighteco.paper;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
 // Used inside plugin.yml
 @SuppressWarnings("unused")
-public class BukkitLightEcoLoader extends JavaPlugin {
-    private final BukkitLightEcoBootstrap bootstrap;
+public class PaperLightEcoLoader extends JavaPlugin {
+    private final PaperLightEcoBootstrap bootstrap;
 
-    public BukkitLightEcoLoader() {
-        this.bootstrap = new BukkitLightEcoBootstrap(this);
+    public PaperLightEcoLoader() {
+        this.bootstrap = new PaperLightEcoBootstrap(this);
     }
 
     @Override
