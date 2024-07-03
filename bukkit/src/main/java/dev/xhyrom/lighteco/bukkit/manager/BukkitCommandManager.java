@@ -1,11 +1,6 @@
 package dev.xhyrom.lighteco.bukkit.manager;
 
 import com.mojang.brigadier.ParseResults;
-import com.mojang.brigadier.context.CommandContextBuilder;
-import com.mojang.brigadier.context.SuggestionContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import dev.xhyrom.lighteco.bukkit.chat.BukkitCommandSender;
 import dev.xhyrom.lighteco.common.command.CommandManager;
@@ -22,10 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
 
 public class BukkitCommandManager extends CommandManager {
     public final BukkitAudiences audienceFactory;
@@ -79,8 +71,7 @@ public class BukkitCommandManager extends CommandManager {
                 );
 
                 getDispatcher().getCompletionSuggestions(
-                        parseResults,
-                        parseResults.getReader().getTotalLength()
+                        parseResults
                 ).join().getList().forEach(suggestion -> suggestions.add(suggestion.getText()));
 
                 return suggestions;
