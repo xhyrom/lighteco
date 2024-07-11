@@ -18,9 +18,12 @@ public class OfflineUserArgument implements ArgumentType<String> {
         LightEcoPlugin plugin = context.getSource().plugin();
 
         UUID uniqueId = plugin.getBootstrap().lookupUniqueId(userName).orElse(null);
-        if (uniqueId == null) {
+        if (uniqueId == null || plugin.getCommandManager().getLocks().contains(uniqueId)) {
             return null;
         }
+
+        // Lock the user to prevent race conditions
+        plugin.getCommandManager().getLocks().add(uniqueId);
 
         return plugin.getUserManager().loadUser(uniqueId).join();
     }

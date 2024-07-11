@@ -17,7 +17,6 @@ public class CurrencyMessageConfig extends OkaeriConfig {
     public String payReceived = "<currency> <dark_gray>| <gray>Received <gold><amount> <yellow>from <gold><sender>";
     public String payReceivedWithTax = "<currency> <dark_gray>| <gray>Received <gold><amount> <yellow>from <gold><sender> <dark_gray>(<gold><taxed_amount> <yellow>after tax<dark_gray>)";
 
-    public String wait = "<red>Please wait a moment before using this command again.";
     public String notEnoughMoney = "<red>You don't have enough money!";
     public String cannotPaySelf = "<red>You cannot pay yourself!";
     public String cannotBeGreaterThan = "<red>Amount cannot be greater than <gold><max>";
