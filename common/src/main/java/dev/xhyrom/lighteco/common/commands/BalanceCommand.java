@@ -47,6 +47,7 @@ public class BalanceCommand extends Command {
 
                                     User target = OfflineUserArgument.getOfflineUser(context, "target");
                                     if (target == null || target.getUsername() == null) {
+                                        OfflineUserArgument.handleMissing(context, "target");
                                         return SINGLE_SUCCESS;
                                     }
 

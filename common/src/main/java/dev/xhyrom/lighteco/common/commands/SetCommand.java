@@ -44,6 +44,7 @@ public class SetCommand extends Command {
 
         final User target = OfflineUserArgument.getOfflineUser(context, "target");
         if (target == null || target.getUsername() == null) {
+            OfflineUserArgument.handleMissing(context, "target");
             return;
         }
 
