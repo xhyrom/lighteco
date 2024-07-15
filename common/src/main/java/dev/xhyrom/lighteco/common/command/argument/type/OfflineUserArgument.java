@@ -23,7 +23,7 @@ public class OfflineUserArgument implements ArgumentType<String> {
         }
 
         // Lock the user to prevent race conditions
-        plugin.getCommandManager().getLocks().add(uniqueId);
+        plugin.getCommandManager().lockBySender(context.getSource().sender(), uniqueId);
 
         return plugin.getUserManager().loadUser(uniqueId).join();
     }

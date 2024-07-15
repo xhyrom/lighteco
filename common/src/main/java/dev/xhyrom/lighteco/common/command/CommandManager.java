@@ -1,5 +1,6 @@
 package dev.xhyrom.lighteco.common.command;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -18,16 +19,23 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class CommandManager {
     protected final LightEcoPlugin plugin;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder()
+            .setDaemon(true)
+            .setNameFormat("lighteco-command-executor")
+            .build()
+    );
+
     @Getter
     private final CommandDispatcher<CommandSource> dispatcher = new CommandDispatcher<>();
+
     @Getter
-    private final List<UUID> locks = new CopyOnWriteArrayList<>();
+    private final Set<UUID> locks = ConcurrentHashMap.newKeySet();
+    private final Map<UUID, UUID> locksMappings = new ConcurrentHashMap<>();
 
     public CommandManager(LightEcoPlugin plugin) {
         this.plugin = plugin;
@@ -67,13 +75,30 @@ public class CommandManager {
 
         locks.add(sender.getUniqueId());
 
-        this.plugin.getBootstrap().getScheduler().async().execute(() -> {
+        CompletableFuture.runAsync(() -> {
             try {
                 dispatcher.execute(parseResults);
             } catch (CommandSyntaxException e) {
                 this.sendError(sender, name, e);
+            }  finally {
+                this.plugin.getBootstrap().getLogger().debug("Removing lock for " + sender.getUsername());
+
+                UUID target = locksMappings.get(sender.getUniqueId());
+                if (target != null) {
+                    locks.remove(target);
+                    locksMappings.remove(sender.getUniqueId());
+
+                    this.plugin.getBootstrap().getLogger().debug("Removing lock caused by " + sender.getUsername() + " for " + target);
+                }
+
+                locks.remove(sender.getUniqueId());
             }
-        });
+        }, executor);
+    }
+
+    public void lockBySender(CommandSender sender, UUID target) {
+        locks.add(target);
+        locksMappings.put(sender.getUniqueId(), target);
     }
 
     private void sendError(CommandSender sender, String name, CommandSyntaxException e) {

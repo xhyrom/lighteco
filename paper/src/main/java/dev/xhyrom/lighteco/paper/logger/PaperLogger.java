@@ -1,14 +1,17 @@
 package dev.xhyrom.lighteco.paper.logger;
 
+import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PaperLogger implements PluginLogger {
+    private final LightEcoPlugin plugin;
     private final Logger logger;
 
-    public PaperLogger(Logger logger) {
+    public PaperLogger(LightEcoPlugin plugin, Logger logger) {
+        this.plugin = plugin;
         this.logger = logger;
     }
 
@@ -20,6 +23,20 @@ public class PaperLogger implements PluginLogger {
     @Override
     public void info(String message, Object... args) {
         this.logger.info(String.format(message, args));
+    }
+
+    @Override
+    public void debug(String message) {
+        if (!this.plugin.getConfig().debug) return;
+
+        info(message);
+    }
+
+    @Override
+    public void debug(String message, Object... args) {
+        if (!this.plugin.getConfig().debug) return;
+
+        info(message, args);
     }
 
     @Override

@@ -34,7 +34,7 @@ public class PaperLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstra
 
     public PaperLightEcoBootstrap(JavaPlugin loader) {
         this.loader = loader;
-        this.logger = new PaperLogger(loader.getLogger());
+        this.logger = new PaperLogger(this.plugin, loader.getLogger());
         this.scheduler = new PaperSchedulerAdapter(this);
     }
 
