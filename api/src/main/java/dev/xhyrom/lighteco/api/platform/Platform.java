@@ -11,7 +11,7 @@ public interface Platform {
     @NonNull Type getType();
 
     enum Type {
-        BUKKIT("Bukkit"),
+        PAPER("Paper"),
         SPONGE("Sponge"),
         VELOCITY("Velocity"),
         BUNGEECORD("BungeeCord");
@@ -27,7 +27,7 @@ public interface Platform {
         }
 
         public boolean isLocal() {
-            return this == BUKKIT || this == SPONGE;
+            return this == PAPER || this == SPONGE;
         }
 
         public boolean isProxy() {

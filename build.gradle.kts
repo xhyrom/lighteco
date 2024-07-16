@@ -28,6 +28,7 @@ subprojects {
     repositories {
         mavenCentral()
         maven("https://storehouse.okaeri.eu/repository/maven-public/")
+        maven("https://libraries.minecraft.net")
     }
 }
 

@@ -12,6 +12,7 @@ import org.spongepowered.plugin.builtin.jvm.Plugin;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Plugin("lighteco-sponge")
@@ -58,6 +59,16 @@ public class SpongeLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     @Override
     public Path getDataDirectory() {
         return null;
+    }
+
+    @Override
+    public String getVersion() {
+        return null;
+    }
+
+    @Override
+    public Optional<UUID> lookupUniqueId(String username) {
+        return Optional.empty();
     }
 
     @Override

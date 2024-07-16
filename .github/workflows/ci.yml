@@ -12,8 +12,7 @@ jobs:
           distribution: 'adopt'
       - name: Build with Gradle
         run: |
-          ./gradlew shadowJar -p bukkittest
-          ./gradlew shadowJar -p bukkit
+          ./gradlew shadowJar -p paper
           ./gradlew shadowJar -p currency-money
       - uses: actions/upload-artifact@v3
         with:
