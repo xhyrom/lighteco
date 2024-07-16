@@ -123,7 +123,7 @@ public class PayCommand extends Command {
     public CommandNode<CommandSource> build() {
         if (currency.fractionalDigits() > 0) {
             return builder()
-                    .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.pay"))
+                    .requires((source) -> !source.sender().isConsole() && source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.pay"))
                     .then(RequiredArgumentBuilder.<CommandSource, String>argument("target", StringArgumentType.word())
                             .suggests(OfflineUserSuggestionProvider.create())
                             .then(RequiredArgumentBuilder.<CommandSource, Double>argument("amount", DoubleArgumentType.doubleArg(1))
@@ -136,7 +136,7 @@ public class PayCommand extends Command {
         }
 
         return builder()
-                .requires((source) -> source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.pay"))
+                .requires((source) -> !source.sender().isConsole() && source.sender().eligible("lighteco.currency." + currency.getIdentifier() + ".command.pay"))
                 .then(RequiredArgumentBuilder.<CommandSource, String>argument("target", StringArgumentType.word())
                         .suggests(OfflineUserSuggestionProvider.create())
                         .then(RequiredArgumentBuilder.<CommandSource, Integer>argument("amount", IntegerArgumentType.integer(1))

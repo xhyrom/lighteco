@@ -60,7 +60,7 @@ public class CommandManager {
     }
 
     public void execute(CommandSender sender, String name, String[] args) {
-        if (locks.contains(sender.getUniqueId())) {
+        if (!sender.isConsole() && locks.contains(sender.getUniqueId())) {
             sender.sendMessage(MiniMessage.miniMessage().deserialize(
                     this.plugin.getConfig().messages.wait
             ));
@@ -73,7 +73,8 @@ public class CommandManager {
                 source
         );
 
-        locks.add(sender.getUniqueId());
+        if (!sender.isConsole())
+            locks.add(sender.getUniqueId());
 
         CompletableFuture.runAsync(() -> {
             try {
@@ -81,17 +82,19 @@ public class CommandManager {
             } catch (CommandSyntaxException e) {
                 this.sendError(sender, name, e);
             }  finally {
-                this.plugin.getBootstrap().getLogger().debug("Removing lock for " + sender.getUsername());
+                if (!source.sender().isConsole()) {
+                    this.plugin.getBootstrap().getLogger().debug("Removing lock for " + sender.getUsername());
 
-                UUID target = locksMappings.get(sender.getUniqueId());
-                if (target != null) {
-                    locks.remove(target);
-                    locksMappings.remove(sender.getUniqueId());
+                    UUID target = locksMappings.get(sender.getUniqueId());
+                    if (target != null) {
+                        locks.remove(target);
+                        locksMappings.remove(sender.getUniqueId());
 
-                    this.plugin.getBootstrap().getLogger().debug("Removing lock caused by " + sender.getUsername() + " for " + target);
+                        this.plugin.getBootstrap().getLogger().debug("Removing lock caused by " + sender.getUsername() + " for " + target);
+                    }
+
+                    locks.remove(sender.getUniqueId());
                 }
-
-                locks.remove(sender.getUniqueId());
             }
         }, executor);
     }

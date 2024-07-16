@@ -9,8 +9,6 @@ import dev.xhyrom.lighteco.common.command.exception.LockedUserException;
 import dev.xhyrom.lighteco.common.model.chat.CommandSender;
 import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 
 import java.util.UUID;
 
@@ -32,7 +30,8 @@ public class OfflineUserArgument implements ArgumentType<String> {
         }
 
         // Lock the user to prevent race conditions
-        plugin.getCommandManager().lockBySender(context.getSource().sender(), uniqueId);
+        if (!sender.isConsole())
+            plugin.getCommandManager().lockBySender(context.getSource().sender(), uniqueId);
 
         return plugin.getUserManager().loadUser(uniqueId).join();
     }
