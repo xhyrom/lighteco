@@ -9,7 +9,6 @@ import com.mojang.brigadier.tree.CommandNode;
 import dev.xhyrom.lighteco.api.exception.CannotBeGreaterThan;
 import dev.xhyrom.lighteco.common.command.CommandSource;
 import dev.xhyrom.lighteco.common.command.abstraction.Command;
-import dev.xhyrom.lighteco.common.command.argument.type.OfflineUserArgument;
 import dev.xhyrom.lighteco.common.command.suggestion.type.OfflineUserSuggestionProvider;
 import dev.xhyrom.lighteco.common.model.chat.CommandSender;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
@@ -23,6 +22,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+import static dev.xhyrom.lighteco.common.command.CommandHelper.*;
 
 public class PayCommand extends Command {
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
@@ -42,11 +42,9 @@ public class PayCommand extends Command {
         final LightEcoPlugin plugin = context.getSource().plugin();
         final CommandSender sender = context.getSource().sender();
 
-        final User target = OfflineUserArgument.getOfflineUser(context, "target");
-        if (target == null || target.getUsername() == null) {
-            OfflineUserArgument.handleMissing(context, "target");
+        final User target = getUser(context);
+        if (target == null)
             return;
-        }
 
         BigDecimal amount = BigDecimal.valueOf(currency.fractionalDigits() > 0
                 ? context.getArgument("amount", Double.class)
@@ -61,7 +59,7 @@ public class PayCommand extends Command {
 
         if (user.getBalance(this.currency).compareTo(amount) < 0) {
             sender.sendMessage(
-                    miniMessage.deserialize(this.getCurrencyMessageConfig(plugin, this.currency).notEnoughMoney)
+                    miniMessage.deserialize(getCurrencyMessageConfig(plugin, this.currency).notEnoughMoney)
             );
 
             return;
@@ -80,7 +78,7 @@ public class PayCommand extends Command {
         } catch (CannotBeGreaterThan e) {
             sender.sendMessage(
                     miniMessage.deserialize(
-                            this.getCurrencyMessageConfig(plugin, this.currency).cannotBeGreaterThan,
+                            getCurrencyMessageConfig(plugin, this.currency).cannotBeGreaterThan,
                             Placeholder.parsed("max", plugin.getConfig().maximumBalance.toPlainString())
                     )
             );
@@ -89,12 +87,12 @@ public class PayCommand extends Command {
         }
 
         String template = tax.compareTo(BigDecimal.ZERO) > 0
-                ? this.getCurrencyMessageConfig(plugin, this.currency).payWithTax
-                : this.getCurrencyMessageConfig(plugin, this.currency).pay;
+                ? getCurrencyMessageConfig(plugin, this.currency).payWithTax
+                : getCurrencyMessageConfig(plugin, this.currency).pay;
 
         String templateReceived = tax.compareTo(BigDecimal.ZERO) > 0
-                ? this.getCurrencyMessageConfig(plugin, this.currency).payReceivedWithTax
-                : this.getCurrencyMessageConfig(plugin, this.currency).payReceived;
+                ? getCurrencyMessageConfig(plugin, this.currency).payReceivedWithTax
+                : getCurrencyMessageConfig(plugin, this.currency).payReceived;
 
         sender.sendMessage(
                 miniMessage.deserialize(

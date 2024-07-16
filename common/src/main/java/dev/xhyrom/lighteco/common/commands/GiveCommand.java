@@ -9,7 +9,6 @@ import com.mojang.brigadier.tree.CommandNode;
 import dev.xhyrom.lighteco.api.exception.CannotBeGreaterThan;
 import dev.xhyrom.lighteco.common.command.CommandSource;
 import dev.xhyrom.lighteco.common.command.abstraction.Command;
-import dev.xhyrom.lighteco.common.command.argument.type.OfflineUserArgument;
 import dev.xhyrom.lighteco.common.command.suggestion.type.OfflineUserSuggestionProvider;
 import dev.xhyrom.lighteco.common.model.chat.CommandSender;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
@@ -23,6 +22,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+import static dev.xhyrom.lighteco.common.command.CommandHelper.*;
 
 public class GiveCommand extends Command {
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
@@ -42,11 +42,9 @@ public class GiveCommand extends Command {
         final LightEcoPlugin plugin = context.getSource().plugin();
         final CommandSender sender = context.getSource().sender();
 
-        final User target = OfflineUserArgument.getOfflineUser(context, "target");
-        if (target == null || target.getUsername() == null) {
-            OfflineUserArgument.handleMissing(context, "target");
+        final User target = getUser(context);
+        if (target == null)
             return;
-        }
 
         BigDecimal amount = BigDecimal.valueOf(currency.fractionalDigits() > 0
                 ? context.getArgument("amount", Double.class)
@@ -59,7 +57,7 @@ public class GiveCommand extends Command {
         } catch (CannotBeGreaterThan e) {
             sender.sendMessage(
                     miniMessage.deserialize(
-                            this.getCurrencyMessageConfig(plugin, this.currency).cannotBeGreaterThan,
+                            getCurrencyMessageConfig(plugin, this.currency).cannotBeGreaterThan,
                             Placeholder.parsed("max", plugin.getConfig().maximumBalance.toPlainString())
                     )
             );
@@ -69,7 +67,7 @@ public class GiveCommand extends Command {
 
         sender.sendMessage(
                 miniMessage.deserialize(
-                        this.getCurrencyMessageConfig(plugin, this.currency).set,
+                        getCurrencyMessageConfig(plugin, this.currency).set,
                         Placeholder.parsed("currency", currency.getIdentifier()),
                         Placeholder.parsed("target", target.getUsername()),
                         Placeholder.parsed("amount", amount.toPlainString())

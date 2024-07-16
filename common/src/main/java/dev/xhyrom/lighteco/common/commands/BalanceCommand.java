@@ -2,12 +2,9 @@ package dev.xhyrom.lighteco.common.commands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.CommandNode;
 import dev.xhyrom.lighteco.common.command.CommandSource;
 import dev.xhyrom.lighteco.common.command.abstraction.Command;
-import dev.xhyrom.lighteco.common.command.argument.type.OfflineUserArgument;
 import dev.xhyrom.lighteco.common.command.suggestion.type.OfflineUserSuggestionProvider;
 import dev.xhyrom.lighteco.common.model.chat.CommandSender;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
@@ -20,6 +17,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.math.BigDecimal;
 
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+import static dev.xhyrom.lighteco.common.command.CommandHelper.*;
 
 public class BalanceCommand extends Command {
     private final Currency currency;
@@ -45,11 +43,9 @@ public class BalanceCommand extends Command {
                                     LightEcoPlugin plugin = context.getSource().plugin();
                                     CommandSender sender = context.getSource().sender();
 
-                                    User target = OfflineUserArgument.getOfflineUser(context, "target");
-                                    if (target == null || target.getUsername() == null) {
-                                        OfflineUserArgument.handleMissing(context, "target");
+                                    final User target = getUser(context);
+                                    if (target == null)
                                         return SINGLE_SUCCESS;
-                                    }
 
                                     BigDecimal balance = target.getBalance(currency);
 

@@ -1,7 +1,7 @@
 name: ${name}
 description: ${description}
 version: ${version}
-main: dev.xhyrom.lighteco.bukkittest.TestPlugin
+main: dev.xhyrom.lighteco.test.paper.TestPlugin
 author: ${author}
 api-version: 1.20
 

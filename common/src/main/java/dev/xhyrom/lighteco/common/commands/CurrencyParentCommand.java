@@ -15,6 +15,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.math.BigDecimal;
 
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+import static dev.xhyrom.lighteco.common.command.CommandHelper.getCurrencyMessageConfig;
 
 public class CurrencyParentCommand extends Command {
     private final Currency currency;
