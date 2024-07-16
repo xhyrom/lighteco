@@ -12,6 +12,7 @@ public class StorageDataConfig extends OkaeriConfig {
 
     @Comment("Credentials for connecting to the database.")
     public String username = "root";
+
     public String password = "password";
 
     @Comment("Maximum number of connections in the pool.")

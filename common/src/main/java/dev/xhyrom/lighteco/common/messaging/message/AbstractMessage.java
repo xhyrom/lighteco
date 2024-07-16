@@ -2,6 +2,7 @@ package dev.xhyrom.lighteco.common.messaging.message;
 
 import dev.xhyrom.lighteco.api.messenger.message.Message;
 import dev.xhyrom.lighteco.api.messenger.message.OutgoingMessage;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.UUID;

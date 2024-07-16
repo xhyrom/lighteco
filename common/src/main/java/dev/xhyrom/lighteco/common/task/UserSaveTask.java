@@ -30,11 +30,11 @@ public class UserSaveTask implements Runnable {
                 user.setDirty(false);
             }
 
-            this.plugin.getStorage().saveUsersSync(
-                    Arrays.stream(users)
+            this.plugin
+                    .getStorage()
+                    .saveUsersSync(Arrays.stream(users)
                             .map(User::getProxy)
-                            .toArray(dev.xhyrom.lighteco.api.model.user.User[]::new)
-            );
+                            .toArray(dev.xhyrom.lighteco.api.model.user.User[]::new));
         } catch (RuntimeException e) {
             this.plugin.getBootstrap().getLogger().error("Failed to save users", e);
         }

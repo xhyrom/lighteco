@@ -2,7 +2,9 @@ package dev.xhyrom.lighteco.common.api.impl;
 
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.api.model.user.User;
+
 import net.kyori.adventure.text.Component;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -15,7 +17,8 @@ public class ApiUser implements User {
             return ((ApiUser) u).handle;
         }
 
-        throw new IllegalArgumentException("Cannot cast " + u.getClass().getName() + " to " + ApiUser.class.getName());
+        throw new IllegalArgumentException(
+                "Cannot cast " + u.getClass().getName() + " to " + ApiUser.class.getName());
     }
 
     private final dev.xhyrom.lighteco.common.model.user.User handle;
@@ -36,36 +39,32 @@ public class ApiUser implements User {
 
     @Override
     public @NonNull BigDecimal getBalance(@NonNull Currency currency) {
-        dev.xhyrom.lighteco.common.model.currency.Currency internal = this.handle.getPlugin()
-                .getCurrencyManager()
-                .getIfLoaded(currency.getIdentifier());
+        dev.xhyrom.lighteco.common.model.currency.Currency internal =
+                this.handle.getPlugin().getCurrencyManager().getIfLoaded(currency.getIdentifier());
 
         return this.handle.getBalance(internal);
     }
 
     @Override
     public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance) {
-        dev.xhyrom.lighteco.common.model.currency.Currency internal = this.handle.getPlugin()
-                .getCurrencyManager()
-                .getIfLoaded(currency.getIdentifier());
+        dev.xhyrom.lighteco.common.model.currency.Currency internal =
+                this.handle.getPlugin().getCurrencyManager().getIfLoaded(currency.getIdentifier());
 
         this.handle.setBalance(internal, balance);
     }
 
     @Override
     public void deposit(@NonNull Currency currency, @NonNull BigDecimal amount) {
-        dev.xhyrom.lighteco.common.model.currency.Currency internal = this.handle.getPlugin()
-                .getCurrencyManager()
-                .getIfLoaded(currency.getIdentifier());
+        dev.xhyrom.lighteco.common.model.currency.Currency internal =
+                this.handle.getPlugin().getCurrencyManager().getIfLoaded(currency.getIdentifier());
 
         this.handle.deposit(internal, amount);
     }
 
     @Override
     public void withdraw(@NonNull Currency currency, @NonNull BigDecimal amount) {
-        dev.xhyrom.lighteco.common.model.currency.Currency internal = this.handle.getPlugin()
-                .getCurrencyManager()
-                .getIfLoaded(currency.getIdentifier());
+        dev.xhyrom.lighteco.common.model.currency.Currency internal =
+                this.handle.getPlugin().getCurrencyManager().getIfLoaded(currency.getIdentifier());
 
         this.handle.withdraw(internal, amount);
     }

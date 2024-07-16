@@ -7,26 +7,22 @@ public enum SqlStatements {
             "INSERT INTO '{prefix}_local_{context}_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON CONFLICT (uuid) DO UPDATE SET balance=?2;",
             "INSERT INTO '{prefix}_local_{context}_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON DUPLICATE KEY UPDATE balance=?2;",
             "INSERT INTO '{prefix}_local_{context}_{currency}_users' (uuid, balance) VALUES (?, ?) ON DUPLICATE KEY UPDATE balance=?;",
-            "INSERT INTO '{prefix}_local_{context}_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON CONFLICT (uuid) DO UPDATE SET balance=?2;"
-    ),
+            "INSERT INTO '{prefix}_local_{context}_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON CONFLICT (uuid) DO UPDATE SET balance=?2;"),
     SAVE_USER_GLOBAL_CURRENCY(
             "INSERT INTO '{prefix}_global_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON CONFLICT (uuid) DO UPDATE SET balance=?2;",
             "INSERT INTO '{prefix}_global_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON DUPLICATE KEY UPDATE balance=?2;",
             "INSERT INTO '{prefix}_global_{currency}_users' (uuid, balance) VALUES (?, ?) ON DUPLICATE KEY UPDATE balance=?;",
-            "INSERT INTO '{prefix}_global_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON CONFLICT (uuid) DO UPDATE SET balance=?2;"
-    ),
+            "INSERT INTO '{prefix}_global_{currency}_users' (uuid, balance) VALUES (?1, ?2) ON CONFLICT (uuid) DO UPDATE SET balance=?2;"),
     LOAD_LOCAL_CURRENCY_USER(
             "SELECT {identifier} AS name, balance FROM '{prefix}_local_{context}_{currency}_users' WHERE uuid = ?1",
             "SELECT {identifier} AS name, balance FROM '{prefix}_local_{context}_{currency}_users' WHERE uuid = ?1",
             "SELECT {identifier} AS name, balance FROM '{prefix}_local_{context}_{currency}_users' WHERE uuid = ?",
-            "SELECT {identifier} AS name, balance FROM '{prefix}_local_{context}_{currency}_users' WHERE uuid = ?1"
-    ),
+            "SELECT {identifier} AS name, balance FROM '{prefix}_local_{context}_{currency}_users' WHERE uuid = ?1"),
     LOAD_GLOBAL_CURRENCY_USER(
             "SELECT {identifier} AS name, balance FROM '{prefix}_global_{currency}_users' WHERE uuid = ?1",
             "SELECT {identifier} AS name, balance FROM '{prefix}_global_{currency}_users' WHERE uuid = ?1",
             "SELECT {identifier} AS name, balance FROM '{prefix}_global_{currency}_users' WHERE uuid = ?",
-            "SELECT {identifier} AS name, balance FROM '{prefix}_global_{currency}_users' WHERE uuid = ?1"
-    );
+            "SELECT {identifier} AS name, balance FROM '{prefix}_global_{currency}_users' WHERE uuid = ?1");
 
     public final String sqlite;
     public final String mysql;
@@ -54,11 +50,13 @@ public enum SqlStatements {
             case POSTGRESQL -> {
                 return this.postgresql;
             }
-            default -> throw new IllegalArgumentException("Unknown implementation: " + implementationName);
+            default -> throw new IllegalArgumentException(
+                    "Unknown implementation: " + implementationName);
         }
     }
 
     public static boolean mustDuplicateParameters(StorageType implementationName) {
-        return implementationName == StorageType.MARIADB || implementationName == StorageType.POSTGRESQL;
+        return implementationName == StorageType.MARIADB
+                || implementationName == StorageType.POSTGRESQL;
     }
 }

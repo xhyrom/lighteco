@@ -4,6 +4,7 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.xhyrom.lighteco.common.command.CommandSource;
 import dev.xhyrom.lighteco.common.command.exception.LockedUserException;
 import dev.xhyrom.lighteco.common.model.chat.CommandSender;
@@ -15,7 +16,8 @@ import java.util.UUID;
 public class OfflineUserArgument implements ArgumentType<String> {
     private OfflineUserArgument() {}
 
-    public static User getOfflineUser(CommandContext<CommandSource> context, String name) throws LockedUserException {
+    public static User getOfflineUser(CommandContext<CommandSource> context, String name)
+            throws LockedUserException {
         String userName = context.getArgument(name, String.class);
         LightEcoPlugin plugin = context.getSource().plugin();
         CommandSender sender = context.getSource().sender();
@@ -25,7 +27,8 @@ public class OfflineUserArgument implements ArgumentType<String> {
             return null;
         }
 
-        if (sender.getUniqueId() != uniqueId && plugin.getCommandManager().getLocks().contains(uniqueId)) {
+        if (sender.getUniqueId() != uniqueId
+                && plugin.getCommandManager().getLocks().contains(uniqueId)) {
             throw new LockedUserException(uniqueId);
         }
 

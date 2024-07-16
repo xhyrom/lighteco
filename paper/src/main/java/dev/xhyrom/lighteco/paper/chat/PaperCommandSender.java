@@ -1,7 +1,9 @@
 package dev.xhyrom.lighteco.paper.chat;
 
 import dev.xhyrom.lighteco.common.model.chat.AbstractCommandSender;
+
 import net.kyori.adventure.text.Component;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

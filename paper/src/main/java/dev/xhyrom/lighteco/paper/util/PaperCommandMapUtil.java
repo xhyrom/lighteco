@@ -1,6 +1,7 @@
 package dev.xhyrom.lighteco.paper.util;
 
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,7 +15,8 @@ public class PaperCommandMapUtil {
 
     static {
         try {
-            COMMAND_CONSTRUCTOR = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
+            COMMAND_CONSTRUCTOR =
+                    PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
             COMMAND_CONSTRUCTOR.setAccessible(true);
         } catch (NoSuchMethodException e) {
             throw new ExceptionInInitializerError(e);
@@ -22,6 +24,7 @@ public class PaperCommandMapUtil {
     }
 
     private final LightEcoPlugin plugin;
+
     public PaperCommandMapUtil(LightEcoPlugin plugin) {
         this.plugin = plugin;
     }
@@ -33,14 +36,16 @@ public class PaperCommandMapUtil {
 
         for (String name : aliases) {
             if (!name.toLowerCase().equals(name)) {
-                throw new IllegalArgumentException("Command aliases must be lowercase! (name: " + name + ")");
+                throw new IllegalArgumentException(
+                        "Command aliases must be lowercase! (name: " + name + ")");
             }
 
             try {
                 PluginCommand command = COMMAND_CONSTRUCTOR.newInstance(name, bukkitPlugin);
 
                 commandMap.register(bukkitPlugin.getName().toLowerCase(), command);
-                knownCommands.put(bukkitPlugin.getName().toLowerCase() + ":" + name.toLowerCase(), command);
+                knownCommands.put(
+                        bukkitPlugin.getName().toLowerCase() + ":" + name.toLowerCase(), command);
                 knownCommands.put(name, command);
 
                 command.setLabel(name);

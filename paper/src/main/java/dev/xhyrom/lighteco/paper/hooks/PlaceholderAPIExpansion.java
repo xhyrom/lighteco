@@ -1,10 +1,13 @@
 package dev.xhyrom.lighteco.paper.hooks;
 
-import dev.xhyrom.lighteco.paper.PaperLightEcoPlugin;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.model.user.User;
+import dev.xhyrom.lighteco.paper.PaperLightEcoPlugin;
+
 import lombok.RequiredArgsConstructor;
+
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+
 import org.bukkit.OfflinePlayer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -20,7 +23,12 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
 
     @Override
     public @NonNull String getAuthor() {
-        return this.plugin.getBootstrap().getLoader().getDescription().getAuthors().toString();
+        return this.plugin
+                .getBootstrap()
+                .getLoader()
+                .getDescription()
+                .getAuthors()
+                .toString();
     }
 
     @Override

@@ -26,11 +26,13 @@ public class H2ConnectionFactory extends FileConnectionFactory {
 
     @Override
     public void init(LightEcoPlugin plugin) {
-        ClassLoader classLoader = plugin.getDependencyManager().obtainClassLoaderWith(EnumSet.of(Dependency.H2_DRIVER));
+        ClassLoader classLoader = plugin.getDependencyManager()
+                .obtainClassLoaderWith(EnumSet.of(Dependency.H2_DRIVER));
 
         try {
             Class<?> connectionClass = classLoader.loadClass("org.h2.jdbc.JdbcConnection");
-            this.connectionConstructor = connectionClass.getConstructor(String.class, Properties.class, String.class, Object.class, boolean.class);
+            this.connectionConstructor = connectionClass.getConstructor(
+                    String.class, Properties.class, String.class, Object.class, boolean.class);
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
@@ -42,8 +44,9 @@ public class H2ConnectionFactory extends FileConnectionFactory {
             return (Connection) this.connectionConstructor.newInstance(
                     "jdbc:h2:" + file.toString() + ";MODE=MySQL;DATABASE_TO_LOWER=TRUE",
                     new Properties(),
-                    null, null, false
-            );
+                    null,
+                    null,
+                    false);
         } catch (Exception e) {
             if (e.getCause() instanceof SQLException) {
                 throw (SQLException) e.getCause();
@@ -55,8 +58,7 @@ public class H2ConnectionFactory extends FileConnectionFactory {
 
     @Override
     public Function<String, String> getStatementProcessor() {
-        return s -> s
-                .replace('\'', '`')
+        return s -> s.replace('\'', '`')
                 .replace("LIKE", "ILIKE")
                 .replace("value", "`value`")
                 .replace("``value``", "`value`");

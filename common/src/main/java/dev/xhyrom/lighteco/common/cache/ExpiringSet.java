@@ -10,9 +10,7 @@ public class ExpiringSet<T> {
     private final long lifetime;
 
     public ExpiringSet(long duration, TimeUnit unit) {
-        this.cache = CacheBuilder.newBuilder()
-            .expireAfterWrite(duration, unit)
-            .build();
+        this.cache = CacheBuilder.newBuilder().expireAfterWrite(duration, unit).build();
         this.lifetime = unit.toMillis(duration);
     }
 

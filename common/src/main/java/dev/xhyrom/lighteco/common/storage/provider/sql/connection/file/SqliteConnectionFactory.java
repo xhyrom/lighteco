@@ -26,11 +26,13 @@ public class SqliteConnectionFactory extends FileConnectionFactory {
 
     @Override
     public void init(LightEcoPlugin plugin) {
-        ClassLoader classLoader = plugin.getDependencyManager().obtainClassLoaderWith(EnumSet.of(Dependency.SQLITE_DRIVER));
+        ClassLoader classLoader = plugin.getDependencyManager()
+                .obtainClassLoaderWith(EnumSet.of(Dependency.SQLITE_DRIVER));
 
         try {
             Class<?> connectionClass = classLoader.loadClass("org.sqlite.jdbc4.JDBC4Connection");
-            this.connectionConstructor = connectionClass.getConstructor(String.class, String.class, Properties.class);
+            this.connectionConstructor =
+                    connectionClass.getConstructor(String.class, String.class, Properties.class);
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
@@ -40,10 +42,7 @@ public class SqliteConnectionFactory extends FileConnectionFactory {
     protected Connection createConnection(Path file) throws SQLException {
         try {
             return (Connection) this.connectionConstructor.newInstance(
-                    "jdbc:sqlite:" + file,
-                    file.toString(),
-                    new Properties()
-            );
+                    "jdbc:sqlite:" + file, file.toString(), new Properties());
         } catch (Exception e) {
             if (e.getCause() instanceof SQLException) {
                 throw (SQLException) e.getCause();

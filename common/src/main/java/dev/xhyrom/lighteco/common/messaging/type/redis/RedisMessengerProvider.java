@@ -4,6 +4,7 @@ import dev.xhyrom.lighteco.api.messenger.IncomingMessageConsumer;
 import dev.xhyrom.lighteco.api.messenger.Messenger;
 import dev.xhyrom.lighteco.api.messenger.MessengerProvider;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class RedisMessengerProvider implements MessengerProvider {

@@ -1,7 +1,9 @@
 package dev.xhyrom.lighteco.paper.hooks;
 
 import dev.xhyrom.lighteco.paper.PaperLightEcoPlugin;
+
 import lombok.experimental.UtilityClass;
+
 import org.bukkit.Bukkit;
 
 @UtilityClass

@@ -2,6 +2,7 @@ package dev.xhyrom.lighteco.api.storage;
 
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.api.model.user.User;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -23,7 +24,10 @@ public interface StorageProvider {
     void shutdown() throws Exception;
 
     default void registerCurrency(@NonNull Currency currency) throws Exception {}
+
     @NonNull User loadUser(@NonNull UUID uniqueId, @Nullable String username) throws Exception;
+
     void saveUser(@NonNull User user) throws Exception;
+
     void saveUsers(@NonNull User... users) throws Exception;
 }

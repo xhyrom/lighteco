@@ -23,7 +23,7 @@ public class TestCurrency2 implements Currency {
 
     @Override
     public int fractionalDigits() {
-       return 2;
+        return 2;
     }
 
     @Override

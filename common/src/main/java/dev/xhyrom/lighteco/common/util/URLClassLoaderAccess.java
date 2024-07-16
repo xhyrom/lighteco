@@ -7,6 +7,7 @@
 package dev.xhyrom.lighteco.common.util;
 
 import dev.xhyrom.lighteco.common.util.exception.UnableToInjectException;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.Field;
@@ -22,9 +23,10 @@ public abstract class URLClassLoaderAccess {
         } else if (Unsafe.isSupported()) {
             return new Unsafe(classLoader);
         } else {
-            throw new UnableToInjectException("LightEco is unable to inject dependencies into the plugin class loader.\n" +
-                    "To fix this, please add '--add-opens java.base/java.lang=ALL-UNNAMED' to your JVM arguments." +
-                    "If it still doesn't work, please report this on https://github.com/xHyroM/lighteco/issues");
+            throw new UnableToInjectException(
+                    "LightEco is unable to inject dependencies into the plugin class loader.\n"
+                            + "To fix this, please add '--add-opens java.base/java.lang=ALL-UNNAMED' to your JVM arguments."
+                            + "If it still doesn't work, please report this on https://github.com/xHyroM/lighteco/issues");
         }
     }
 
@@ -109,7 +111,9 @@ public abstract class URLClassLoaderAccess {
             this.pathURLs = pathURLs;
         }
 
-        private static Object fetchField(final Class<?> clazz, final Object object, final String name) throws NoSuchFieldException {
+        private static Object fetchField(
+                final Class<?> clazz, final Object object, final String name)
+                throws NoSuchFieldException {
             Field field = clazz.getDeclaredField(name);
             long offset = UNSAFE.objectFieldOffset(field);
             return UNSAFE.getObject(object, offset);
@@ -121,7 +125,7 @@ public abstract class URLClassLoaderAccess {
                 throw new NullPointerException("unopenedURLs or pathURLs");
             }
 
-            synchronized (this.unopenedURLs)  {
+            synchronized (this.unopenedURLs) {
                 this.unopenedURLs.add(url);
                 this.pathURLs.add(url);
             }

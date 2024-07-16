@@ -14,9 +14,8 @@ public class ApiMessagingService implements MessagingService {
 
     @Override
     public void pushUserUpdate(User user, Currency currency) {
-        dev.xhyrom.lighteco.common.model.currency.Currency internalCurrency = this.handle.getPlugin()
-                .getCurrencyManager()
-                .getIfLoaded(currency.getIdentifier());
+        dev.xhyrom.lighteco.common.model.currency.Currency internalCurrency =
+                this.handle.getPlugin().getCurrencyManager().getIfLoaded(currency.getIdentifier());
 
         this.handle.pushUserUpdate(ApiUser.cast(user), internalCurrency);
     }

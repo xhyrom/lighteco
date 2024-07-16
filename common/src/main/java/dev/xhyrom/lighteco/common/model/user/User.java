@@ -7,9 +7,12 @@ import dev.xhyrom.lighteco.common.cache.RedisBackedMap;
 import dev.xhyrom.lighteco.common.messaging.InternalMessagingService;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+
 import lombok.Getter;
 import lombok.Setter;
+
 import net.kyori.adventure.text.Component;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.math.BigDecimal;
@@ -31,6 +34,7 @@ public class User {
     @Getter
     @Setter
     private boolean dirty = false;
+
     @Getter
     @Setter
     private String username;
@@ -51,54 +55,63 @@ public class User {
         return balances.getOrDefault(currency, currency.getDefaultBalance());
     }
 
-    public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance) throws CannotBeNegative, CannotBeGreaterThan {
+    public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance)
+            throws CannotBeNegative, CannotBeGreaterThan {
         this.setBalance(currency, balance, false, true);
     }
 
-    public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance, boolean force) throws CannotBeNegative, CannotBeGreaterThan {
+    public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance, boolean force)
+            throws CannotBeNegative, CannotBeGreaterThan {
         this.setBalance(currency, balance, force, true);
     }
 
-    public void setBalance(@NonNull Currency currency, @NonNull BigDecimal balance, boolean force, boolean publish) throws CannotBeNegative, CannotBeGreaterThan {
+    public void setBalance(
+            @NonNull Currency currency, @NonNull BigDecimal balance, boolean force, boolean publish)
+            throws CannotBeNegative, CannotBeGreaterThan {
         if (balance.compareTo(BigDecimal.ZERO) < 0) {
             throw new CannotBeNegative("Balance cannot be negative");
         }
 
         if (balance.compareTo(this.plugin.getConfig().maximumBalance) > 0) {
-            throw new CannotBeGreaterThan("Balance cannot be greater than " + this.plugin.getConfig().maximumBalance);
+            throw new CannotBeGreaterThan(
+                    "Balance cannot be greater than " + this.plugin.getConfig().maximumBalance);
         }
 
         balance = balance.setScale(currency.fractionalDigits(), RoundingMode.DOWN);
         balances.put(currency, balance);
 
-        if (!force)
-            this.setDirty(true);
+        if (!force) this.setDirty(true);
 
         if (publish) {
             @NonNull Optional<InternalMessagingService> messagingService = this.plugin.getMessagingService();
-            messagingService.ifPresent(internalMessagingService -> internalMessagingService.pushUserUpdate(this, currency));
+            messagingService.ifPresent(internalMessagingService ->
+                    internalMessagingService.pushUserUpdate(this, currency));
         }
     }
 
-    public void deposit(@NonNull Currency currency, @NonNull BigDecimal amount) throws CannotBeNegative, CannotBeGreaterThan {
+    public void deposit(@NonNull Currency currency, @NonNull BigDecimal amount)
+            throws CannotBeNegative, CannotBeGreaterThan {
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Amount cannot be negative");
         }
 
         if (amount.compareTo(this.plugin.getConfig().maximumBalance) > 0) {
-            throw new CannotBeGreaterThan("Amount cannot be greater than " + this.plugin.getConfig().maximumBalance);
+            throw new CannotBeGreaterThan(
+                    "Amount cannot be greater than " + this.plugin.getConfig().maximumBalance);
         }
 
         this.setBalance(currency, this.getBalance(currency).add(amount));
     }
 
-    public void withdraw(@NonNull Currency currency, @NonNull BigDecimal amount) throws CannotBeNegative, CannotBeGreaterThan {
+    public void withdraw(@NonNull Currency currency, @NonNull BigDecimal amount)
+            throws CannotBeNegative, CannotBeGreaterThan {
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Amount cannot be negative");
         }
 
         if (amount.compareTo(this.plugin.getConfig().maximumBalance) > 0) {
-            throw new CannotBeGreaterThan("Amount cannot be greater than " + this.plugin.getConfig().maximumBalance);
+            throw new CannotBeGreaterThan(
+                    "Amount cannot be greater than " + this.plugin.getConfig().maximumBalance);
         }
 
         if (this.getBalance(currency).compareTo(amount) < 0) {

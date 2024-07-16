@@ -3,6 +3,7 @@ package dev.xhyrom.lighteco.test.paper;
 import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.LightEcoProvider;
 import dev.xhyrom.lighteco.api.manager.CurrencyManager;
+
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,7 +20,9 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
         getLogger().info("TestCurrency registered!");
 
-        currencyManager.getRegisteredCurrencies().forEach(currency -> getLogger().info("Currency: " + currency.getIdentifier() + " (" + currency.getType() + ", " + currency.fractionalDigits() + ", " + currency.isPayable() + ")"));
+        currencyManager.getRegisteredCurrencies().forEach(currency -> getLogger()
+                .info("Currency: " + currency.getIdentifier() + " (" + currency.getType() + ", "
+                        + currency.fractionalDigits() + ", " + currency.isPayable() + ")"));
 
         provider.getCommandManager().registerCurrencyCommand(currencyManager.getCurrency("test"));
         provider.getCommandManager().registerCurrencyCommand(currencyManager.getCurrency("test2"));

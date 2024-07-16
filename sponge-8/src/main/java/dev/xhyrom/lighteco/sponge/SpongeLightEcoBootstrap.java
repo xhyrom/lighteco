@@ -1,11 +1,14 @@
 package dev.xhyrom.lighteco.sponge;
 
 import com.google.inject.Inject;
+
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LightEcoBootstrap;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LoaderBootstrap;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 import dev.xhyrom.lighteco.common.plugin.scheduler.SchedulerAdapter;
+
 import net.kyori.adventure.audience.Audience;
+
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
 

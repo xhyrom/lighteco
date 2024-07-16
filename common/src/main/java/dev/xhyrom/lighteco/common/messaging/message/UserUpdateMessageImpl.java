@@ -3,9 +3,12 @@ package dev.xhyrom.lighteco.common.messaging.message;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+
 import dev.xhyrom.lighteco.api.messenger.message.type.UserUpdateMessage;
 import dev.xhyrom.lighteco.common.messaging.LightEcoMessagingService;
+
 import lombok.Getter;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.math.BigDecimal;
@@ -16,8 +19,10 @@ public class UserUpdateMessageImpl extends AbstractMessage implements UserUpdate
 
     @Getter
     private final UUID userUniqueId;
+
     @Getter
     private final String currencyIdentifier;
+
     @Getter
     private final BigDecimal newBalance;
 
@@ -30,7 +35,8 @@ public class UserUpdateMessageImpl extends AbstractMessage implements UserUpdate
         return new UserUpdateMessageImpl(id, userUniqueId, currencyIdentifier, newBalance);
     }
 
-    public UserUpdateMessageImpl(UUID id, UUID userUniqueId, String currencyIdentifier, BigDecimal newBalance) {
+    public UserUpdateMessageImpl(
+            UUID id, UUID userUniqueId, String currencyIdentifier, BigDecimal newBalance) {
         super(id);
         this.userUniqueId = userUniqueId;
         this.currencyIdentifier = currencyIdentifier;

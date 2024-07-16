@@ -5,9 +5,9 @@ import eu.okaeri.configs.annotation.Comment;
 
 public class Config extends OkaeriConfig {
     @Comment("Currency name")
-
     @Comment("In singular form")
     public String currencyNameSingular = "Dollar";
+
     @Comment("In plural form")
     public String currencyNamePlural = "Dollars";
 

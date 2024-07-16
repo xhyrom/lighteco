@@ -75,7 +75,8 @@ public class Storage {
         }
 
         return future(() -> this.provider.loadUser(uniqueId, username))
-                .thenApply(apiUser -> this.plugin.getUserManager().getIfLoaded(apiUser.getUniqueId()));
+                .thenApply(
+                        apiUser -> this.plugin.getUserManager().getIfLoaded(apiUser.getUniqueId()));
     }
 
     public CompletableFuture<Void> saveUser(dev.xhyrom.lighteco.api.model.user.User user) {

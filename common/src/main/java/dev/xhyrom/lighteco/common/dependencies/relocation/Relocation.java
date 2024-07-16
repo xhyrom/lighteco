@@ -17,5 +17,4 @@ public class Relocation {
         this.pattern = pattern;
         this.relocatedPattern = relocatedPattern;
     }
-
 }

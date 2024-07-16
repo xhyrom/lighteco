@@ -1,14 +1,17 @@
 package dev.xhyrom.lighteco.paper;
 
-import dev.xhyrom.lighteco.paper.logger.PaperLogger;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LightEcoBootstrap;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LoaderBootstrap;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 import dev.xhyrom.lighteco.common.plugin.scheduler.SchedulerAdapter;
+import dev.xhyrom.lighteco.paper.logger.PaperLogger;
+
 import lombok.Getter;
-import org.bukkit.OfflinePlayer;
+
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,10 +28,13 @@ public class PaperLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstra
 
     @Getter
     private final JavaPlugin loader;
+
     @Getter
     private final PluginLogger logger;
+
     @Getter
     private final SchedulerAdapter scheduler;
+
     @Getter
     private BukkitAudiences audience;
 
@@ -67,7 +73,8 @@ public class PaperLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstra
 
     @Override
     public Optional<UUID> lookupUniqueId(String username) {
-        return Optional.of(this.loader.getServer().getOfflinePlayer(username)).map(OfflinePlayer::getUniqueId);
+        return Optional.of(this.loader.getServer().getOfflinePlayer(username))
+                .map(OfflinePlayer::getUniqueId);
     }
 
     @Override

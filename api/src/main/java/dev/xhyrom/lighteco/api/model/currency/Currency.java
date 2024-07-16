@@ -24,7 +24,8 @@ public interface Currency {
      */
     default String[] getIdentifierAliases() {
         return new String[0];
-    };
+    }
+    ;
 
     /**
      * Returns the type of the currency, either {@link Type#LOCAL} or {@link Type#GLOBAL}
@@ -79,7 +80,8 @@ public interface Currency {
      */
     default BigDecimal calculateTax(User user, BigDecimal amount) {
         return BigDecimal.ZERO;
-    };
+    }
+    ;
 
     /**
      * Represents the type of currency

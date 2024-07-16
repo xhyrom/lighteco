@@ -10,6 +10,7 @@ public interface ConnectionFactory {
     StorageType getImplementationName();
 
     void init(LightEcoPlugin plugin);
+
     void shutdown() throws Exception;
 
     Function<String, String> getStatementProcessor();

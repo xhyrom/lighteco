@@ -1,6 +1,7 @@
 package dev.xhyrom.lighteco.api.messenger.message.type;
 
 import dev.xhyrom.lighteco.api.messenger.message.Message;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.math.BigDecimal;

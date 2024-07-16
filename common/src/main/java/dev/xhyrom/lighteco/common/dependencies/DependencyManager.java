@@ -9,6 +9,7 @@ public interface DependencyManager extends AutoCloseable {
     void loadDependencies(Set<Dependency> dependencies);
 
     void loadStorageDependencies(Set<StorageType> types);
+
     void loadMessagingDependencies(Set<MessagingType> types);
 
     ClassLoader obtainClassLoaderWith(Set<Dependency> dependencies);

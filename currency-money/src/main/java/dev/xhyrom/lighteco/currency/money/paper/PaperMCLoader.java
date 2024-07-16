@@ -5,15 +5,18 @@ import dev.xhyrom.lighteco.api.LightEcoProvider;
 import dev.xhyrom.lighteco.api.manager.CommandManager;
 import dev.xhyrom.lighteco.api.manager.CurrencyManager;
 import dev.xhyrom.lighteco.api.model.currency.Currency;
-import dev.xhyrom.lighteco.currency.money.paper.hooks.vault.VaultFactory;
 import dev.xhyrom.lighteco.currency.money.common.AbstractPlugin;
 import dev.xhyrom.lighteco.currency.money.common.Plugin;
 import dev.xhyrom.lighteco.currency.money.common.currency.MoneyCurrency;
+import dev.xhyrom.lighteco.currency.money.paper.hooks.vault.VaultFactory;
+
 import lombok.Getter;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PaperMCLoader extends JavaPlugin {
     private VaultFactory vaultFactory;
+
     @Getter
     private final Plugin plugin;
 
@@ -50,4 +53,3 @@ public class PaperMCLoader extends JavaPlugin {
         this.vaultFactory.unhook();
     }
 }
-

@@ -1,6 +1,7 @@
 package dev.xhyrom.lighteco.common.config.messaging;
 
 import dev.xhyrom.lighteco.common.messaging.MessagingType;
+
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 

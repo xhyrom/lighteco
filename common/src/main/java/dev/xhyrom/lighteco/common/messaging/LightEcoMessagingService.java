@@ -3,6 +3,7 @@ package dev.xhyrom.lighteco.common.messaging;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+
 import dev.xhyrom.lighteco.api.messenger.IncomingMessageConsumer;
 import dev.xhyrom.lighteco.api.messenger.Messenger;
 import dev.xhyrom.lighteco.api.messenger.MessengerProvider;
@@ -15,7 +16,9 @@ import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.model.user.User;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.util.gson.GsonProvider;
+
 import lombok.Getter;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -25,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class LightEcoMessagingService implements InternalMessagingService, IncomingMessageConsumer {
     @Getter
     private final LightEcoPlugin plugin;
+
     private final ExpiringSet<UUID> receivedMessages;
 
     private final Messenger messenger;
@@ -47,12 +51,18 @@ public class LightEcoMessagingService implements InternalMessagingService, Incom
 
     @Override
     public void pushUserUpdate(User user, Currency currency) {
-        this.plugin.getBootstrap().getScheduler().async().execute(() ->
-                this.messenger.sendOutgoingMessage(
-                        new UserUpdateMessageImpl(generateMessageId(), user.getUniqueId(), currency.getIdentifier(), user.getBalance(currency)),
-                        currency.getType() == dev.xhyrom.lighteco.api.model.currency.Currency.Type.GLOBAL
-                )
-        );
+        this.plugin
+                .getBootstrap()
+                .getScheduler()
+                .async()
+                .execute(() -> this.messenger.sendOutgoingMessage(
+                        new UserUpdateMessageImpl(
+                                generateMessageId(),
+                                user.getUniqueId(),
+                                currency.getIdentifier(),
+                                user.getBalance(currency)),
+                        currency.getType()
+                                == dev.xhyrom.lighteco.api.model.currency.Currency.Type.GLOBAL));
     }
 
     public static @NonNull String serialize(MessageType type, UUID id, JsonElement content) {
@@ -79,7 +89,10 @@ public class LightEcoMessagingService implements InternalMessagingService, Incom
         try {
             deserializeAndConsumeRawIncomingMessage(message);
         } catch (Exception e) {
-            this.plugin.getBootstrap().getLogger().warn("Failed to deserialize incoming message: " + message, e);
+            this.plugin
+                    .getBootstrap()
+                    .getLogger()
+                    .warn("Failed to deserialize incoming message: " + message, e);
         }
     }
 
@@ -121,12 +134,16 @@ public class LightEcoMessagingService implements InternalMessagingService, Incom
     private void processIncomingMessage(Message message) {
         if (message instanceof UserUpdateMessage userUpdateMessage) {
             this.plugin.getBootstrap().getScheduler().async().execute(() -> {
-                User user = this.plugin.getUserManager().getIfLoaded(userUpdateMessage.getUserUniqueId());
+                User user = this.plugin
+                        .getUserManager()
+                        .getIfLoaded(userUpdateMessage.getUserUniqueId());
                 if (user == null) {
                     return;
                 }
 
-                Currency currency = this.plugin.getCurrencyManager().getIfLoaded(userUpdateMessage.getCurrencyIdentifier());
+                Currency currency = this.plugin
+                        .getCurrencyManager()
+                        .getIfLoaded(userUpdateMessage.getCurrencyIdentifier());
                 if (currency == null) {
                     return;
                 }
@@ -134,7 +151,8 @@ public class LightEcoMessagingService implements InternalMessagingService, Incom
                 user.setBalance(currency, userUpdateMessage.getNewBalance(), false, false);
             });
         } else {
-            throw new IllegalStateException("Unknown message type: " + message.getClass().getName());
+            throw new IllegalStateException(
+                    "Unknown message type: " + message.getClass().getName());
         }
     }
 
