@@ -1,4 +1,4 @@
-package dev.xhyrom.lighteco.currency.money.bukkit.hooks.vault;
+package dev.xhyrom.lighteco.currency.money.paper.hooks.vault;
 
 import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.LightEcoProvider;

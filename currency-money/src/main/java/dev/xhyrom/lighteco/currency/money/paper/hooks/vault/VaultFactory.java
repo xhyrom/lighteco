@@ -1,16 +1,16 @@
-package dev.xhyrom.lighteco.currency.money.bukkit.hooks.vault;
+package dev.xhyrom.lighteco.currency.money.paper.hooks.vault;
 
-import dev.xhyrom.lighteco.currency.money.bukkit.BukkitMCLoader;
+import dev.xhyrom.lighteco.currency.money.paper.PaperMCLoader;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.ServicesManager;
 
 public class VaultFactory {
-    private final BukkitMCLoader loader;
+    private final PaperMCLoader loader;
     private Vault vault;
 
-    public VaultFactory(BukkitMCLoader loader) {
+    public VaultFactory(PaperMCLoader loader) {
         this.loader = loader;
     }
 
