@@ -11,5 +11,4 @@ public class IsolatedClassLoader extends URLClassLoader {
     public IsolatedClassLoader(URL[] urls) {
         super(urls, ClassLoader.getSystemClassLoader().getParent());
     }
-
 }

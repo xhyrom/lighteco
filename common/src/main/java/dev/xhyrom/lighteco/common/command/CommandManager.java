@@ -4,6 +4,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import dev.xhyrom.lighteco.common.command.abstraction.Command;
 import dev.xhyrom.lighteco.common.commands.BalanceCommand;
 import dev.xhyrom.lighteco.common.commands.CurrencyParentCommand;
@@ -12,7 +13,9 @@ import dev.xhyrom.lighteco.common.commands.PayCommand;
 import dev.xhyrom.lighteco.common.model.chat.CommandSender;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+
 import lombok.Getter;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -24,17 +27,18 @@ import java.util.concurrent.*;
 
 public class CommandManager {
     protected final LightEcoPlugin plugin;
-    private final ExecutorService executor = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder()
-            .setDaemon(true)
-            .setNameFormat("lighteco-command-executor")
-            .build()
-    );
+    private final ExecutorService executor =
+            Executors.newSingleThreadExecutor(new ThreadFactoryBuilder()
+                    .setDaemon(true)
+                    .setNameFormat("lighteco-command-executor")
+                    .build());
 
     @Getter
     private final CommandDispatcher<CommandSource> dispatcher = new CommandDispatcher<>();
 
     @Getter
     private final Set<UUID> locks = ConcurrentHashMap.newKeySet();
+
     private final Map<UUID, UUID> locksMappings = new ConcurrentHashMap<>();
 
     public CommandManager(LightEcoPlugin plugin) {
@@ -61,42 +65,47 @@ public class CommandManager {
 
     public void execute(CommandSender sender, String name, String[] args) {
         if (!sender.isConsole() && locks.contains(sender.getUniqueId())) {
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(
-                    this.plugin.getConfig().messages.wait
-            ));
+            sender.sendMessage(
+                    MiniMessage.miniMessage().deserialize(this.plugin.getConfig().messages.wait));
             return;
         }
 
         final CommandSource source = new CommandSource(this.plugin, sender);
         final ParseResults<CommandSource> parseResults = dispatcher.parse(
-                name + (args.length > 0 ? " " + String.join(" ", args) : ""),
-                source
-        );
+                name + (args.length > 0 ? " " + String.join(" ", args) : ""), source);
 
-        if (!sender.isConsole())
-            locks.add(sender.getUniqueId());
+        if (!sender.isConsole()) locks.add(sender.getUniqueId());
 
-        CompletableFuture.runAsync(() -> {
-            try {
-                dispatcher.execute(parseResults);
-            } catch (CommandSyntaxException e) {
-                this.sendError(sender, name, e);
-            }  finally {
-                if (!source.sender().isConsole()) {
-                    this.plugin.getBootstrap().getLogger().debug("Removing lock for " + sender.getUsername());
+        CompletableFuture.runAsync(
+                () -> {
+                    try {
+                        dispatcher.execute(parseResults);
+                    } catch (CommandSyntaxException e) {
+                        this.sendError(sender, name, e);
+                    } finally {
+                        if (!source.sender().isConsole()) {
+                            this.plugin
+                                    .getBootstrap()
+                                    .getLogger()
+                                    .debug("Removing lock for " + sender.getUsername());
 
-                    UUID target = locksMappings.get(sender.getUniqueId());
-                    if (target != null) {
-                        locks.remove(target);
-                        locksMappings.remove(sender.getUniqueId());
+                            UUID target = locksMappings.get(sender.getUniqueId());
+                            if (target != null) {
+                                locks.remove(target);
+                                locksMappings.remove(sender.getUniqueId());
 
-                        this.plugin.getBootstrap().getLogger().debug("Removing lock caused by " + sender.getUsername() + " for " + target);
+                                this.plugin
+                                        .getBootstrap()
+                                        .getLogger()
+                                        .debug("Removing lock caused by " + sender.getUsername()
+                                                + " for " + target);
+                            }
+
+                            locks.remove(sender.getUniqueId());
+                        }
                     }
-
-                    locks.remove(sender.getUniqueId());
-                }
-            }
-        }, executor);
+                },
+                executor);
     }
 
     public void lockBySender(CommandSender sender, UUID target) {
@@ -110,7 +119,10 @@ public class CommandManager {
         if (e.getInput() != null && e.getCursor() >= 0) {
             int j = Math.min(e.getInput().length(), e.getCursor());
 
-            Component msg = Component.empty().color(NamedTextColor.GRAY).clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + name));
+            Component msg = Component.empty()
+                    .color(NamedTextColor.GRAY)
+                    .clickEvent(
+                            ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + name));
 
             if (j > 10) {
                 msg = msg.append(Component.text("..."));
@@ -119,11 +131,15 @@ public class CommandManager {
             msg = msg.append(Component.text(e.getInput().substring(Math.max(0, j - 10), j)));
 
             if (j < e.getInput().length()) {
-                Component component = Component.text(e.getInput().substring(j)).color(NamedTextColor.RED).decorate(TextDecoration.UNDERLINED);
+                Component component = Component.text(e.getInput().substring(j))
+                        .color(NamedTextColor.RED)
+                        .decorate(TextDecoration.UNDERLINED);
                 msg = msg.append(component);
             }
 
-            msg = msg.append(Component.translatable("command.context.here").color(NamedTextColor.RED).decorate(TextDecoration.ITALIC));
+            msg = msg.append(Component.translatable("command.context.here")
+                    .color(NamedTextColor.RED)
+                    .decorate(TextDecoration.ITALIC));
             sender.sendMessage(msg);
         }
     }

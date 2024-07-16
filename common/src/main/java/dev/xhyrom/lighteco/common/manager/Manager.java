@@ -6,6 +6,7 @@ public interface Manager<I, T> {
     T apply(I identifier);
 
     Collection<I> keys();
+
     Collection<T> values();
 
     T getOrMake(I identifier);

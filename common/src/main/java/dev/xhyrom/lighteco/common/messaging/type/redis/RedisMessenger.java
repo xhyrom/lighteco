@@ -4,13 +4,17 @@ import dev.xhyrom.lighteco.api.messenger.IncomingMessageConsumer;
 import dev.xhyrom.lighteco.api.messenger.Messenger;
 import dev.xhyrom.lighteco.api.messenger.message.OutgoingMessage;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+
 import lombok.Getter;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
 import redis.clients.jedis.*;
 
 public class RedisMessenger implements Messenger {
     private static final String CHANNEL = "lighteco:{}:messages";
+
     @Getter
     private final String[] channels;
 
@@ -25,16 +29,13 @@ public class RedisMessenger implements Messenger {
         this.consumer = consumer;
 
         this.channels = new String[] {
-                CHANNEL.replace("{}:", ""),
-                CHANNEL.replace("{}", this.plugin.getConfig().server)
+            CHANNEL.replace("{}:", ""), CHANNEL.replace("{}", this.plugin.getConfig().server)
         };
     }
 
-    public void init(@Nullable String address, @Nullable String username, String password, boolean ssl) {
-        this.init(new JedisPooled(
-                parseAddress(address),
-                jedisConfig(username, password, ssl)
-        ));
+    public void init(
+            @Nullable String address, @Nullable String username, String password, boolean ssl) {
+        this.init(new JedisPooled(parseAddress(address), jedisConfig(username, password, ssl)));
     }
 
     private void init(UnifiedJedis jedis) {
@@ -46,7 +47,8 @@ public class RedisMessenger implements Messenger {
         });
     }
 
-    private static JedisClientConfig jedisConfig(@Nullable String username, @Nullable String password, boolean ssl) {
+    private static JedisClientConfig jedisConfig(
+            @Nullable String username, @Nullable String password, boolean ssl) {
         return DefaultJedisClientConfig.builder()
                 .user(username)
                 .password(password)
@@ -58,7 +60,8 @@ public class RedisMessenger implements Messenger {
     private static HostAndPort parseAddress(String address) {
         String[] addressSplit = address.split(":");
         String host = addressSplit[0];
-        int port = addressSplit.length > 1 ? Integer.parseInt(addressSplit[1]) : Protocol.DEFAULT_PORT;
+        int port =
+                addressSplit.length > 1 ? Integer.parseInt(addressSplit[1]) : Protocol.DEFAULT_PORT;
 
         return new HostAndPort(host, port);
     }

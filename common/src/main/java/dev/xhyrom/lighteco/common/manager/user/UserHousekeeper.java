@@ -13,7 +13,8 @@ public class UserHousekeeper implements Runnable {
 
     private final ExpiringSet<UUID> recentlyUsed;
 
-    public UserHousekeeper(LightEcoPlugin plugin, UserManager userManager, TimeoutSettings timeoutSettings) {
+    public UserHousekeeper(
+            LightEcoPlugin plugin, UserManager userManager, TimeoutSettings timeoutSettings) {
         this.plugin = plugin;
         this.userManager = userManager;
         this.recentlyUsed = new ExpiringSet<>(timeoutSettings.duration, timeoutSettings.unit);
@@ -41,8 +42,7 @@ public class UserHousekeeper implements Runnable {
         }
 
         // If the user is dirty (has unsaved changes), don't unload
-        if (user.isDirty())
-            return;
+        if (user.isDirty()) return;
 
         if (this.plugin.getConfig().debug) {
             this.plugin.getBootstrap().getLogger().info("Unloading data for " + uuid);

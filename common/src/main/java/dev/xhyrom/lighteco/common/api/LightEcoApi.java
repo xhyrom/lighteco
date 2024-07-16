@@ -9,6 +9,7 @@ import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.api.platform.PlayerAdapter;
 import dev.xhyrom.lighteco.common.api.impl.*;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Optional;
@@ -62,7 +63,8 @@ public class LightEcoApi implements LightEco {
         Class<?> expected = this.plugin.getContextManager().getPlayerClass();
 
         if (!expected.equals(playerClass)) {
-            throw new IllegalArgumentException("Expected player class " + expected.getName() + ", got " + playerClass.getName());
+            throw new IllegalArgumentException("Expected player class " + expected.getName()
+                    + ", got " + playerClass.getName());
         }
 
         return (PlayerAdapter<T>) this.playerAdapter;

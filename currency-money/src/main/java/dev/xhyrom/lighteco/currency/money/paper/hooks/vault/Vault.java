@@ -7,8 +7,10 @@ import dev.xhyrom.lighteco.api.exception.CannotBeNegative;
 import dev.xhyrom.lighteco.api.model.currency.Currency;
 import dev.xhyrom.lighteco.api.model.user.User;
 import dev.xhyrom.lighteco.currency.money.common.Plugin;
+
 import net.milkbowl.vault.economy.AbstractEconomy;
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.Bukkit;
 
 import java.math.BigDecimal;
@@ -93,7 +95,7 @@ public class Vault extends AbstractEconomy {
 
     @Override
     public boolean has(String playerName, double amount) {
-       return has(playerName, null, amount);
+        return has(playerName, null, amount);
     }
 
     @Override
@@ -121,16 +123,14 @@ public class Vault extends AbstractEconomy {
                     amount,
                     bigDecimalToDouble(user.getBalance(currency)),
                     EconomyResponse.ResponseType.FAILURE,
-                    e.getMessage()
-            );
+                    e.getMessage());
         }
 
         return new EconomyResponse(
                 amount,
                 bigDecimalToDouble(user.getBalance(currency)),
                 EconomyResponse.ResponseType.SUCCESS,
-                ""
-        );
+                "");
     }
 
     @Override
@@ -150,16 +150,14 @@ public class Vault extends AbstractEconomy {
                     amount,
                     bigDecimalToDouble(user.getBalance(currency)),
                     EconomyResponse.ResponseType.FAILURE,
-                    e.getMessage()
-            );
+                    e.getMessage());
         }
 
         return new EconomyResponse(
                 amount,
                 bigDecimalToDouble(user.getBalance(currency)),
                 EconomyResponse.ResponseType.SUCCESS,
-                ""
-        );
+                "");
     }
 
     @Override

@@ -1,7 +1,9 @@
 package dev.xhyrom.lighteco.api.model.user;
 
 import dev.xhyrom.lighteco.api.model.currency.Currency;
+
 import net.kyori.adventure.text.Component;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -50,7 +52,8 @@ public interface User {
      * @param amount the amount
      * @throws IllegalArgumentException if the amount is negative
      */
-    void deposit(@NonNull Currency currency, @NonNull BigDecimal amount) throws IllegalArgumentException;
+    void deposit(@NonNull Currency currency, @NonNull BigDecimal amount)
+            throws IllegalArgumentException;
 
     /**
      * Subtract the specified amount from the balance of this user for the specified currency.
@@ -59,7 +62,8 @@ public interface User {
      * @param amount the amount
      * @throws IllegalArgumentException if the amount is negative
      */
-    void withdraw(@NonNull Currency currency, @NonNull BigDecimal amount) throws IllegalArgumentException;
+    void withdraw(@NonNull Currency currency, @NonNull BigDecimal amount)
+            throws IllegalArgumentException;
 
     /**
      * Send a message to this user.

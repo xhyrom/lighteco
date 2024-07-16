@@ -9,6 +9,7 @@ public class MessagingDataConfig extends OkaeriConfig {
 
     @Comment("Credentials for connecting to the messaging service.")
     public String username = "root";
+
     public String password = "password";
 
     @Comment("Whether to use SSL to connect to the messaging service.")

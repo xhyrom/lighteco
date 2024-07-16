@@ -2,6 +2,7 @@ package dev.xhyrom.lighteco.common.manager.currency;
 
 import dev.xhyrom.lighteco.common.manager.Manager;
 import dev.xhyrom.lighteco.common.model.currency.Currency;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Collection;

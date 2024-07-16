@@ -12,7 +12,8 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class RelocationHandler {
-    public static final Set<Dependency> DEPENDENCIES = EnumSet.of(Dependency.ASM, Dependency.ASM_COMMONS, Dependency.JAR_RELOCATOR);
+    public static final Set<Dependency> DEPENDENCIES =
+            EnumSet.of(Dependency.ASM, Dependency.ASM_COMMONS, Dependency.JAR_RELOCATOR);
     private static final String JAR_RELOCATOR_CLASS = "me.lucko.jarrelocator.JarRelocator";
     private static final String JAR_RELOCATOR_RUN_METHOD = "run";
 
@@ -31,10 +32,12 @@ public class RelocationHandler {
             Class<?> jarRelocatorClass = classLoader.loadClass(JAR_RELOCATOR_CLASS);
 
             // prepare the reflected constructor & method instances
-            this.jarRelocatorConstructor = jarRelocatorClass.getDeclaredConstructor(File.class, File.class, Map.class);
+            this.jarRelocatorConstructor =
+                    jarRelocatorClass.getDeclaredConstructor(File.class, File.class, Map.class);
             this.jarRelocatorConstructor.setAccessible(true);
 
-            this.jarRelocatorRunMethod = jarRelocatorClass.getDeclaredMethod(JAR_RELOCATOR_RUN_METHOD);
+            this.jarRelocatorRunMethod =
+                    jarRelocatorClass.getDeclaredMethod(JAR_RELOCATOR_RUN_METHOD);
             this.jarRelocatorRunMethod.setAccessible(true);
         } catch (Exception e) {
             try {
@@ -56,8 +59,8 @@ public class RelocationHandler {
         }
 
         // create and invoke a new relocator
-        Object relocator = this.jarRelocatorConstructor.newInstance(input.toFile(), output.toFile(), mappings);
+        Object relocator =
+                this.jarRelocatorConstructor.newInstance(input.toFile(), output.toFile(), mappings);
         this.jarRelocatorRunMethod.invoke(relocator);
     }
-
 }

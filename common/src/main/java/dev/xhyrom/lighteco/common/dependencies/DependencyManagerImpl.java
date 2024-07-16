@@ -2,6 +2,7 @@ package dev.xhyrom.lighteco.common.dependencies;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.MoreFiles;
+
 import dev.xhyrom.lighteco.common.config.Config;
 import dev.xhyrom.lighteco.common.dependencies.relocation.Relocation;
 import dev.xhyrom.lighteco.common.dependencies.relocation.RelocationHandler;
@@ -10,6 +11,7 @@ import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 import dev.xhyrom.lighteco.common.storage.StorageType;
 import dev.xhyrom.lighteco.common.util.URLClassLoaderAccess;
+
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.io.IOException;
@@ -35,7 +37,8 @@ public class DependencyManagerImpl implements DependencyManager {
         this.logger = plugin.getBootstrap().getLogger();
         this.registry = new DependencyRegistry();
         this.cacheDirectory = setupCacheDirectory(plugin);
-        this.classLoader = URLClassLoaderAccess.create((URLClassLoader) plugin.getBootstrap().getClass().getClassLoader());
+        this.classLoader = URLClassLoaderAccess.create(
+                (URLClassLoader) plugin.getBootstrap().getClass().getClassLoader());
     }
 
     private synchronized RelocationHandler getRelocationHandler() {
@@ -48,29 +51,25 @@ public class DependencyManagerImpl implements DependencyManager {
 
     @Override
     public void loadDependencies(Set<Dependency> dependencies) {
-        if (this.config.debug)
-            this.logger.info("Loading dependencies: " + dependencies);
+        if (this.config.debug) this.logger.info("Loading dependencies: " + dependencies);
 
         for (Dependency dependency : dependencies) {
             if (this.loaded.containsKey(dependency)) {
                 continue;
             }
 
-            if (this.config.debug)
-                this.logger.info("Loading dependency " + dependency);
+            if (this.config.debug) this.logger.info("Loading dependency " + dependency);
 
             try {
                 loadDependency(dependency);
             } catch (Exception e) {
                 throw new RuntimeException("Failed to load dependency " + dependency, e);
             } finally {
-                if (this.config.debug)
-                    this.logger.info("Loaded dependency " + dependency);
+                if (this.config.debug) this.logger.info("Loaded dependency " + dependency);
             }
         }
 
-        if (this.config.debug)
-            this.logger.info("Loaded dependencies: " + dependencies);
+        if (this.config.debug) this.logger.info("Loaded dependencies: " + dependencies);
     }
 
     private void loadDependency(Dependency dependency) throws Exception {

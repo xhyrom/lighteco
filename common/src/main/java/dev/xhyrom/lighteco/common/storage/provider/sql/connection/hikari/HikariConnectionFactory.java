@@ -2,6 +2,7 @@ package dev.xhyrom.lighteco.common.storage.provider.sql.connection.hikari;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+
 import dev.xhyrom.lighteco.common.config.storage.StorageDataConfig;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.storage.provider.sql.connection.ConnectionFactory;
@@ -23,7 +24,13 @@ public abstract class HikariConnectionFactory implements ConnectionFactory {
 
     protected abstract String defaultPort();
 
-    protected abstract void configureDatabase(HikariConfig config, String address, String port, String databaseName, String username, String password);
+    protected abstract void configureDatabase(
+            HikariConfig config,
+            String address,
+            String port,
+            String databaseName,
+            String username,
+            String password);
 
     protected void overrideProperties(Map<String, Object> properties) {
         // https://github.com/brettwooldridge/HikariCP/wiki/Rapid-Recovery
@@ -39,9 +46,7 @@ public abstract class HikariConnectionFactory implements ConnectionFactory {
     /**
      * Called after the Hikari pool has been initialised
      */
-    protected void postInitialize() {
-
-    }
+    protected void postInitialize() {}
 
     @Override
     public void init(LightEcoPlugin plugin) {
@@ -56,7 +61,13 @@ public abstract class HikariConnectionFactory implements ConnectionFactory {
         String port = addressSplit.length > 1 ? addressSplit[1] : defaultPort();
 
         // allow the implementation to configure the HikariConfig appropriately with these values
-        configureDatabase(config, address, port, this.configuration.database, this.configuration.username, this.configuration.password);
+        configureDatabase(
+                config,
+                address,
+                port,
+                this.configuration.database,
+                this.configuration.username,
+                this.configuration.password);
 
         Map<String, Object> properties = new HashMap<>();
 
@@ -91,7 +102,8 @@ public abstract class HikariConnectionFactory implements ConnectionFactory {
 
         Connection connection = this.hikari.getConnection();
         if (connection == null) {
-            throw new SQLException("Unable to get a connection from the pool. (getConnection returned null)");
+            throw new SQLException(
+                    "Unable to get a connection from the pool. (getConnection returned null)");
         }
 
         return connection;

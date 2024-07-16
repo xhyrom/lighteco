@@ -4,4 +4,3 @@ package dev.xhyrom.lighteco.common.util;
 public interface ThrowableRunnable {
     void run() throws Exception;
 }
-

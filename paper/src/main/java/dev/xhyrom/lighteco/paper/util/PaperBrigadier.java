@@ -17,7 +17,7 @@ public class PaperBrigadier {
             CHILDREN_FIELD = CommandNode.class.getDeclaredField("children");
             LITERALS_FIELD = CommandNode.class.getDeclaredField("literals");
             ARGUMENTS_FIELD = CommandNode.class.getDeclaredField("arguments");
-            CHILDREN_FIELDS = new Field[]{CHILDREN_FIELD, LITERALS_FIELD, ARGUMENTS_FIELD};
+            CHILDREN_FIELDS = new Field[] {CHILDREN_FIELD, LITERALS_FIELD, ARGUMENTS_FIELD};
 
             for (Field field : CHILDREN_FIELDS) {
                 field.setAccessible(true);

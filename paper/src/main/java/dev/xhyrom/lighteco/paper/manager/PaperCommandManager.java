@@ -1,13 +1,14 @@
 package dev.xhyrom.lighteco.paper.manager;
 
 import com.mojang.brigadier.ParseResults;
-import dev.xhyrom.lighteco.paper.chat.PaperCommandSender;
+
 import dev.xhyrom.lighteco.common.command.CommandManager;
 import dev.xhyrom.lighteco.common.command.CommandSource;
 import dev.xhyrom.lighteco.common.command.abstraction.Command;
-import dev.xhyrom.lighteco.common.model.currency.Currency;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+import dev.xhyrom.lighteco.paper.chat.PaperCommandSender;
 import dev.xhyrom.lighteco.paper.util.PaperCommandMapUtil;
+
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 
@@ -37,28 +38,27 @@ public class PaperCommandManager extends CommandManager {
         };
 
         TabCompleter completer = (sender, bukkitCommand, s, args) -> {
-                final List<String> suggestions = new ArrayList<>();
-                final CommandSource source = new CommandSource(plugin, new PaperCommandSender(sender));
+            final List<String> suggestions = new ArrayList<>();
+            final CommandSource source = new CommandSource(plugin, new PaperCommandSender(sender));
 
-                final ParseResults<CommandSource> parseResults = getDispatcher().parse(
-                        command.getName() + (args.length > 0 ? " " + String.join(" ", args) : ""),
-                        source
-                );
+            final ParseResults<CommandSource> parseResults = getDispatcher()
+                    .parse(
+                            command.getName()
+                                    + (args.length > 0 ? " " + String.join(" ", args) : ""),
+                            source);
 
-                getDispatcher().getCompletionSuggestions(
-                        parseResults
-                ).join().getList().forEach(suggestion -> suggestions.add(suggestion.getText()));
+            getDispatcher()
+                    .getCompletionSuggestions(parseResults)
+                    .join()
+                    .getList()
+                    .forEach(suggestion -> suggestions.add(suggestion.getText()));
 
-                return suggestions;
+            return suggestions;
         };
 
         List<String> aliases = new ArrayList<>(command.getAliases());
         aliases.add(command.getName());
 
-        this.commandMapUtil.register(
-                executor,
-                completer,
-                aliases
-        );
+        this.commandMapUtil.register(executor, completer, aliases);
     }
 }

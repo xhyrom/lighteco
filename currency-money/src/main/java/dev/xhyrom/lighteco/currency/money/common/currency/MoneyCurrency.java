@@ -19,7 +19,7 @@ public class MoneyCurrency implements Currency {
 
     @Override
     public String[] getIdentifierAliases() {
-        return new String[]{"eco"};
+        return new String[] {"eco"};
     }
 
     @Override
@@ -39,6 +39,6 @@ public class MoneyCurrency implements Currency {
 
     @Override
     public int fractionalDigits() {
-       return this.plugin.getConfig().fractionalDigits;
+        return this.plugin.getConfig().fractionalDigits;
     }
 }
