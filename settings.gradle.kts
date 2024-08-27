@@ -4,7 +4,7 @@ sequenceOf(
     "api",
     "common",
     "paper",
-    "sponge-8",
+    "sponge-9",
     "currency-money",
     "test"
 ).forEach {
