@@ -14,8 +14,6 @@ public class SpongeSchedulerAdapter implements SchedulerAdapter {
     private final Executor async;
 
     protected SpongeSchedulerAdapter(SpongeLightEcoBootstrap bootstrap) {
-        this.plugin = bootstrap.getLoader();
-
         this.async = runnable -> Sponge.asyncScheduler().submit(Task.builder().execute(runnable).build());
     }
 
@@ -29,6 +27,11 @@ public class SpongeSchedulerAdapter implements SchedulerAdapter {
 
         ScheduledTask scheduledTask = Sponge.asyncScheduler().submit(task);
         return scheduledTask::cancel;
+    }
+
+    @Override
+    public Executor async() {
+        return this.async;
     }
 
     @Override
