@@ -14,6 +14,20 @@ public interface Currency {
     String getIdentifier();
 
     /**
+     * Returns the identifier aliases of the currency.
+     * <p>
+     *     Useful if you want multiple commands for the same currency.
+     *     For example, you can have a command `/hyrocoins` but also `/hc`.
+     * </p>
+     *
+     * @return the aliases
+     */
+    default String[] getIdentifierAliases() {
+        return new String[0];
+    }
+    ;
+
+    /**
      * Returns the type of the currency, either {@link Type#LOCAL} or {@link Type#GLOBAL}
      *
      * @see Type
@@ -66,7 +80,8 @@ public interface Currency {
      */
     default BigDecimal calculateTax(User user, BigDecimal amount) {
         return BigDecimal.ZERO;
-    };
+    }
+    ;
 
     /**
      * Represents the type of currency

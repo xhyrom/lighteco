@@ -1,6 +1,7 @@
 package dev.xhyrom.lighteco.common.storage.provider.sql.connection.hikari;
 
 import com.zaxxer.hikari.HikariConfig;
+
 import dev.xhyrom.lighteco.common.config.storage.StorageDataConfig;
 
 import java.sql.Driver;
@@ -18,9 +19,16 @@ public abstract class DriverBasedHikariConnectionFactory extends HikariConnectio
     protected abstract String driverJdbcIdentifier();
 
     @Override
-    protected void configureDatabase(HikariConfig config, String address, String port, String databaseName, String username, String password) {
+    protected void configureDatabase(
+            HikariConfig config,
+            String address,
+            String port,
+            String databaseName,
+            String username,
+            String password) {
         config.setDriverClassName(driverClassName());
-        config.setJdbcUrl(String.format("jdbc:%s://%s:%s/%s", driverJdbcIdentifier(), address, port, databaseName));
+        config.setJdbcUrl(String.format(
+                "jdbc:%s://%s:%s/%s", driverJdbcIdentifier(), address, port, databaseName));
         config.setUsername(username);
         config.setPassword(password);
     }
@@ -39,7 +47,8 @@ public abstract class DriverBasedHikariConnectionFactory extends HikariConnectio
             if (driver.getClass().getName().equals(driverClassName)) {
                 try {
                     DriverManager.deregisterDriver(driver);
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
         }
     }

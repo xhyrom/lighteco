@@ -11,7 +11,7 @@
 - **Multi-currency** - LightEco supports creating your own currencies and using them in your server
 - **Local and global currencies** - LightEco offers support for both local and global currencies, enabling you to create server-specific or proxy-wide currencies.
 - **Storage** - LightEco offers support for multiple storage types.
-- **Open-source** - LightEco is open-source, and is available on [GitHub](https://github.com/xHyroM/lightecp)
+- **Open-source** - LightEco is open-source, and is available on [GitHub](https://github.com/xHyroM/lighteco)
 
 ## Development
 

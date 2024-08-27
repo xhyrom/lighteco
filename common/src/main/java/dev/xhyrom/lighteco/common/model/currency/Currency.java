@@ -16,6 +16,10 @@ public class Currency {
         return proxy.getIdentifier();
     }
 
+    public String[] getIdentifierAliases() {
+        return proxy.getIdentifierAliases();
+    }
+
     public dev.xhyrom.lighteco.api.model.currency.Currency.Type getType() {
         return proxy.getType();
     }

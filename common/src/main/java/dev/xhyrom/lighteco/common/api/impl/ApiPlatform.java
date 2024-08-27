@@ -2,6 +2,7 @@ package dev.xhyrom.lighteco.common.api.impl;
 
 import dev.xhyrom.lighteco.api.platform.Platform;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class ApiPlatform implements Platform {

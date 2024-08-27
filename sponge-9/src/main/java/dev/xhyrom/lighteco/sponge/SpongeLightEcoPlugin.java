@@ -3,11 +3,14 @@ package dev.xhyrom.lighteco.sponge;
 import dev.xhyrom.lighteco.api.LightEco;
 import dev.xhyrom.lighteco.api.manager.ContextManager;
 import dev.xhyrom.lighteco.api.platform.Platform;
-import dev.xhyrom.lighteco.common.manager.command.CommandManager;
+import dev.xhyrom.lighteco.common.command.CommandManager;
 import dev.xhyrom.lighteco.common.manager.currency.StandardCurrencyManager;
 import dev.xhyrom.lighteco.common.manager.user.StandardUserManager;
+import dev.xhyrom.lighteco.common.messaging.MessagingFactory;
 import dev.xhyrom.lighteco.common.plugin.AbstractLightEcoPlugin;
+
 import lombok.Getter;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.api.entity.living.player.Player;
 
@@ -17,10 +20,13 @@ public class SpongeLightEcoPlugin extends AbstractLightEcoPlugin {
 
     @Getter
     private StandardUserManager userManager;
+
     @Getter
     private StandardCurrencyManager currencyManager;
+
     @Getter
     private CommandManager commandManager;
+
     @Getter
     private ContextManager<Player> contextManager;
 
@@ -30,31 +36,34 @@ public class SpongeLightEcoPlugin extends AbstractLightEcoPlugin {
 
     @Override
     protected void registerListeners() {
-        //this.bootstrap.getServer().getPluginManager().registerEvents(new BukkitConnectionListener(this), this.bootstrap);
+        // this.bootstrap.getServer().getPluginManager().registerEvents(new
+        // BukkitConnectionListener(this), this.bootstrap);
     }
 
     @Override
     public void setupManagers() {
         this.userManager = new StandardUserManager(this);
         this.currencyManager = new StandardCurrencyManager(this);
-        //this.commandManager = new BukkitCommandManager(this);
-        //this.contextManager = new BukkitContextManager();
+        // this.commandManager = new BukkitCommandManager(this);
+        // this.contextManager = new BukkitContextManager();
+    }
+
+    @Override
+    protected MessagingFactory getMessagingFactory() {
+        return new MessagingFactory(this);
     }
 
     @Override
     protected void registerApiOnPlatform(LightEco api) {
-        //this.getBootstrap().getServer().getServicesManager().register(LightEco.class, api, this.getBootstrap(), ServicePriority.Normal);
+        // this.getBootstrap().getServer().getServicesManager().register(LightEco.class, api,
+        // this.getBootstrap(), ServicePriority.Normal);
     }
 
     @Override
-    protected void registerPlatformHooks() {
-
-    }
+    protected void registerPlatformHooks() {}
 
     @Override
-    protected void removePlatformHooks() {
-
-    }
+    protected void removePlatformHooks() {}
 
     @Override
     public Platform.@NonNull Type getPlatformType() {

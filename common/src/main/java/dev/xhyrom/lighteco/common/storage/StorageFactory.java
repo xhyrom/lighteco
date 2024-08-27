@@ -1,6 +1,5 @@
 package dev.xhyrom.lighteco.common.storage;
 
-import com.google.common.collect.ImmutableSet;
 import dev.xhyrom.lighteco.api.storage.StorageProvider;
 import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 import dev.xhyrom.lighteco.common.storage.provider.memory.MemoryStorageProvider;
@@ -21,7 +20,7 @@ public class StorageFactory {
     }
 
     public Set<StorageType> getRequiredTypes() {
-        return ImmutableSet.of(this.plugin.getConfig().storage.provider);
+        return Set.of(this.plugin.getConfig().storage.provider);
     }
 
     public Storage get() {
@@ -38,25 +37,27 @@ public class StorageFactory {
             case MEMORY -> new MemoryStorageProvider(this.plugin);
             case H2 -> new SqlStorageProvider(
                     this.plugin,
-                    new H2ConnectionFactory(this.plugin.getBootstrap().getDataDirectory().resolve("lighteco-h2").toAbsolutePath())
-            );
+                    new H2ConnectionFactory(this.plugin
+                            .getBootstrap()
+                            .getDataDirectory()
+                            .resolve("lighteco-h2")
+                            .toAbsolutePath()));
             case SQLITE -> new SqlStorageProvider(
                     this.plugin,
-                    new SqliteConnectionFactory(this.plugin.getBootstrap().getDataDirectory().resolve("lighteco-sqlite.db"))
-            );
+                    new SqliteConnectionFactory(this.plugin
+                            .getBootstrap()
+                            .getDataDirectory()
+                            .resolve("lighteco-sqlite.db")));
             case MYSQL -> new SqlStorageProvider(
-                    this.plugin,
-                    new MySQLConnectionFactory(this.plugin.getConfig().storage.data)
-            );
+                    this.plugin, new MySQLConnectionFactory(this.plugin.getConfig().storage.data));
             case MARIADB -> new SqlStorageProvider(
                     this.plugin,
-                    new MariaDBConnectionFactory(this.plugin.getConfig().storage.data)
-            );
+                    new MariaDBConnectionFactory(this.plugin.getConfig().storage.data));
             case POSTGRESQL -> new SqlStorageProvider(
                     this.plugin,
-                    new PostgreSQLConnectionFactory(this.plugin.getConfig().storage.data)
-            );
-            default -> throw new IllegalArgumentException("Unknown storage provider: " + type.name());
+                    new PostgreSQLConnectionFactory(this.plugin.getConfig().storage.data));
+            default -> throw new IllegalArgumentException(
+                    "Unknown storage provider: " + type.name());
         };
     }
 }

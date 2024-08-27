@@ -1,8 +1,10 @@
 package dev.xhyrom.lighteco.currency.money.common;
 
 import dev.xhyrom.lighteco.currency.money.common.config.Config;
+
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
+
 import lombok.Getter;
 
 import java.nio.file.Path;

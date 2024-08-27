@@ -1,31 +1,32 @@
 package dev.xhyrom.lighteco.sponge;
 
+import com.google.inject.Inject;
+
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LightEcoBootstrap;
 import dev.xhyrom.lighteco.common.plugin.bootstrap.LoaderBootstrap;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 import dev.xhyrom.lighteco.common.plugin.scheduler.SchedulerAdapter;
-import dev.xhyrom.lighteco.sponge.logger.SpongeLogger;
-import lombok.Getter;
+
+import net.kyori.adventure.audience.Audience;
+
+import org.apache.logging.log4j.Logger;
+import org.spongepowered.plugin.builtin.jvm.Plugin;
 
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+@Plugin("lighteco-sponge")
 public class SpongeLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstrap {
-    private final SpongeLightEcoPlugin plugin = new SpongeLightEcoPlugin(this);
+    private final SpongeLightEcoPlugin plugin;
 
-    @Getter
-    private final SpongeLightEcoLoader loader;
-    @Getter
-    private final PluginLogger logger;
-    @Getter
-    private final SchedulerAdapter scheduler;
+    @Inject
+    private Logger logger;
 
-    public SpongeLightEcoBootstrap(SpongeLightEcoLoader loader) {
-        this.loader = loader;
-        this.logger = new SpongeLogger(loader.logger);
-        this.scheduler = new SpongeSchedulerAdapter(this);
+    public SpongeLightEcoBootstrap() {
+        this.plugin = new SpongeLightEcoPlugin(this);
     }
 
     @Override
@@ -44,8 +45,33 @@ public class SpongeLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
     }
 
     @Override
+    public Object getLoader() {
+        return null;
+    }
+
+    @Override
+    public PluginLogger getLogger() {
+        return null;
+    }
+
+    @Override
+    public SchedulerAdapter getScheduler() {
+        return null;
+    }
+
+    @Override
     public Path getDataDirectory() {
         return null;
+    }
+
+    @Override
+    public String getVersion() {
+        return null;
+    }
+
+    @Override
+    public Optional<UUID> lookupUniqueId(String username) {
+        return Optional.empty();
     }
 
     @Override
@@ -60,6 +86,11 @@ public class SpongeLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     @Override
     public InputStream getResourceStream(String filename) {
+        return null;
+    }
+
+    @Override
+    public Audience getPlayerAudience(UUID uniqueId) {
         return null;
     }
 }

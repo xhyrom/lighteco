@@ -3,6 +3,7 @@ import java.io.ByteArrayOutputStream
 plugins {
     id("java")
     id("org.sonarqube") version "4.2.1.3168"
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 val majorVersion = 0
@@ -10,12 +11,20 @@ val minorVersion = 1
 val patchVersion = determinePatchVersion(project)
 val commitHash = determineCommitHash(project)
 
+defaultTasks("spotlessApply")
+
+repositories {
+    mavenCentral()
+}
+
 allprojects {
     group = "dev.xhyrom"
     version = "$majorVersion.$minorVersion.$patchVersion"
+    description = "Incredibly fast, lightweight, and modular plugin that excels across multiple platforms."
 
     ext {
         set("version", "$majorVersion.$minorVersion.$patchVersion+$commitHash")
+        set("description", description)
     }
 }
 
@@ -26,6 +35,19 @@ subprojects {
     repositories {
         mavenCentral()
         maven("https://storehouse.okaeri.eu/repository/maven-public/")
+        maven("https://libraries.minecraft.net")
+    }
+}
+
+spotless {
+    java {
+        importOrder()
+        removeUnusedImports()
+
+        palantirJavaFormat().style("AOSP")
+        formatAnnotations()
+
+        target("api/src/main/java/**", "common/src/main/java/**", "currency-money/src/main/java/**", "paper/src/main/java/**", "sponge-8/src/main/java/**", "test/**/src/main/java/**")
     }
 }
 
@@ -54,5 +76,5 @@ fun determineCommitHash(project: Project): String {
         standardOutput = commitHashInfo
     }
 
-    return commitHashInfo.toString()
+    return commitHashInfo.toString().strip()
 }

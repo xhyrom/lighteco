@@ -1,6 +1,7 @@
 package dev.xhyrom.lighteco.common.config.storage;
 
 import dev.xhyrom.lighteco.common.storage.StorageType;
+
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 

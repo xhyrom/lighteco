@@ -4,10 +4,10 @@ import dev.xhyrom.lighteco.common.plugin.LightEcoPlugin;
 
 public abstract class ApiAbstractManager<H> {
     protected final LightEcoPlugin plugin;
-    protected final H handler;
+    protected final H handle;
 
-    protected ApiAbstractManager(LightEcoPlugin plugin, H handler) {
+    protected ApiAbstractManager(LightEcoPlugin plugin, H handle) {
         this.plugin = plugin;
-        this.handler = handler;
+        this.handle = handle;
     }
 }

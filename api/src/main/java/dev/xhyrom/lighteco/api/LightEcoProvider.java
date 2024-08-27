@@ -1,9 +1,10 @@
 package dev.xhyrom.lighteco.api;
 
-import lombok.experimental.UtilityClass;
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import static org.jetbrains.annotations.ApiStatus.Internal;
+
+import lombok.experimental.UtilityClass;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 @UtilityClass
 public final class LightEcoProvider {
