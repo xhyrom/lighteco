@@ -3,7 +3,7 @@ plugins {
 }
 
 repositories {
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
+    maven("https://repo.extendedclip.com/releases/")
 
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://oss.sonatype.org/content/repositories/snapshots")
@@ -19,7 +19,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-mojangapi:1.19.1-R0.1-SNAPSHOT")
 
     // PlaceholderAPI
-    compileOnly("me.clip:placeholderapi:2.11.3")
+    compileOnly("me.clip:placeholderapi:2.11.6")
 
     compileOnly("org.projectlombok:lombok:1.18.28")
     annotationProcessor("org.projectlombok:lombok:1.18.28")
