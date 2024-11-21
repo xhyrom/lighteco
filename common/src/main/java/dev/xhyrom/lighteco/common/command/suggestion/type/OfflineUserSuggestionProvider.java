@@ -22,11 +22,9 @@ public class OfflineUserSuggestionProvider implements SuggestionProvider<Command
             CommandContext<CommandSource> context, SuggestionsBuilder builder) {
         LightEcoPlugin plugin = context.getSource().plugin();
 
-        String remaining = builder.getRemaining();
-
         for (UUID uniqueId : plugin.getBootstrap().getOnlinePlayers()) {
             User user = plugin.getUserManager().getIfLoaded(uniqueId);
-            if (user == null) continue;
+            if (user == null || user.getUsername() == null) continue;
 
             builder.suggest(user.getUsername());
         }
