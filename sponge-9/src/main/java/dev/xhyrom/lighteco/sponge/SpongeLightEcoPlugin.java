@@ -9,6 +9,8 @@ import dev.xhyrom.lighteco.common.manager.user.StandardUserManager;
 import dev.xhyrom.lighteco.common.messaging.MessagingFactory;
 import dev.xhyrom.lighteco.common.plugin.AbstractLightEcoPlugin;
 
+import dev.xhyrom.lighteco.sponge.manager.SpongeCommandManager;
+import dev.xhyrom.lighteco.sponge.manager.SpongeContextManager;
 import lombok.Getter;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -44,8 +46,8 @@ public class SpongeLightEcoPlugin extends AbstractLightEcoPlugin {
     public void setupManagers() {
         this.userManager = new StandardUserManager(this);
         this.currencyManager = new StandardCurrencyManager(this);
-        // this.commandManager = new BukkitCommandManager(this);
-        // this.contextManager = new BukkitContextManager();
+        this.commandManager = new SpongeCommandManager(this);
+        this.contextManager = new SpongeContextManager();
     }
 
     @Override
@@ -54,10 +56,7 @@ public class SpongeLightEcoPlugin extends AbstractLightEcoPlugin {
     }
 
     @Override
-    protected void registerApiOnPlatform(LightEco api) {
-        // this.getBootstrap().getServer().getServicesManager().register(LightEco.class, api,
-        // this.getBootstrap(), ServicePriority.Normal);
-    }
+    protected void registerApiOnPlatform(LightEco api) {}
 
     @Override
     protected void registerPlatformHooks() {}

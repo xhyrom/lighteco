@@ -7,9 +7,14 @@ import dev.xhyrom.lighteco.common.plugin.bootstrap.LoaderBootstrap;
 import dev.xhyrom.lighteco.common.plugin.logger.PluginLogger;
 import dev.xhyrom.lighteco.common.plugin.scheduler.SchedulerAdapter;
 
+import dev.xhyrom.lighteco.sponge.logger.SpongeLogger;
+import lombok.Getter;
 import net.kyori.adventure.audience.Audience;
 
 import org.apache.logging.log4j.Logger;
+import org.spongepowered.api.Game;
+import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
 
 import java.io.InputStream;
@@ -18,15 +23,33 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Plugin("lighteco-sponge")
+
 public class SpongeLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstrap {
-    private final SpongeLightEcoPlugin plugin;
+    private final SpongeLightEcoPlugin plugin = new SpongeLightEcoPlugin(this);
+
+    @Getter
+    private final SpongeLightEcoLoader loader;
+
+    @Getter
+    private final PluginLogger logger;
+
+    @Getter
+    private final SchedulerAdapter scheduler;
+
+    private final Game game;
+    private final PluginContainer pluginContainer;
 
     @Inject
-    private Logger logger;
+    @ConfigDir(sharedRoot = false)
+    private Path configDirectory;
 
-    public SpongeLightEcoBootstrap() {
-        this.plugin = new SpongeLightEcoPlugin(this);
+    public SpongeLightEcoBootstrap(SpongeLightEcoLoader loader) {
+        this.loader = loader;
+        this.logger = new SpongeLogger(this.plugin, loader.getLogger());
+        this.scheduler = new SpongeSchedulerAdapter(this);
+
+        this.game = loader.getInjector().getInstance(Game.class);
+        this.pluginContainer = loader.getInjector().getInstance(PluginContainer.class);
     }
 
     @Override
@@ -46,17 +69,17 @@ public class SpongeLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     @Override
     public Object getLoader() {
-        return null;
+        return this.loader;
     }
 
     @Override
     public PluginLogger getLogger() {
-        return null;
+        return this.logger;
     }
 
     @Override
     public SchedulerAdapter getScheduler() {
-        return null;
+        return this.scheduler;
     }
 
     @Override
@@ -66,7 +89,7 @@ public class SpongeLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     @Override
     public String getVersion() {
-        return null;
+        return this.pluginContainer.metadata().version().toString();
     }
 
     @Override
@@ -81,12 +104,12 @@ public class SpongeLightEcoBootstrap implements LightEcoBootstrap, LoaderBootstr
 
     @Override
     public List<UUID> getOnlinePlayers() {
-        return null;
+        return game.server().onlinePlayers().size();
     }
 
     @Override
     public InputStream getResourceStream(String filename) {
-        return null;
+        return getClass().getClassLoader().getResourceAsStream(filename);
     }
 
     @Override
