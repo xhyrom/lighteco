@@ -14,7 +14,7 @@ jobs:
         run: |
           ./gradlew shadowJar -p paper
           ./gradlew shadowJar -p currency-money
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: Built Jars
           path: |
