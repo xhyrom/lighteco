@@ -5,9 +5,7 @@ plugins {
 dependencies {
     implementation(project(":lighteco-common"))
 
-    compileOnly("org.spongepowered:spongeapi:8.0.0")
-
-    //implementation("dev.jorel:commandapi-sponge-shade:9.1.0")
+    compileOnly("org.spongepowered:spongeapi:9.0.0")
 
     compileOnly("org.projectlombok:lombok:1.18.28")
     annotationProcessor("org.projectlombok:lombok:1.18.28")
@@ -17,8 +15,6 @@ dependencies {
 }
 
 tasks.shadowJar {
-    relocate("dev.jorel.commandapi", "dev.xhyrom.lighteco.libraries.commandapi")
-
     // common
     relocate("eu.okaeri.configs", "dev.xhyrom.lighteco.libraries.okaeri.configs")
     relocate("eu.okaeri.validator", "dev.xhyrom.lighteco.libraries.okaeri.validator")
